@@ -6,62 +6,56 @@ import {
   MenuFoldOutlined,
   UserOutlined,
 } from '@ant-design/icons';
+import { NavLink, Link, withRouter } from 'react-router-dom';
 import './SiderComponent.styles.scss';
 
-const { Header, Sider, Content } = Layout;
-export const SiderComponent = () => {
-    const [collapsed, setCollapsed] = useState(false);
-    const toggle = (e) => {
-        return setCollapsed(previous => !previous)
-    }
-    return (
-        <Layout>
-            <Sider 
-                trigger={null} 
-                collapsible 
-                collapsed={collapsed}
-                style={{
-                  overflow: 'auto',
-                  height: '100vh',
-                }}
-            >
-              <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-                <Menu.Item key="1" icon={<UserOutlined />}>
-                  Student
-                </Menu.Item>
-                <Menu.Item key="2" icon={<UserOutlined />}>
-                  Teacher
-                </Menu.Item>
-                <Menu.Item key="3" icon={<UserOutlined />}>
-                  Enrollment
-                </Menu.Item>
-                <Menu.Item key="4" icon={<UserOutlined />}>
-                  Course
-                </Menu.Item>
-                <Menu.Item key="5" icon={<UserOutlined />}>
-                  Department
-                </Menu.Item>
-              </Menu>
-            </Sider>
-            <Layout className="site-layout">
-              <Header className="site-layout-background" style={{ padding: 0 }}>
-                {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
-                  className: 'trigger',
-                  onClick: toggle,
-                })}
+const { Sider } = Layout;
 
-              </Header>
-              <Content
-                className="site-layout-background"
-                style={{
-                  margin: '24px 16px',
-                  padding: 24,
-                  minHeight: 280,
-                }}
-              >
-                Content
-              </Content>
-            </Layout>
-          </Layout>
-      );
-}
+const SiderComponent = withRouter(props => {
+  const [collapsed, setCollapsed] = useState(false);
+  const { location } = props;
+  const toggle = (e) => {
+      e.preventDefault();
+      return setCollapsed(previous => !previous)
+  }
+  return (
+    <aside className="SiderComponent">
+      <Sider 
+        trigger={null} 
+        collapsible 
+        collapsed={collapsed}
+        style={{
+          overflow: 'auto',
+          height: '100vh',
+        }}
+      >
+        {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
+            className: 'trigger',
+            onClick: toggle,
+            style: {
+              color: '#fff'
+            }
+        })}
+        <Menu mode="inline" selectedKeys={[location.pathname]}>
+          <Menu.Item key="/admin" icon={<UserOutlined/>}>
+            <NavLink to="/admin">Dashboard</NavLink>
+          </Menu.Item>
+          <Menu.Item key="/admin/students" icon={<UserOutlined/>}>
+            <NavLink to="/admin/students">Student</NavLink>
+          </Menu.Item>
+          <Menu.Item key="/admin/teachers" icon={<UserOutlined/>}>
+            <NavLink to="/admin/teachers">Teacher</NavLink>
+          </Menu.Item>
+          <Menu.Item key="/admin/courses" icon={<UserOutlined/>}>
+            <NavLink to="/admin/courses">Course</NavLink>
+          </Menu.Item>
+          <Menu.Item key="/admin/departments" icon={<UserOutlined/>}>
+            <NavLink to="/admin/departments">Department</NavLink>
+          </Menu.Item>
+        </Menu>
+      </Sider>
+    </aside>
+  )
+})
+
+export default SiderComponent;
