@@ -1,45 +1,42 @@
-import React from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
-import { AdminCoursePage, AdminDashboardPage, AdminDeparmentPage, AdminStudentPage, AdminTeacherPage } from "../admin";
-import { TestComponent } from '../end-user/TestComponent'
-const routes = [
-    {
-        path: '/admin',
-        component: AdminDashboardPage,
-    },
-    {
-        path: '/admin/students',
-        component: AdminStudentPage
-    },
-    {
-        path: '/admin/teachers',
-        component: AdminTeacherPage
-    },
-    {
-        path: '/admin/deparments',
-        component: AdminDeparmentPage
-    },
-    {
-        path: '/admin/courses',
-        component: AdminCoursePage
-    },
-    {
-        path: '/',
-        component: TestComponent
-    }
-]
+// import React from "react";
+// import {
+//   Route,
+// } from "react-router-dom";
+// import { AdminDashboardPage } from "../admin";
+// import { UserDashboard } from '../end-user/UserDashboard'
+// import PrivateRoute from './privateRoute.config';
+// // const routes = [
+// //     {
+// //         path: '/admin',
+// //         component: AdminDashboardPage,
+// //     },
+// //     {
+// //         path: '/admin/students',
+// //         component: AdminStudentPage
+// //     },
+// //     {
+// //         path: '/admin/teachers',
+// //         component: AdminTeacherPage
+// //     },
+// //     {
+// //         path: '/admin/deparments',
+// //         component: AdminDeparmentPage
+// //     },
+// //     {
+// //         path: '/admin/courses',
+// //         component: AdminCoursePage
+// //     },
+// //     {
+// //         path: '/',
+// //         component: TestComponent
+// //     }
+// // ]
 
-export const RouterConfig = () => {
-    return (
-        <div>
-            {routes.map((route, i) => (
-                <Route exact key={i}  path={route.path} component={route.component} />
-            ))}
-        </div>
-    )
-}
+// export const RouterConfig = () => {
+//     return (
+//         <div>
+//            <PrivateRoute exact path='/admin' component={AdminDashboardPage} />
+//            <Route exact path='/' component={UserDashboard} />
+//         </div>
+//     )
+// }

@@ -1,11 +1,8 @@
 import React from 'react'
-import {Switch} from 'react-router-dom'
-import {RouteWithSubRoutes} from '../../config/routers.config'
-
-const DashboardAdminContainer = ({routes}) => {
+const DashboardAdminContainer = () => {
     return (
         <div>
-            admin dashboard...
+            admin dashboard
         </div>
     )
 }

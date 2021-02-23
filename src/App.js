@@ -1,36 +1,26 @@
-import './App.scss';
-import 'antd/dist/antd.css';
-import { SiderComponent } from './layout/index';
-import { BrowserRouter as Router, Switch } from 'react-router-dom'
-import { RouterConfig } from './config/routers.config';
-import { Layout } from 'antd'
+import { Fragment } from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
-const { Header, Content } = Layout;
+import './App.css';
+import 'antd/dist/antd.css';
+
+import { LandingPage } from './layout'
+import { LoginPage } from './shared';
 
 function App() {
   return(
-    <div className="App">
+    <div className="app">
       <Router>
-        <Layout>
-          <SiderComponent className="App__sidebar" />
-          <Layout className="App__wrapper">
-            <Header className="App__wrapper__header" style={{padding: 0, background: "#fff"}}>
-              This is header
-            </Header>
-            <Content
-              className="App__wrapper__content"
-              style={{
-                margin: '24px 16px',
-                padding: 24,
-              }}
-            >
-              <Switch>
-                <RouterConfig />
-              </Switch>
-            </Content>
-          </Layout>
-        </Layout>
+        <Fragment>
+          <Route exact path='/' component={LandingPage} />
+          <section className="app__container">
+            <Switch>
+              <Route exact path='/login' component={LoginPage} />
+            </Switch>
+          </section>
+        </Fragment>
       </Router>
+       
     </div>
   )
 }

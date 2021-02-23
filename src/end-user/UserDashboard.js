@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const TestComponent = () => {
+export const UserDashboard = () => {
     return (
         <div>
             End User space...
