@@ -38,7 +38,7 @@ export const RouterConfig = () => {
     return (
         <div>
             {routes.map((route, i) => (
-                    <Route exact key={i}  path={route.path} component={route.component} />
+                <Route exact key={i}  path={route.path} component={route.component} />
             ))}
         </div>
     )
