@@ -10,16 +10,6 @@ const axiosClient = axios.create({
 
 });
 
-export const setAuthToken = (token) => {
-  if (token) {
-    axios.defaults.headers.common["x-auth-token"] = token;
-  } else {
-    delete axios.defaults.headers.common["x-auth-token"];
-  }
-};
-
-export default axiosClient;
-
 axiosClient.interceptors.request.use(async (config) => {
   // Handle token here ...
   const token = localStorage.getItem('token');
@@ -37,3 +27,7 @@ axiosClient.interceptors.response.use((response) => {
   // Handle errors
   throw error;
 });
+
+
+export default axiosClient;
+
