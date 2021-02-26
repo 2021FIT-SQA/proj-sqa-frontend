@@ -6,6 +6,7 @@ import { login } from "../../../redux/actions/auth.action";
 import './LoginComponent.style.css';
 
 const Login = ({ login, isAuthenticated }) => {
+
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -21,9 +22,8 @@ const Login = ({ login, isAuthenticated }) => {
     login({ username, password });
   };
 
-  //Redirect if logged in
-  if ( localStorage.getItem('token') || isAuthenticated) {
-    return <Redirect to='/admin/dashboard' />;
+  if(isAuthenticated) {
+    return <Redirect to='/admin/dashboard' />
   }
 
   return (

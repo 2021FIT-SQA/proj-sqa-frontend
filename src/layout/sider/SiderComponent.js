@@ -6,12 +6,12 @@ import {
   MenuFoldOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import { NavLink, Link, withRouter } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 import './SiderComponent.styles.scss';
 
 const { Sider } = Layout;
 
-const SiderComponent = withRouter(props => {
+export const SiderComponent = withRouter(props => {
   const [collapsed, setCollapsed] = useState(false);
   const { location } = props;
   const toggle = (e) => {
@@ -57,5 +57,3 @@ const SiderComponent = withRouter(props => {
     </aside>
   )
 })
-
-export default SiderComponent;

@@ -1,2 +1,1 @@
-export {default as SiderComponent} from './sider/SiderComponent'
-export {default as LandingPage} from './landing/LandingComponent'
+export {default as FullLayoutPage} from './full-layout/FullLayoutPage'

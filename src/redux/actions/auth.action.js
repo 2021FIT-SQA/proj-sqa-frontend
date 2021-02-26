@@ -11,7 +11,6 @@ import authApi from '../../api/authApi';
 export const loggedUser = () => async (dispatch) => {
     try {
       const res = await authApi.getAuth();
-      console.log('Loaded user', res)
       dispatch({
         type: USER_LOADED,
         payload: res,
@@ -28,7 +27,6 @@ export const login = ({ username, password }) => async (dispatch) => {
   const body = JSON.stringify({ username, password });
   try {
     const res = await authApi.getToken(body);
-    console.log('login', res)
     dispatch({
       type: LOGIN_SUCCESS,
       payload: res,
