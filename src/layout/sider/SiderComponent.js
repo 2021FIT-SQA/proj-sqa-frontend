@@ -37,8 +37,8 @@ export const SiderComponent = withRouter(props => {
             }
         })}
         <Menu mode="inline" selectedKeys={[location.pathname]}>
-          <Menu.Item key="/admin" icon={<UserOutlined/>}>
-            <NavLink to="/admin">Dashboard</NavLink>
+          <Menu.Item key="/admin/dashboard" icon={<UserOutlined/>}>
+            <NavLink to="/admin/dashboard">Dashboard</NavLink>
           </Menu.Item>
           <Menu.Item key="/admin/students" icon={<UserOutlined/>}>
             <NavLink to="/admin/students">Student</NavLink>
