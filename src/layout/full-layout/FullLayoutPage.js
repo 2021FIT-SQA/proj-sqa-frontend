@@ -1,16 +1,49 @@
 import React from 'react'
+import { Route } from 'react-router-dom'
+
 import { Layout } from 'antd';
 import { SiderComponent } from '../sider/SiderComponent' 
-import { Switch } from 'react-router-dom';
+import { 
+    AdminDashboardPage,
+    AdminStudentPage,
+    AdminTeacherPage,
+    AdminDeparmentPage,
+    AdminCoursePage
+  } from 'admin';
+
 const { Header, Content } = Layout;
-const FullLayoutPage = (routes) => {
+
+const adminRoutes = [
+    {
+        path: '/admin/dashboard',
+        component: AdminDashboardPage,
+    },
+    {
+        path: '/admin/students',
+        component: AdminStudentPage
+    },
+    {
+        path: '/admin/teachers',
+        component: AdminTeacherPage
+    },
+    {
+        path: '/admin/deparments',
+        component: AdminDeparmentPage
+    },
+    {
+        path: '/admin/courses',
+        component: AdminCoursePage
+    },
+  ]
+
+const FullLayoutPage = () => {
     return (
         <div>
             <Layout>
                 <SiderComponent className="App__sidebar" />
                 <Layout className="App__wrapper">
                     <Header className="App__wrapper__header" style={{padding: 0, background: "#fff"}}>
-                    This is header
+                        This is header
                     </Header>
                     <Content
                     className="App__wrapper__content"
@@ -19,13 +52,11 @@ const FullLayoutPage = (routes) => {
                         padding: 24,
                     }}
                     >
-                    <Switch>
                         {
-                            routes.map((route, index) => (
-                                <route.type key={index} path={route.path} component={route.component} />
+                            adminRoutes.map((route, index) => (
+                               <Route exact path={route.path} component={route.component} key={index} />
                             ))
                         }
-                    </Switch>
                     </Content>
                 </Layout>
             </Layout>

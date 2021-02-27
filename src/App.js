@@ -1,21 +1,22 @@
 import { Fragment } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 
-import './App.css';
-import 'antd/dist/antd.css';
+import './App.css'
+import 'antd/dist/antd.css'
 
-import { LandingPage } from './layout'
-import { LoginPage } from './shared';
+import { LoginPage } from './shared'
+import { FullLayoutPage } from 'layout'
 
 function App() {
+  const token = localStorage.getItem('token')
   return(
     <div className="app">
       <Router>
         <Fragment>
-          <Route exact path='/' component={LandingPage} />
           <section className="app__container">
             <Switch>
-              <Route exact path='/login' component={LoginPage} />
+              <Route exact path='/' component={LoginPage} />
+              {token && <FullLayoutPage />}
             </Switch>
           </section>
         </Fragment>
