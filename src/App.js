@@ -13,7 +13,7 @@ function App() {
     <div className="app">
       <Router>
         <Fragment>
-          {token && <FullLayoutPage />}
+          {token && <Redirect to='/admin' />}
           <section className="app__container">
             <Switch>
               <Route exact path='/' component={LoginPage} />
