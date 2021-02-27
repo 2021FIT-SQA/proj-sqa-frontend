@@ -1,1 +1,1 @@
-export {default as LoginPage} from './components/login/LoginComponent';
+export {default as LoginPage } from './components/login/LoginComponent';

@@ -13,10 +13,11 @@ function App() {
     <div className="app">
       <Router>
         <Fragment>
+          {token && <FullLayoutPage />}
           <section className="app__container">
             <Switch>
               <Route exact path='/' component={LoginPage} />
-              {token && <FullLayoutPage />}
+              <Route exact path='/admin' component={FullLayoutPage} />
             </Switch>
           </section>
         </Fragment>
