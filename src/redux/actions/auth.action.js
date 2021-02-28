@@ -9,18 +9,18 @@ import authApi from '../../api/authApi';
 
 // LOAD USER
 export const loggedUser = () => async (dispatch) => {
-    try {
-      const res = await authApi.getAuth();
+    const res = await authApi.getAuth();
+    if (res === 'anonymousUser') {
       dispatch({
-        type: USER_LOADED,
-        payload: res,
-      });
-    } catch (err) {
-      dispatch({
-        type: AUTH_ERROR,
-      });
+        type: AUTH_ERROR
+      })
+      return;
     }
-  };
+    dispatch({
+      type: USER_LOADED,
+      payload: res,
+    });
+};
 
 //LOGIN USER
 export const login = ({ username, password }) => async (dispatch) => {
