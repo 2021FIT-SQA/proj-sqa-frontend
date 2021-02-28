@@ -24,7 +24,7 @@ function App() {
             <section className="app__container">
               <Switch>
                 <Route exact path='/login' component={LoginPage} />
-                <Route exact path='/admin' component={FullLayoutPage} />
+                <PrivateRoute path='/admin' component={FullLayoutPage} />
               </Switch>
             </section>
           </Fragment>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, useRouteMatch, Switch, Link, useParams} from 'react-router-dom'
+import { BrowserRouter as Router ,Route, useRouteMatch, Switch } from 'react-router-dom'
 
 import { Layout } from 'antd';
 import { SiderComponent } from '../sider/SiderComponent' 
@@ -7,85 +7,67 @@ import {
     AdminDashboardPage,
     AdminStudentPage,
     AdminTeacherPage,
-    AdminDeparmentPage,
+    AdminDepartmentPage,
     AdminCoursePage
   } from 'admin';
-import PrivateRoute from 'config/privateRoute.config'
 
-const { Header, Content, Footer} = Layout;
+const { Header, Content, Footer } = Layout;
+
+const adminRoutes = [
+    {
+        path: '/admin/students',
+        component: AdminStudentPage
+    },
+    {
+        path: '/admin/teachers',
+        component: AdminTeacherPage
+    },
+    {
+        path: '/admin/departments',
+        component: AdminDepartmentPage
+    },
+    {
+        path: '/admin/courses',
+        component: AdminCoursePage
+    },
+  ]
 
 const FullLayoutPage = () => {
-
-    let { path, url } = useRouteMatch();
-
+    const { url } = useRouteMatch();
     return (
         <div>
-            <Layout>
-                <SiderComponent url={url} className="App__sidebar" />
-                <Layout className="App__wrapper">
-                    <Header className="App__wrapper__header" style={{padding: 0, background: "#fff"}}>
-                        This is header
-                    </Header>
-                    <Content
-                    className="App__wrapper__content"
-                    style={{
-                        margin: '24px 16px',
-                        padding: 24,
-                    }}
-                    >
-                         {/* <Switch>
-
-                            <PrivateRoute exact path={`${path}`}>admin route</PrivateRoute>
-
-                            <PrivateRoute exact path={`${path}/dashboard`} component={AdminDashboardPage} />
-                                
-                            <PrivateRoute exact path={`${path}/students`} component={AdminStudentPage} />
-
-                            <PrivateRoute exact path={`${path}/courses`} component={AdminCoursePage} />
-                            
-                            <PrivateRoute exact path={`${path}/teachers`} component={AdminTeacherPage} />
-                            
-                            <PrivateRoute exact path={`${path}/departments`} component={AdminDeparmentPage} />
-                            
-                        </Switch> */}
-                        <ul>
-                            <li>
-                                <Link to={`${url}/rendering`}>Rendering with React</Link>
-                            </li>
-                            <li>
-                                <Link to={`${url}/components`}>Components</Link>
-                            </li>
-                            <li>
-                                <Link to={`${url}/props-v-state`}>Props v. State</Link>
-                            </li>
-                        </ul>
-                        <Switch>
-                            <Route exact path={path}>
-                                <h3>Please select a topic.</h3>
-                            </Route>
-                            <Route path={`${path}/:topicId`}>
-                                <Topic />
-                            </Route>
-                        </Switch>
-                    </Content>
-                    <Footer>
-                        This is footer....
-                    </Footer>
+            <Router>
+                <Layout>
+                    <SiderComponent url={url} className="App__sidebar" />
+                    <Layout className="App__wrapper">
+                        <Header className="App__wrapper__header" style={{padding: 0, paddingLeft: 16, background: "#fff"}}>
+                            This is header
+                        </Header>
+                        <Content
+                        className="App__wrapper__content"
+                        style={{
+                            margin: "24px 16px",
+                            padding: 24,
+                            background: "#fff",
+                            minHeight: 280
+                        }}
+                        >
+                            <Switch>
+                                <Route exact path='/admin' component={AdminDashboardPage} />
+                                {
+                                adminRoutes.map((route, index) => (
+                                    <Route path={route.path} component={route.component} key={index} />
+                                ))
+                                }
+                            </Switch>
+                        </Content>
+                        <Footer style={{ textAlign: "center" }}>
+                            This is our footer.
+                        </Footer>
+                    </Layout>
                 </Layout>
-            </Layout>
+            </Router>
         </div>
     )
 }
-
-function Topic() {
-    let { topicId } = useParams();
-    console.log(topicId)
-    return (
-        <div>
-            <h3>{topicId}</h3>
-        </div>
-    );
-}
-
-
 export default FullLayoutPage
