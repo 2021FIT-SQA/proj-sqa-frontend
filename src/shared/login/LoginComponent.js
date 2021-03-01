@@ -27,6 +27,7 @@ const Login = ({ login, isAuthenticated }) => {
   }
 
   return (
+    // STYLE CSS ONLY
     <Fragment>
       <h1 className='large text-primary'>Sign In</h1>
       <p className='lead'></p>
