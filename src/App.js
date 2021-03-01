@@ -8,6 +8,7 @@ import './App.css'
 import 'antd/dist/antd.css'
 import { LandingPage, FullLayoutPage } from './layout'
 import LoginPage from './shared/login/LoginComponent'
+import RegisterPage from './shared/register/RegisterComponent'
 import  PrivateRoute  from './config/privateRoute.config'
 
 
@@ -24,6 +25,7 @@ function App() {
             <section className="app__container">
               <Switch>
                 <Route exact path='/login' component={LoginPage} />
+                <Route exact path='/register' component={RegisterPage} />
                 <PrivateRoute path='/admin' component={FullLayoutPage} />
               </Switch>
             </section>
