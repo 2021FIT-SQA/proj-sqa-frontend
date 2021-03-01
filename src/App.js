@@ -1,30 +1,37 @@
-import { Fragment } from 'react';
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
+import { Fragment, useEffect } from 'react'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import store from 'redux/store'
+import { loggedUser } from 'redux/actions/auth.action'
+import { Provider } from 'react-redux'
 
 import './App.css'
 import 'antd/dist/antd.css'
+import { LandingPage, FullLayoutPage } from './layout'
+import LoginPage from './shared/login/LoginComponent'
+import  PrivateRoute  from './config/privateRoute.config'
 
-import { LoginPage } from './shared'
-import { FullLayoutPage } from 'layout'
 
 function App() {
-  const token = localStorage.getItem('token')
+  useEffect(() => {
+    store.dispatch(loggedUser())
+  }, [])
   return(
     <div className="app">
-      <Router>
-        <Fragment>
-          {token && <FullLayoutPage />}
-          <section className="app__container">
-            <Switch>
-              <Route exact path='/' component={LoginPage} />
-              <Route exact path='/admin' component={FullLayoutPage} />
-            </Switch>
-          </section>
-        </Fragment>
-      </Router>
-       
+      <Provider store={store}>
+        <Router>
+          <Fragment>
+            <Route exact path='/' component={LandingPage} />
+            <section className="app__container">
+              <Switch>
+                <Route exact path='/login' component={LoginPage} />
+                <PrivateRoute path='/admin' component={FullLayoutPage} />
+              </Switch>
+            </section>
+          </Fragment>
+        </Router>
+      </Provider>
     </div>
   )
 }
 
-export default App;
+export default App

@@ -212,7 +212,7 @@ const data = [
 const StudentContainer = () => {
 
     const [tableData, setTableData] = useState(data);
-    console.log(tableData)
+    
     // Search function
     const handleSearch = searchText => {
         const filteredData = tableData.filter(({ fullName }) => {

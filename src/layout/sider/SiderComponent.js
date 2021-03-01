@@ -1,59 +1,57 @@
 import React, {useState} from 'react';
-import 'antd/dist/antd.css';
 import { Layout, Menu } from 'antd';
-import {
-  MenuUnfoldOutlined,
-  MenuFoldOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
-import { NavLink, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './SiderComponent.styles.scss';
+import { CameraTwoTone } from '@ant-design/icons'
 
 const { Sider } = Layout;
 
-export const SiderComponent = withRouter(props => {
+export const SiderComponent = ({url}) => {
+
   const [collapsed, setCollapsed] = useState(false);
-  const { location } = props;
-  const toggle = (e) => {
-      e.preventDefault();
-      return setCollapsed(previous => !previous)
+
+  const onCollapse = (e) => {
+      setCollapsed(previous => !previous)
   }
+
   return (
     <aside className="SiderComponent">
       <Sider 
-        trigger={null} 
         collapsible 
         collapsed={collapsed}
+        onCollapse={onCollapse}
         style={{
           overflow: 'auto',
           height: '100vh',
         }}
-      >
-        {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
-            className: 'trigger',
-            onClick: toggle,
-            style: {
-              color: '#fff'
-            }
-        })}
-        <Menu mode="inline" selectedKeys={[location.pathname]}>
-          <Menu.Item key="/admin/dashboard" icon={<UserOutlined/>}>
-            <NavLink to="/admin/dashboard">Dashboard</NavLink>
-          </Menu.Item>
-          <Menu.Item key="/admin/students" icon={<UserOutlined/>}>
-            <NavLink to="/admin/students">Student</NavLink>
-          </Menu.Item>
-          <Menu.Item key="/admin/teachers" icon={<UserOutlined/>}>
-            <NavLink to="/admin/teachers">Teacher</NavLink>
-          </Menu.Item>
-          <Menu.Item key="/admin/courses" icon={<UserOutlined/>}>
-            <NavLink to="/admin/courses">Course</NavLink>
-          </Menu.Item>
-          <Menu.Item key="/admin/departments" icon={<UserOutlined/>}>
-            <NavLink to="/admin/departments">Department</NavLink>
-          </Menu.Item>
-        </Menu>
+      > 
+        <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
+            <Menu.Item key="1" icon={<CameraTwoTone />}>
+              <span>Dashboard</span>
+              <Link to={`${url}`} />
+            </Menu.Item>
+            <Menu.Item key="2" icon={<CameraTwoTone />}>
+              <span>Student</span>
+              <Link to={`${url}/students`} />
+            </Menu.Item>
+            <Menu.Item key="3" icon={<CameraTwoTone />}>
+              <span>Teacher</span>
+              <Link to={`${url}/teachers`} />
+            </Menu.Item>
+            <Menu.Item key="4" icon={<CameraTwoTone />}>
+              <span>Course</span>
+              <Link to={`${url}/courses`} />
+            </Menu.Item>
+            <Menu.Item key="5" icon={<CameraTwoTone />}>
+              <span>Department</span>
+              <Link to={`${url}/departments`} />
+            </Menu.Item>
+            <Menu.Item key="6" icon={<CameraTwoTone />}>
+              <span>Enrollment</span>
+              <Link to={`${url}/enrollment`} />
+            </Menu.Item>
+          </Menu>
       </Sider>
     </aside>
   )
-})
+}
