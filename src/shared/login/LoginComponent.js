@@ -3,7 +3,7 @@ import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { login } from 'redux/actions/auth.action';
-import './LoginComponent.styles.scss';
+import './LoginComponent.styles.css';
 
 const Login = ({ login, isAuthenticated }) => {
 
@@ -31,7 +31,6 @@ const Login = ({ login, isAuthenticated }) => {
     <Fragment>
       <div class="container" id="container">
         <div class="form-container sign-in-container">
-          <form action="#">
           <h1>Sign In</h1>
             <div class="social-container"></div>
               <form className='form' onSubmit={(e) => onSubmit(e)}>
@@ -55,10 +54,6 @@ const Login = ({ login, isAuthenticated }) => {
                 </div>
                   <button>Login</button>
                   </form>
-              <p className='my-1'>
-               <Link to='/register'>Create an account?</Link>
-              </p>
-              </form>
         </div>
         <div class="overlay-container">
 		      <div class="overlay">

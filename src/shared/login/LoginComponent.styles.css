@@ -15,7 +15,11 @@ body {
 
 h1 {
 	font-weight: bold;
+	font-size: 40px;
 	margin: 60px 0 10px 0;
+	text-transform: uppercase;
+    text-align: center;
+	font-family: inherit;
 }
 
 p {
@@ -34,7 +38,7 @@ button {
 	font-size: 12px;
 	font-weight: bold;
 	padding: 12px 45px;
-    margin-top: 20px;
+    margin-top: 40px;
 	letter-spacing: 1px;
 	text-transform: uppercase;
 	transition: transform 80ms ease-in;
@@ -51,7 +55,7 @@ form {
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
-	height: 90%;
+	height: 60%;
 	text-align: center;
 }
 
@@ -59,7 +63,7 @@ input {
 	background-color: #eee;
 	border: none;
 	padding: 12px 15px;
-	margin: 10px 0;
+	margin: 15px 0;
 	width: 100%;
 }
 
@@ -95,7 +99,6 @@ input {
 	width: 50%;
 	height: 100%;
 	overflow: hidden;
-	transition: transform 0.6s ease-in-out;
 	z-index: 100;
 }
 
