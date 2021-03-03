@@ -11,10 +11,8 @@ const LandingComponent = ({isAuthenticated}) => {
     }
     
     return (
-        <div>
-            {/* Code here */}
+        <div className="landing-component">
             <Link to='/login'><button class="bLogin">Login</button></Link>
-            
         </div>
     )
 }

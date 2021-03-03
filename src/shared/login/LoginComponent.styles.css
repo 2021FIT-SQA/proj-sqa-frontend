@@ -28,7 +28,7 @@ p {
 	margin: 20px 0 30px;
 }
 
-button {
+.btn-login {
 	border-radius: 10px;
 	border: 1px solid #6196d3;
 	background-color: #6196d3;
@@ -43,7 +43,7 @@ button {
     
 }
 
-button:focus {
+.btn-login:focus {
 	outline: none;
 }
 

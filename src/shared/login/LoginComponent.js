@@ -51,7 +51,7 @@ const Login = ({ login, isAuthenticated }) => {
                     onChange={(e) => onChange(e)}
                   />
                 </div>
-                  <button>Login</button>
+                  <button className="btn-login">Login</button>
                   </form>
         </div>
         <div className="overlay-container">
