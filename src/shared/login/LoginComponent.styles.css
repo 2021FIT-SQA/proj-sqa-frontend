@@ -4,13 +4,11 @@ body {
     background-image: url("bg.jpg");
     background-repeat: no-repeat;
     background-size: cover;
-	display: flex;
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
 	font-family: 'Montserrat', sans-serif;
 	height: 100vh;
-	margin: 0 0 50px 10px;
 }
 
 h1 {
@@ -77,6 +75,8 @@ input {
 	width: 768px;
 	max-width: 100%;
 	min-height: 480px;
+	margin: auto;
+	margin-top: 80px;
 }
 
 .form-container {

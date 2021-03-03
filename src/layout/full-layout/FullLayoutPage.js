@@ -1,6 +1,5 @@
 import React from 'react'
 import { BrowserRouter as Router ,Route, useRouteMatch, Switch } from 'react-router-dom'
-import './FullLayoutPage.css';
 import { Layout } from 'antd';
 import { SiderComponent } from '../sider/SiderComponent' 
 import { 
