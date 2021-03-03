@@ -10,7 +10,7 @@ import { LandingPage, FullLayoutPage } from './layout'
 import LoginPage from './shared/login/LoginComponent'
 import RegisterPage from './shared/register/RegisterComponent'
 import  PrivateRoute  from './config/privateRoute.config'
-
+import RouterConfig from 'config/RouterConfig.routing'
 
 function App() {
   useEffect(() => {
@@ -31,6 +31,7 @@ function App() {
             </section>
           </Fragment>
         </Router>
+        {/* <RouterConfig /> */}
       </Provider>
     </div>
   )

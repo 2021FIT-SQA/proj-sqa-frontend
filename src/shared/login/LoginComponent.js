@@ -29,11 +29,10 @@ const Login = ({ login, isAuthenticated }) => {
   return (
     // STYLE CSS ONLY
     <Fragment>
-      <div class="container" id="container">
-        <div class="form-container sign-in-container">
-          <form action="#">
+      <div className="container" id="container">
+        <div className="form-container sign-in-container">
           <h1>Sign In</h1>
-            <div class="social-container"></div>
+            <div className="social-container"></div>
               <form className='form' onSubmit={(e) => onSubmit(e)}>
                 <div className='form-group'>
                   <input
@@ -58,10 +57,9 @@ const Login = ({ login, isAuthenticated }) => {
               <p className='my-1'>
                <Link to='/register'>Create an account?</Link>
               </p>
-              </form>
         </div>
-        <div class="overlay-container">
-		      <div class="overlay">
+        <div className="overlay-container">
+		      <div className="overlay">
           </div>
 	      </div>
       </div>
