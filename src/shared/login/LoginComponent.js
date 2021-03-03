@@ -29,33 +29,40 @@ const Login = ({ login, isAuthenticated }) => {
   return (
     // STYLE CSS ONLY
     <Fragment>
-      <h1 className='large text-primary'>Sign In</h1>
-      <p className='lead'></p>
-      <form className='form' onSubmit={(e) => onSubmit(e)}>
-        <div className='form-group'>
-          <input
-            type='text'
-            placeholder='Username'
-            name='username'
-            value={username}
-            onChange={(e) => onChange(e)}
-          />
+      <div className="container" id="container">
+        <div className="form-container sign-in-container">
+          <h1>Sign In</h1>
+            <div className="social-container"></div>
+              <form className='form' onSubmit={(e) => onSubmit(e)}>
+                <div className='form-group'>
+                  <input
+                    type='text'
+                    placeholder='Username'
+                    name='username'
+                    value={username}
+                    onChange={(e) => onChange(e)}
+                  />
+                </div>
+                <div className='form-group'>
+                  <input
+                    type='password'
+                    placeholder='Password'
+                    name='password'
+                    value={password}
+                    onChange={(e) => onChange(e)}
+                  />
+                </div>
+                  <button>Login</button>
+                  </form>
+              <p className='my-1'>
+               <Link to='/register'>Create an account?</Link>
+              </p>
         </div>
-        <div className='form-group'>
-          <input
-            type='password'
-            placeholder='Password'
-            name='password'
-            value={password}
-            onChange={(e) => onChange(e)}
-          />
-        </div>
-
-        <input type='submit' className='btn btn-primary' value='Login' />
-      </form>
-      <p className='my-1'>
-        Don't have an account? <Link to='/register'>Sign Up</Link>
-      </p>
+        <div className="overlay-container">
+		      <div className="overlay">
+          </div>
+	      </div>
+      </div>
     </Fragment>
   );
 };
