@@ -7,27 +7,39 @@ import Main from 'layout/main/Main'
 // COMPONENT 
 import LoginPage from 'shared/login/LoginComponent'
 import LandingPage from 'layout/landing/LandingComponent'
-import AdminDashboardPage from 'admin/dashboard/DashboardContainer'
 import UserDashboardPage from 'end-user/UserDashboard'
+import PrivateRoute from 'config/privateRoute.config'
+
+import { 
+  AdminDashboardPage,
+  AdminCoursePage,
+  AdminDepartmentPage,
+  AdminEnrollmentPage,
+  AdminStudentPage,
+  AdminTeacherPage } from 'admin'
 
 const RouterConfig = () => {
   return (
     <Router>
       <Switch>
         <Route path='/login' component={LoginPage} />
-
+        <Route path='/' exact component={LandingPage} />
         <Route path='/admin/:path?' exact>
           <MainAdmin>
             <Switch>
-              <Route path='/admin' exact component={AdminDashboardPage} />
+              <PrivateRoute path='/admin' exact component={AdminDashboardPage} />
+              <PrivateRoute path='/admin/students' component={AdminStudentPage} />
+              <PrivateRoute path='/admin/teachers' component={AdminTeacherPage} />
+              <PrivateRoute path='/admin/courses' component={AdminCoursePage} />
+              <PrivateRoute path='/admin/departments' component={AdminDepartmentPage} />
+              <PrivateRoute path='/admin/enrollments' component={AdminEnrollmentPage} />
             </Switch>
           </MainAdmin>
         </Route>
         
-        <Route>
+        <Route path='user/:path?' exact>
           <Main>
             <Switch>
-              <Route path='/' component={LandingPage} />
               <Route path='/user' exact component={UserDashboardPage} />
             </Switch>
           </Main>

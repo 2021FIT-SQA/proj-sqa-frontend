@@ -19,7 +19,7 @@ function App() {
   return(
     <div className="app">
       <Provider store={store}>
-        <Router>
+        {/* <Router>
           <Fragment>
             <Route exact path='/' component={LandingPage} />
             <section className="app__container">
@@ -30,8 +30,8 @@ function App() {
               </Switch>
             </section>
           </Fragment>
-        </Router>
-        {/* <RouterConfig /> */}
+        </Router> */}
+        <RouterConfig />
       </Provider>
     </div>
   )

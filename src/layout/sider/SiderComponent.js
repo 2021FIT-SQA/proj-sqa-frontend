@@ -6,7 +6,7 @@ import { CameraTwoTone } from '@ant-design/icons'
 
 const { Sider } = Layout;
 
-export const SiderComponent = ({url}) => {
+export const SiderComponent = () => {
 
   const [collapsed, setCollapsed] = useState(false);
 
@@ -28,27 +28,27 @@ export const SiderComponent = ({url}) => {
         <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
             <Menu.Item key="1" icon={<CameraTwoTone />}>
               <span>Dashboard</span>
-              <Link to={`${url}`} />
+              <Link to='/admin' />
             </Menu.Item>
             <Menu.Item key="2" icon={<CameraTwoTone />}>
               <span>Student</span>
-              <Link to={`${url}/students`} />
+              <Link to='/admin/students' />
             </Menu.Item>
             <Menu.Item key="3" icon={<CameraTwoTone />}>
               <span>Teacher</span>
-              <Link to={`${url}/teachers`} />
+              <Link to='/admin/teachers' />
             </Menu.Item>
             <Menu.Item key="4" icon={<CameraTwoTone />}>
               <span>Course</span>
-              <Link to={`${url}/courses`} />
+              <Link to='/admin/courses' />
             </Menu.Item>
             <Menu.Item key="5" icon={<CameraTwoTone />}>
               <span>Department</span>
-              <Link to={`${url}/departments`} />
+              <Link to='/admin/departments' />
             </Menu.Item>
             <Menu.Item key="6" icon={<CameraTwoTone />}>
               <span>Enrollment</span>
-              <Link to={`${url}/enrollment`} />
+              <Link to='/admin/enrollments' />
             </Menu.Item>
           </Menu>
       </Sider>
