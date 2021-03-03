@@ -1,9 +1,9 @@
 import React, { Fragment, useState } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { login } from 'redux/actions/auth.action';
-import './LoginComponent.styles.scss';
+import './LoginComponent.styles.css';
 
 const Login = ({ login, isAuthenticated }) => {
 
@@ -27,10 +27,9 @@ const Login = ({ login, isAuthenticated }) => {
   }
 
   return (
-    // STYLE CSS ONLY
     <Fragment>
-      <div className="container" id="container">
-        <div className="form-container sign-in-container">
+      <div class="container" id="container">
+        <div class="form-container sign-in-container">
           <h1>Sign In</h1>
             <div className="social-container"></div>
               <form className='form' onSubmit={(e) => onSubmit(e)}>
@@ -54,9 +53,6 @@ const Login = ({ login, isAuthenticated }) => {
                 </div>
                   <button>Login</button>
                   </form>
-              <p className='my-1'>
-               <Link to='/register'>Create an account?</Link>
-              </p>
         </div>
         <div className="overlay-container">
 		      <div className="overlay">
