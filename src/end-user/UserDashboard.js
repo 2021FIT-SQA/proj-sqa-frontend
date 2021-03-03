@@ -1,9 +1,11 @@
 import React from 'react'
 
-export const UserDashboard = () => {
+const UserDashboard = () => {
     return (
         <div>
             End User space...
         </div>
     )
 }
+
+export default UserDashboard

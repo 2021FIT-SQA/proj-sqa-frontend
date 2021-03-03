@@ -1,9 +1,9 @@
 import React, { Fragment, useState } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { login } from 'redux/actions/auth.action';
-import './LoginComponent.styles.scss';
+import './LoginComponent.styles.css';
 
 const Login = ({ login, isAuthenticated }) => {
 
@@ -27,35 +27,38 @@ const Login = ({ login, isAuthenticated }) => {
   }
 
   return (
-    // STYLE CSS ONLY
     <Fragment>
-      <h1 className='large text-primary'>Sign In</h1>
-      <p className='lead'></p>
-      <form className='form' onSubmit={(e) => onSubmit(e)}>
-        <div className='form-group'>
-          <input
-            type='text'
-            placeholder='Username'
-            name='username'
-            value={username}
-            onChange={(e) => onChange(e)}
-          />
+      <div class="container" id="container">
+        <div class="form-container sign-in-container">
+          <h1>Sign In</h1>
+            <div className="social-container"></div>
+              <form className='form' onSubmit={(e) => onSubmit(e)}>
+                <div className='form-group'>
+                  <input
+                    type='text'
+                    placeholder='Username'
+                    name='username'
+                    value={username}
+                    onChange={(e) => onChange(e)}
+                  />
+                </div>
+                <div className='form-group'>
+                  <input
+                    type='password'
+                    placeholder='Password'
+                    name='password'
+                    value={password}
+                    onChange={(e) => onChange(e)}
+                  />
+                </div>
+                  <button className="btn-login">Login</button>
+                  </form>
         </div>
-        <div className='form-group'>
-          <input
-            type='password'
-            placeholder='Password'
-            name='password'
-            value={password}
-            onChange={(e) => onChange(e)}
-          />
-        </div>
-
-        <input type='submit' className='btn btn-primary' value='Login' />
-      </form>
-      <p className='my-1'>
-        Don't have an account? <Link to='/register'>Sign Up</Link>
-      </p>
+        <div className="overlay-container">
+		      <div className="overlay">
+          </div>
+	      </div>
+      </div>
     </Fragment>
   );
 };
