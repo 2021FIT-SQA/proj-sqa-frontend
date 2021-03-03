@@ -29,33 +29,42 @@ const Login = ({ login, isAuthenticated }) => {
   return (
     // STYLE CSS ONLY
     <Fragment>
-      <h1 className='large text-primary'>Sign In</h1>
-      <p className='lead'></p>
-      <form className='form' onSubmit={(e) => onSubmit(e)}>
-        <div className='form-group'>
-          <input
-            type='text'
-            placeholder='Username'
-            name='username'
-            value={username}
-            onChange={(e) => onChange(e)}
-          />
+      <div class="container" id="container">
+        <div class="form-container sign-in-container">
+          <form action="#">
+          <h1>Sign In</h1>
+            <div class="social-container"></div>
+              <form className='form' onSubmit={(e) => onSubmit(e)}>
+                <div className='form-group'>
+                  <input
+                    type='text'
+                    placeholder='Username'
+                    name='username'
+                    value={username}
+                    onChange={(e) => onChange(e)}
+                  />
+                </div>
+                <div className='form-group'>
+                  <input
+                    type='password'
+                    placeholder='Password'
+                    name='password'
+                    value={password}
+                    onChange={(e) => onChange(e)}
+                  />
+                </div>
+                  <button>Login</button>
+                  </form>
+              <p className='my-1'>
+               <Link to='/register'>Create an account?</Link>
+              </p>
+              </form>
         </div>
-        <div className='form-group'>
-          <input
-            type='password'
-            placeholder='Password'
-            name='password'
-            value={password}
-            onChange={(e) => onChange(e)}
-          />
-        </div>
-
-        <input type='submit' className='btn btn-primary' value='Login' />
-      </form>
-      <p className='my-1'>
-        Don't have an account? <Link to='/register'>Sign Up</Link>
-      </p>
+        <div class="overlay-container">
+		      <div class="overlay">
+          </div>
+	      </div>
+      </div>
     </Fragment>
   );
 };

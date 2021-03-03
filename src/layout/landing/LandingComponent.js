@@ -13,8 +13,7 @@ const LandingComponent = ({isAuthenticated}) => {
     return (
         <div>
             {/* Code here */}
-            <Link to='/login'>Login ne`</Link>
-            <div className="test">Test</div>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Login</button>
         </div>
     )
 }
