@@ -28,8 +28,8 @@ const Login = ({ login, isAuthenticated }) => {
 
   return (
     <Fragment>
-      <div class="container" id="container">
-        <div class="form-container sign-in-container">
+      <div className="container" id="container">
+        <div className="form-container sign-in-container">
           <h1>Sign In</h1>
             <div className="social-container"></div>
               <form className='form' onSubmit={(e) => onSubmit(e)}>

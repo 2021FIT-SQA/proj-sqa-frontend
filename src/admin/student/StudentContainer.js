@@ -1,6 +1,12 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
+import queryString from 'query-string'
+
 import { Card } from 'antd'
 import { FilterComponent, StudentTableComponent } from './components'
+
+import { getStudents } from 'redux/actions/student.action'
 
 const data = [
   {
@@ -209,27 +215,63 @@ const data = [
 //   },
 ];
 
-const StudentContainer = () => {
+const StudentContainer = ({ student: {students, loading}, getStudents}) => {
 
-    const [tableData, setTableData] = useState(data);
-    
+  const studentsToDisplay = students.map((student, index = 1) => {
+    const { username, lastName, firstName, gender, email, sinceYear, department, phoneNumber, fullAddress} = student;
+    return {
+      key: index,
+      studentID: username,
+      fullName: `${lastName} ${firstName}`,
+      gender: gender.toLowerCase(),
+      email,
+      sinceYear,
+      department: department.code,
+      phoneNumber,
+      fullAddress
+    }
+  });
+  
+  const [studentData, setStudentData] = useState(studentsToDisplay);
+  const [filters, setFilters] = useState({
+    page: 0,
+    size: 10,
+    sort: 'ASC',
+  })
+
+  const paramsString = queryString.stringify(filters);
+
+  useEffect(() => {
+    getStudents(paramsString);
+  },
+  [getStudents, paramsString]);
+
+
     // Search function
-    const handleSearch = searchText => {
-        const filteredData = tableData.filter(({ fullName }) => {
-          fullName = fullName.toLowerCase();
-          return fullName.includes(searchText);
-        });
-        
-        setTableData([...filteredData])
-      };
-
-    return (
-        <div>
-            <Card title='Students' style={{'overflowX': 'auto'}}>
-                <FilterComponent onSearch={handleSearch} />
-                <StudentTableComponent data={tableData} />
-            </Card>                       
-        </div>
-    )
+  const handleSearch = searchText => {
+    const filteredData = studentData.filter(({ fullName }) => {
+      fullName = fullName.toLowerCase();
+      return fullName.includes(searchText);
+    });
+    setStudentData([...filteredData])
+  };
+  return (
+    <div>
+        <Card title='Students' style={{'overflowX': 'auto'}}>
+            <FilterComponent onSearch={handleSearch} />
+            <StudentTableComponent data={studentData} />
+        </Card>                       
+    </div>
+  )
 }
-export default StudentContainer
+
+StudentContainer.propTypes = {
+  getStudents: PropTypes.func.isRequired,
+  student: PropTypes.object.isRequired,
+}
+
+const mapStateToProps = (state) => ({
+  student: state.student
+})
+
+export default connect(mapStateToProps, {getStudents})(StudentContainer)
