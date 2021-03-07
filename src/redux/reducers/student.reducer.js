@@ -14,9 +14,10 @@ const studentReducer = (state = initialState, action) => {
     const { type, payload } = action;
     switch (type) {
         case GET_ALL_STUDENTS:
+            const { content } = payload;
             return {
                 ...state,
-                students: payload,
+                students: content,
                 loading: false
             }
         case GET_STUDENT_DETAIL:
