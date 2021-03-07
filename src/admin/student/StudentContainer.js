@@ -18,6 +18,7 @@ const StudentContainer = () => {
     pageSize: 10,
   });
   const [filters, setFilters] = useState({
+    // need to change first requet with params ?page=1
     page: 0,
     size: 10
   })
