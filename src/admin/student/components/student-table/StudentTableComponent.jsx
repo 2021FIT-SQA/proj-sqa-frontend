@@ -50,7 +50,7 @@ const handleAction = currentEvent => {
 };
 
 
-export const StudentTableComponent = ({data}) => {
+export const StudentTableComponent = ({data, pagination, onChange}) => {
 
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
@@ -65,10 +65,13 @@ export const StudentTableComponent = ({data}) => {
     return (
         <div>
             <Table
+                rowKey={record => record.key}
                 rowSelection={rowSelection}
                 columns={columns}
                 dataSource={data}
                 style={{'marginTop': '1rem'}}
+                pagination={pagination}
+                onChange={onChange}
             />            
         </div>
     )
