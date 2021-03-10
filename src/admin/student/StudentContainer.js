@@ -17,8 +17,9 @@ const StudentContainer = () => {
     current: 1,
     pageSize: 10,
   });
+  const [keyword, setKeyword] = useState(null);
 
-  async function fetchStudentList(antCurrentPage, pageSize) {
+  async function fetchStudentList(antCurrentPage, pageSize, keyword) {
     try {
 
       //calling getStudents() function from student action 
@@ -27,7 +28,9 @@ const StudentContainer = () => {
       const paramsString = queryString.stringify({
         page: antCurrentPage - 1,
         size: pageSize,
+        keyword: keyword
       });
+      console.log(paramsString)
       const data = await studentApi.getPaginatedStudents(paramsString);
       const { content, pageable, totalElements } = data;
 
@@ -57,27 +60,47 @@ const StudentContainer = () => {
   }
 
   useEffect(() => {
-    fetchStudentList(pagination.current, pagination.pageSize)
+    fetchStudentList(pagination.current, pagination.pageSize, keyword)
   },[]);
 
-    // Search function
-  const handleSearch = searchText => {
-    const filteredData = studentData.filter(({ fullName }) => {
-      fullName = fullName.toLowerCase();
-      return fullName.includes(searchText);
-    });
-    setStudentData([...filteredData])
+  // @BUG: with each given keyword => only get the first page with 10 items
+  const handleFinish = (values) => {
+    // hanlde out search here
+    const { keyword } = values;
+    setKeyword(previous => keyword)
+    // @BUG: cannot set pagination to initial state ????
+    // setPagination({
+    //   ...pagination,
+    //   current: 1,
+    //   pageSize: 10
+    // })
+    
+    // Garbage code -> not utility :<
+    fetchStudentList(1, 10, keyword)
   };
+
+  const handleReset =  () => {
+    // clear the filter
+    // @BUG: keyword is set to be null is only available for FilterComponent
+    //       local state is kept
+    setKeyword(null)
+    // @BUG: cannot set pagination to initial state ????
+    // setPagination({
+    //   ...pagination,
+    //   current: 1,
+    //   pageSize: 10
+    // })
+    fetchStudentList(1, 10, "")
+  }
 
   const handleTableChange = (pagination) => {
     const { current, pageSize } = pagination;
-    // setPagination(pagination);
-    fetchStudentList(current, pageSize);
+    fetchStudentList(current, pageSize, keyword);
   }
   return (
     <div>
         <Card title='Students' style={{'overflowX': 'auto'}}>
-            <FilterComponent onSearch={handleSearch} />
+            <FilterComponent keyword={keyword} onFinish={handleFinish} onReset={handleReset} />
             <StudentTableComponent data={studentData} onChange={handleTableChange} pagination={pagination} />
         </Card>                       
     </div>

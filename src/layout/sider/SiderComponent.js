@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { Layout, Menu } from 'antd';
 import { Link } from 'react-router-dom';
-import './SiderComponent.styles.scss';
+import './SiderComponent.styles.css';
 import { CameraTwoTone } from '@ant-design/icons'
 
 const { Sider } = Layout;
