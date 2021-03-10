@@ -3,7 +3,7 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
-  AUTH_ERROR
+  AUTH_ERROR,
 } from '../constants/constants.action';
 import authApi from '../../api/authApi';
 
@@ -41,5 +41,5 @@ export const login = ({ username, password }) => async (dispatch) => {
 
 // LOG OUT
 export const logout = () => (dispatch) => {
-  dispatch({ type: LOGOUT });
+    dispatch({ type: LOGOUT });
 };
