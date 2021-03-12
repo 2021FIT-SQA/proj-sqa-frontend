@@ -8,6 +8,7 @@ import { Card } from 'antd'
 import { FilterComponent, StudentTableComponent } from './components'
 
 import studentApi from 'api/studentApi'
+import CreateStudentForm from './components/student-form/CreateStudentForm';
 
 const StudentContainer = () => {
 
@@ -102,7 +103,11 @@ const StudentContainer = () => {
         <Card title='Students' style={{'overflowX': 'auto'}}>
             <FilterComponent keyword={keyword} onFinish={handleFinish} onReset={handleReset} />
             <StudentTableComponent data={studentData} onChange={handleTableChange} pagination={pagination} />
-        </Card>                       
+        </Card>    
+        <CreateStudentForm onSubmit={(createStudentDTO) => {
+          // TODO: Call backend
+          console.log(createStudentDTO);
+        }}/>                   
     </div>
   )
 }
