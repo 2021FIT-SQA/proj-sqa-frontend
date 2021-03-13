@@ -50,7 +50,7 @@ const CreateStudentForm = ({ onSubmit }) => {
         sinceYear: 1975,
       }}
       onSubmit={(data) => {
-        data.dob = convertMomentToDateString(data.dob);
+        // data.dob = convertMomentToDateString(data.dob);
         
         // TODO: Call backend to create new student
         onSubmit(data);
@@ -70,8 +70,8 @@ const CreateStudentForm = ({ onSubmit }) => {
                   return "Username's length must be greater than 4";
                 if (value.length > 25)
                   return "Username's length must be lower than 25";
-                if (await checkUsernameUnique(value))
-                  return "Username is already existed, please choose another one";
+                // if (await checkUsernameUnique(value))
+                //   return "Username is already existed, please choose another one";
               }}
             >
               <Input name="username" placeholder="Username" />
@@ -133,8 +133,8 @@ const CreateStudentForm = ({ onSubmit }) => {
                   return "Email's length must be greater than 4";
                 if (value.length > 50)
                   return "Email's length must be lower than 50";
-                if (await checkEmailUnique(value))
-                  return "Email is already existed, please choose another one";
+                // if (await checkEmailUnique(value))
+                //   return "Email is already existed, please choose another one";
               }}
             >
               <Input name="email" type="email" placeholder="Email" />
@@ -150,8 +150,8 @@ const CreateStudentForm = ({ onSubmit }) => {
                   return "Phone Number's length must be greater than 9";
                 if (value.length > 10)
                   return "Phone Number's length must be lower than 10";
-                if (await checkPhoneNumberUnique(value))
-                  return "Phone Number is already existed, please choose another one";
+                // if (await checkPhoneNumberUnique(value))
+                //   return "Phone Number is already existed, please choose another one";
               }}
             >
               <Input name="phoneNumber" placeholder="Phone Number" />
