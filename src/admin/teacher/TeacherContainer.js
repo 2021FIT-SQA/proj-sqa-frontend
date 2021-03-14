@@ -72,7 +72,8 @@ const TeacherContainer = () => {
         console.log('filter', filters)
         fetchTeacherList(queryString.stringify({
             page: paginate.current,
-            size: paginate.pageSize
+            size: paginate.pageSize,
+            keyword: params.keyword
         }))
     }
 

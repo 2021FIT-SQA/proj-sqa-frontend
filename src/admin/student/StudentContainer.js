@@ -88,7 +88,8 @@ const handleReset =  () => {
     console.log(filters)
     fetchStudentList(queryString.stringify({
       page: pagination.current,
-      size: pagination.pageSize
+      size: pagination.pageSize,
+      keyword: params.keyword
     }));
   }
   return (
