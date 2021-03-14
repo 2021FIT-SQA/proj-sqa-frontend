@@ -29,10 +29,14 @@ const columns = [
   {
     title: 'Department',
     dataIndex: 'department',
+    filters: [
+      { text: 'FIT', value: 'FIT' },
+      { text: 'FMT', value: 'FMT' },
+    ]
   },
 ];
 
-export const TeacherTableComponent = ({data, pagination, onChange}) => {
+export const TeacherTableComponent = ({data, pagination, loading, onChange}) => {
 
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
@@ -54,6 +58,7 @@ export const TeacherTableComponent = ({data, pagination, onChange}) => {
                 style={{'marginTop': '1rem'}}
                 pagination={pagination}
                 onChange={onChange}
+                loading={loading}
             />            
         </div>
     )

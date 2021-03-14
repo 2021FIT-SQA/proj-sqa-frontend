@@ -6,63 +6,108 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { Card } from 'antd'
 import { TeacherTableComponent } from '../teacher/components/teacher-table/TeacherTable'
+import { TeacherFilterComponent } from './components/filter/TeacherFilter';
 
 import { getTeachers } from 'redux/actions/teacher.action'
+import teacherApi from 'api/teacherApi';
 
-const TeacherContainer = ( {teacher: {teachers, pagination, loading}, getTeachers}) => {
+const TeacherContainer = () => {
 
-    // TODO: build initial teacher data here
+    // TODO: Build custom loading to be independent on redux
     const [teacherList, setTeacherList] = useState([]);
     const [params, setParams] = useState({
         page: 1,
-        size: 20
+        size: 10,
+        keyword: '',
     });
+    const [pagination, setPagination] = useState({
+        current: 1,
+        pageSize: 10
+    })
+    const [loading, setLoading] = useState(false)
 
     // featch teacher api
-    const fetchTeacherList = async (paramsString) => {
+    const fetchTeacherList = (paramsString) => {
         try {
-            // action call
-            await getTeachers(paramsString);
-            // custom attribute to match column index
-            const teacherToDisplay = teachers.map(ele => {
-                const { username, firstName,lastName, gender, email, phoneNumber, dob, department } = ele;
-                return {
-                    key: uuidv4(),
-                    username,
-                    fullName: `${lastName} ${firstName.split('').splice(0,firstName.indexOf('(')).join('')}`,
-                    gender,
-                    email,
-                    phoneNumber,
-                    dob: dob.reverse().join('/'),
-                    department: `${department.name} (${department.code})`
-                }
-            });
-            setTeacherList(teacherToDisplay);
+            setLoading(previous => true);
+
+            teacherApi.getTeachers(paramsString).then(data => {
+                const { content, pageable, totalElements } = data;
+                const teacherToDisplay = content.map(ele => {
+                    const { username, firstName,lastName, gender, email, phoneNumber, dob, department } = ele;
+                    return {
+                        key: uuidv4(),
+                        username,
+                        fullName: `${lastName} ${firstName.split('').splice(0,firstName.indexOf('(')).join('')}`,
+                        gender,
+                        email,
+                        phoneNumber,
+                        dob: dob.reverse().join('/'),
+                        department: `${department.name} (${department.code})`
+                    } 
+                })
+                setTeacherList(teacherToDisplay);
+                setPagination( previous => {
+                    return {
+                        ...previous,
+                        current: pageable.pageNumber + 1,
+                        pageSize: pageable.pageSize,
+                        total: totalElements
+                    }
+                })
+                setLoading(previous => false)
+            })
         } catch (error) {
             throw error
         }
     }
 
-    // component did mount
+    // did mount every params changes
     useEffect(() => {
-        // first request with params: ?page=1&size=10
         fetchTeacherList(queryString.stringify(params));
-    }, [])
+    }, [params])
 
-    // TODO: need to memoized value on of pagination on table change
-    const handlePagination = (paginate) => {
+    // TODO: filters on table changing
+    const handlePagination = (paginate, filters) => {
+        console.log('filter', filters)
         fetchTeacherList(queryString.stringify({
             page: paginate.current,
             size: paginate.pageSize
         }))
     }
 
-    return loading ? (<div>loadingggg</div>) : (
+    const handleFinish = (values) => {
+        const {keyword} = values;
+        setParams(previous => {
+            return {
+                ...previous,
+                keyword: keyword
+            }
+        })
+    }
+    
+    const handleReset =  () => {
+        setParams(previous => {
+            return {
+                ...previous,
+                keyword: ''
+            }
+        })
+    }
+
+    return (
         <div>
             <Card>
+                <TeacherFilterComponent 
+                    keyword={params.keyword}
+                    onFinish={handleFinish}
+                    onReset={handleReset}
+
+                />
                 <TeacherTableComponent 
                     data={teacherList}
                     onChange={handlePagination}
+                    loading={loading}
                     pagination={pagination}
                 />
             </Card>
@@ -70,14 +115,4 @@ const TeacherContainer = ( {teacher: {teachers, pagination, loading}, getTeacher
     )
 }
 
-
-
-TeacherContainer.propTypes = {
-    getTeachers: PropTypes.func.isRequired,
-    teacher: PropTypes.object.isRequired,
-}
-const mapStateToProps = state => ({
-    teacher: state.teacher
-})
-
-export default connect(mapStateToProps, { getTeachers })(TeacherContainer)
+export default TeacherContainer

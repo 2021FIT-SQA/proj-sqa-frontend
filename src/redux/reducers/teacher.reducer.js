@@ -3,10 +3,6 @@ import * as constants from '../constants/constants.action'
 const initialState = {
     teacher: null,
     teachers: [],
-    pagination: {
-        current: 1,
-        pageSize: 10,
-    },
     loading: true,
     error: {}
 }
@@ -19,11 +15,6 @@ const teacherReducer = (state = initialState, action) => {
             return {
                 ...state,
                 teachers: content,
-                pagination: {
-                    current: pageable.pageNumber + 1,
-                    pageSize: pageable.pageSize,
-                    total: totalElements
-                },
                 loading: false
             }
         case constants.TEACHER_ERROR:

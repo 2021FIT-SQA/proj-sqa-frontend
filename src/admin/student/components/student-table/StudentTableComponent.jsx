@@ -50,7 +50,7 @@ const handleAction = currentEvent => {
 };
 
 
-export const StudentTableComponent = ({data, pagination, onChange}) => {
+export const StudentTableComponent = ({data, pagination, onChange, loading}) => {
 
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
@@ -72,6 +72,7 @@ export const StudentTableComponent = ({data, pagination, onChange}) => {
                 style={{'marginTop': '1rem'}}
                 pagination={pagination}
                 onChange={onChange}
+                loading={loading}
             />            
         </div>
     )

@@ -15,41 +15,46 @@ const StudentContainer = ({ postStudent }) => {
 
   // STATE HANDLING
   const [studentData, setStudentData] = useState([]);
+  const [params, setParams] = useState({
+    page: 1,
+    size: 10,
+    keyword: '',
+  });
   const [pagination, setPagination] = useState({
     current: 1,
-    pageSize: 10,
-  });
-  const [keyword, setKeyword] = useState(null);
+    pageSize: 10
+})
+  const [loading, setLoading] = useState(false)
 
-  async function fetchStudentList(antCurrentPage, pageSize, keyword) {
+  const fetchStudentList = (paramsString) => {
     try {
-      const paramsString = queryString.stringify({
-        page: antCurrentPage - 1,
-        size: pageSize,
-        keyword: keyword
-      });
-      const data = await studentApi.getPaginatedStudents(paramsString);
-      const { content, pageable, totalElements } = data;
-
-      const studentsToDisplay = content.map((student) => {
-        const { username, lastName, firstName, gender, email, sinceYear, department, phoneNumber, fullAddress} = student;
-        return {
-          key: uuidv4(),
-          studentID: username,
-          fullName: `${lastName} ${firstName}`,
-          gender,
-          email,
-          sinceYear,
-          department: `${department.name} (${department.code})`,
-          phoneNumber,
-          fullAddress
-        }
-      });
-      setStudentData(studentsToDisplay);
-      setPagination({
-        current: pageable.pageNumber + 1,
-        pageSize: pageable.pageSize,
-        total: totalElements,
+      setLoading(pre => true);
+      studentApi.getPaginatedStudents(paramsString).then(data => {
+        const { content, pageable, totalElements } = data;
+        const studentsToDisplay = content.map((student) => {
+          const { username, lastName, firstName, gender, email, sinceYear, department, phoneNumber, fullAddress} = student;
+          return {
+            key: uuidv4(),
+            studentID: username,
+            fullName: `${lastName} ${firstName}`,
+            gender,
+            email,
+            sinceYear,
+            department: `${department.name} (${department.code})`,
+            phoneNumber,
+            fullAddress
+          }
+        });
+        setStudentData(studentsToDisplay);
+        setPagination(pre => {
+          return {
+            ...pre,
+            current: pageable.pageNumber + 1,
+            pageSize: pageable.pageSize,
+            total: totalElements
+          }
+        })
+        setLoading(pre => false)
       })
     } catch (error) {
         throw error;
@@ -57,29 +62,40 @@ const StudentContainer = ({ postStudent }) => {
   }
 
   useEffect(() => {
-    fetchStudentList(pagination.current, pagination.pageSize, keyword)
-  },[]);
+    fetchStudentList(queryString.stringify(params))
+  }, [params]);
 
   const handleFinish = (values) => {
-    const { keyword } = values;
-    setKeyword(previous => keyword)
-    fetchStudentList(1, 10, keyword)
-  };
+    setParams(previous => {
+      return {
+        ...previous,
+        keyword: values.keyword
+      }
+    })
+}
 
-  const handleReset =  () => {
-    setKeyword(null)
-    fetchStudentList(1, 10, "")
-  }
+const handleReset =  () => {
+  setParams(previous => {
+    return {
+      ...previous,
+      keyword: ''
+    }
+  })
+}
 
-  const handleTableChange = (pagination) => {
-    const { current, pageSize } = pagination;
-    fetchStudentList(current, pageSize, keyword);
+  // TODO: filter some columns
+  const handleTableChange = (pagination, filters) => {
+    console.log(filters)
+    fetchStudentList(queryString.stringify({
+      page: pagination.current,
+      size: pagination.pageSize
+    }));
   }
   return (
     <div>
         <Card title='Students' style={{'overflowX': 'auto'}}>
-            <FilterComponent keyword={keyword} onFinish={handleFinish} onReset={handleReset} />
-            <StudentTableComponent data={studentData} onChange={handleTableChange} pagination={pagination} />
+            <FilterComponent keyword={params.keyword} onFinish={handleFinish} onReset={handleReset} />
+            <StudentTableComponent data={studentData} onChange={handleTableChange} pagination={pagination} loading={loading} />
         </Card>    
         <CreateStudentForm onSubmit={(createStudentDTO) => {
           // TODO: Call backend
