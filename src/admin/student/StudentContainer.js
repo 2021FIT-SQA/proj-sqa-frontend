@@ -28,7 +28,6 @@ const StudentContainer = ({ postStudent }) => {
         size: pageSize,
         keyword: keyword
       });
-      console.log(paramsString)
       const data = await studentApi.getPaginatedStudents(paramsString);
       const { content, pageable, totalElements } = data;
 
@@ -38,10 +37,10 @@ const StudentContainer = ({ postStudent }) => {
           key: uuidv4(),
           studentID: username,
           fullName: `${lastName} ${firstName}`,
-          gender: gender.toLowerCase(),
+          gender,
           email,
           sinceYear,
-          department: department.code,
+          department: `${department.name} (${department.code})`,
           phoneNumber,
           fullAddress
         }
@@ -53,7 +52,7 @@ const StudentContainer = ({ postStudent }) => {
         total: totalElements,
       })
     } catch (error) {
-        console.log(error)
+        throw error;
     }
   }
 
@@ -84,7 +83,8 @@ const StudentContainer = ({ postStudent }) => {
         </Card>    
         <CreateStudentForm onSubmit={(createStudentDTO) => {
           // TODO: Call backend
-          postStudent(createStudentDTO)
+          console.log(createStudentDTO)
+          // postStudent(createStudentDTO)
         }}/>                   
     </div>
   )
