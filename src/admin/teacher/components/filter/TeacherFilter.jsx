@@ -1,8 +1,9 @@
 import React from 'react'
 import { Form, Row, Col, Input, Button} from 'antd';
 
+export const TeacherFilter = (props) => {
+    const {keyword, onFinish, onReset } = props;
 
-export const FilterComponent = ({keyword, onFinish, onReset}) => {
     return (
         <Form className="search-form" onFinish={onFinish}>
             <Row style={{width: '100%'}}>
@@ -30,6 +31,5 @@ export const FilterComponent = ({keyword, onFinish, onReset}) => {
                 }
             </Row>
         </Form>
-    );
-};
-
+    )
+}
