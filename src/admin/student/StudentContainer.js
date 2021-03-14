@@ -4,24 +4,28 @@ import { Card, Row, Col, Button, Modal } from "antd";
 
 import { FilterComponent, StudentTableComponent } from "./components";
 
-import studentApi from "api/studentApi"; 
+import studentApi from "api/studentApi";
 import CreateStudentForm from "./components/student-form/StudentForm";
 
-import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
-import { postStudent } from 'redux/actions/student.action'
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { postStudent } from "redux/actions/student.action";
 
 const StudentContainer = ({ postStudent }) => {
-
   // STATE HANDLING
   const [students, setStudents] = useState([]);
+
+  const [params, setParams] = useState({
+    page: 1,
+    size: 10,
+    keyword: "",
+  });
 
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
   });
-  const [keyword, setKeyword] = useState(null);
-
+  
   const [isStudentTableLoading, setStudentTableLoading] = useState(false);
 
   const [
@@ -46,36 +50,58 @@ const StudentContainer = ({ postStudent }) => {
       const { content, pageable, totalElements } = data;
 
       setStudents(content);
-      
+
       setPagination({
         // current: antCurrentPage,
         pageSize: pageable.pageSize,
         total: totalElements,
       });
+
+      setPagination((pre) => {
+        return {
+          ...pre,
+          current: pageable.pageNumber + 1,
+          pageSize: pageable.pageSize,
+          total: totalElements,
+        };
+      });
     } catch (error) {
-        throw error;
+      throw error;
     }
     setStudentTableLoading(false);
   }
 
   useEffect(() => {
-    fetchStudentList(pagination.current, pagination.pageSize, keyword);
-  }, []);
+    fetchStudentList(queryString.stringify(params));
+  }, [params]);
 
   const handleFinish = (values) => {
-    const { keyword } = values;
-    setKeyword(previous => keyword)
-    fetchStudentList(1, 10, keyword)
+    setParams((previous) => {
+      return {
+        ...previous,
+        keyword: values.keyword,
+      };
+    });
   };
 
-  const handleReset =  () => {
-    setKeyword(null)
-    fetchStudentList(1, 10, "")
-  }
+  const handleReset = () => {
+    setParams((previous) => {
+      return {
+        ...previous,
+        keyword: "",
+      };
+    });
+  };
 
-  const handleTableChange = (pagination) => {
-    const { current, pageSize } = pagination;
-    fetchStudentList(current, pageSize, keyword);
+  const handleTableChange = (pagination, filters) => {
+    console.log(filters);
+    fetchStudentList(
+      queryString.stringify({
+        page: pagination.current,
+        size: pagination.pageSize,
+        keyword: params.keyword,
+      })
+    );
   };
 
   return (
@@ -84,7 +110,7 @@ const StudentContainer = ({ postStudent }) => {
         <Row>
           <Col span={22}>
             <FilterComponent
-              keyword={keyword}
+              keyword={params.keyword}
               onFinish={handleFinish}
               onReset={handleReset}
             />
@@ -106,15 +132,19 @@ const StudentContainer = ({ postStudent }) => {
           students={students}
           onChange={handleTableChange}
           pagination={pagination}
-          onStudentEdit={(_, index) => { 
-            setSelectedStudent(students[index]); 
+          onStudentEdit={(_, index) => {
+            setSelectedStudent(students[index]);
             setStudentFormDialogOpened(true);
           }}
         />
       </Card>
 
       <Modal
-        title={selectedStudent ? `Edit Student ${selectedStudent.lastName} ${selectedStudent.firstName}` : "Create a new Student"}
+        title={
+          selectedStudent
+            ? `Edit Student ${selectedStudent.lastName} ${selectedStudent.firstName}`
+            : "Create a new Student"
+        }
         visible={isCreateStudentFormDialogOpened}
         onOk={() => {
           setStudentFormDialogOpened(false);
@@ -136,7 +166,7 @@ const StudentContainer = ({ postStudent }) => {
 
               console.log("Success. Response Model: ");
               console.log(student);
-              
+
               // Close the form dialog
               setStudentFormDialogOpened(false);
 
@@ -162,6 +192,6 @@ const StudentContainer = ({ postStudent }) => {
 
 StudentContainer.propTypes = {
   postStudent: PropTypes.func.isRequired,
-}
+};
 
-export default connect(null, { postStudent })(StudentContainer)
+export default connect(null, { postStudent })(StudentContainer);

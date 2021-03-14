@@ -1,7 +1,7 @@
 import React from 'react'
 import { Form, Row, Col, Input, Button} from 'antd';
 
-export const TeacherFilter = (props) => {
+export const TeacherFilterComponent = (props) => {
     const {keyword, onFinish, onReset } = props;
 
     return (
