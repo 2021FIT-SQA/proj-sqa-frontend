@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import queryString from "query-string";
-import { Card, Row, Col, Button, Modal } from "antd";
+import { Card, Button, Modal, Typography, Row, Col } from "antd";
 
 import { FilterComponent, StudentTableComponent } from "./components";
 
@@ -20,7 +20,7 @@ const StudentContainer = ({ postStudent }) => {
     size: 10,
     keyword: "",
   });
-  
+
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
@@ -95,16 +95,23 @@ const StudentContainer = ({ postStudent }) => {
   return (
     <div>
       <Card title="Students" style={{ overflowX: "auto" }}>
+        <FilterComponent
+          keyword={params.keyword}
+          onFinish={handleFinish}
+          onReset={handleReset}
+        />
         <Row>
-          <Col span={22}>
-            <FilterComponent
-              keyword={params.keyword}
-              onFinish={handleFinish}
-              onReset={handleReset}
-            />
+          <Col span={24} style={{ marginBottom: "15px" }}>
+            {pagination.total && (
+              <Typography.Text>
+                Found <b>{pagination.total}</b> records
+              </Typography.Text>
+            )}
           </Col>
-          <Col span={2}>
+
+          <Col span={24}>
             <Button
+              type="primary"
               onClick={() => {
                 setSelectedStudent(null);
                 setStudentFormDialogOpened(true);
