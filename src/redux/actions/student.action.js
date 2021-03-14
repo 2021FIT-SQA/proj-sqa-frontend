@@ -17,12 +17,12 @@ export const postStudent = (createStudentDTO) => async dispatch => {
         },
     }
     try {
-        console.log(createStudentDTO)
         const res = await studentApi.createStudent(createStudentDTO, config);
         dispatch({
             type: constants.POST_STUDENT,
             payload: res
         })
+        return res;
     } catch (err) {
         dispatch({
             type: constants.STUDENT_ERROR,

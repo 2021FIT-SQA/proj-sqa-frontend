@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import queryString from "query-string";
-import { v4 as uuidv4 } from "uuid";
-import { Card, Row, Col, Button } from "antd";
+import { Card, Row, Col, Button, Modal } from "antd";
 
 import { FilterComponent, StudentTableComponent } from "./components";
 
 import studentApi from "api/studentApi"; 
 import CreateStudentForm from "./components/student-form/StudentForm";
-import Modal from "antd/lib/modal/Modal";
 
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
@@ -79,6 +77,7 @@ const StudentContainer = ({ postStudent }) => {
     const { current, pageSize } = pagination;
     fetchStudentList(current, pageSize, keyword);
   };
+
   return (
     <div>
       <Card title="Students" style={{ overflowX: "auto" }}>
@@ -104,20 +103,7 @@ const StudentContainer = ({ postStudent }) => {
 
         <StudentTableComponent
           loading={isStudentTableLoading}
-          data={students.map((student, index) => {
-            return {
-              index,
-              key: uuidv4(),
-              studentID: student.username,
-              fullName: `${student.lastName} ${student.firstName}`,
-              gender: student.gender.toLowerCase(),
-              email: student.email,
-              sinceYear: student.sinceYear,
-              department: student.department.code,
-              phoneNumber: student.phoneNumber,
-              fullAddress: student.fullAddress,
-            };
-          })}
+          students={students}
           onChange={handleTableChange}
           pagination={pagination}
           onStudentEdit={(_, index) => { 
@@ -142,8 +128,30 @@ const StudentContainer = ({ postStudent }) => {
           mode={selectedStudent ? "edit" : "create"}
           onSubmit={async (createStudentDTO) => {
             // TODO: Call backend
-            console.log(createStudentDTO);
-            return new Promise(r => setTimeout(r, 2000));
+            try {
+              console.log("Sending... with Request DTO: ");
+              console.log(createStudentDTO);
+
+              const student = await postStudent(createStudentDTO);
+
+              console.log("Success. Response Model: ");
+              console.log(student);
+              
+              // Close the form dialog
+              setStudentFormDialogOpened(false);
+
+              // Show success dialog
+              Modal.success({
+                title: "Success",
+                content: `Successfully saved student ${student.lastName} ${student.firstName} with ID ${student.id}`,
+              });
+            } catch (e) {
+              Modal.error({
+                title: "Error",
+                content: e.toString(),
+              });
+            }
+            return;
           }}
           initialValues={selectedStudent}
         />

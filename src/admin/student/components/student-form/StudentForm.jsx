@@ -13,7 +13,6 @@ import { Formik } from "formik";
 import moment from "moment";
 import departmentApi from "api/departmentApi";
 import userApi from "api/userApi";
-import { Spin } from "antd";
 
 const StudentForm = ({ onSubmit, initialValues, mode }) => {
   const now = moment();
@@ -22,14 +21,8 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
 
   initialValues &&
     (function convertInitialValuesToDTO() {
-      // TODO
-      // const dob = initialValues.dob;
-      // console.log(dob);
-      // const year = dob[0];
-      // const month = dob[1];
-      // const day = dob[2];
-      // initialValues.dob = moment(`${year}/${month}/${day}`, "YYYY/MM/DD");
-      // console.log(initialValues);
+      // Transform
+      initialValues.departmentID = initialValues.department.id;
     })();
 
   React.useEffect(() => {
@@ -64,10 +57,22 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
           sinceYear: 1975,
         }
       }
-      onSubmit={(data) => {
-        data.dob = convertMomentToDateString(data.dob);
-        // TODO: Call backend to create new student
-        onSubmit(data);
+      onSubmit={async (data) => {
+        // @BUG: Cannot determine the correct type of data.dob at runtime
+        // it is either "string" or "Moment" (as "object" when checking with typeof)
+
+        // The current solution is to check its type first, then convert it to DTO
+
+        const studentDTO = { ...data };
+
+        if (typeof studentDTO.dob === "string") // 2000-01-03T17:00:00.000Z, for example
+          studentDTO.dob = studentDTO.dob.substring(10); // Get the 2000-01-03 part
+        else if (typeof data.dob === "object")
+          studentDTO.dob = convertMomentToDateString(studentDTO.dob);
+
+        console.log(data);
+
+        await onSubmit(studentDTO);
       }}
     >
       {({ values, handleSubmit, isSubmitting }) => {
@@ -76,6 +81,7 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
             {/* every formik-antd component must have the 'name' prop set: */}
             <Form.Item
               name="username"
+              required
               label="Username"
               style={{ width: "100%" }}
               validate={async (value) => {
@@ -84,7 +90,7 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
                   return "Username's length must be greater than 4";
                 if (value.length > 25)
                   return "Username's length must be lower than 25";
-                if (!(await checkUsernameUnique(value) === true))
+                if (!((await checkUsernameUnique(value)) === true))
                   return "Username is already existed, please choose another one";
               }}
             >
@@ -93,6 +99,7 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
 
             <Form.Item
               hidden={mode === "edit"}
+              required
               name="password"
               label="Password"
               style={{ width: "100%" }}
@@ -108,6 +115,7 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
             </Form.Item>
 
             <Form.Item
+              required
               name="firstName"
               label="First Name"
               style={{ width: "100%" }}
@@ -123,6 +131,7 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
             </Form.Item>
 
             <Form.Item
+              required
               name="lastName"
               label="Last Name"
               style={{ width: "100%" }}
@@ -141,6 +150,7 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
               type="email"
               name="email"
               label="Email"
+              required
               style={{ width: "100%" }}
               validate={async (value) => {
                 if (value == null) return "Email is required";
@@ -148,7 +158,7 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
                   return "Email's length must be greater than 4";
                 if (value.length > 50)
                   return "Email's length must be lower than 50";
-                if (!(await checkEmailUnique(value) === true))
+                if (!((await checkEmailUnique(value)) === true))
                   return "Email is already existed, please choose another one";
               }}
             >
@@ -156,6 +166,7 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
             </Form.Item>
 
             <Form.Item
+              required
               name="phoneNumber"
               label="Phone Number"
               style={{ width: "100%" }}
@@ -165,7 +176,7 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
                   return "Phone Number's length must be greater than 9";
                 if (value.length > 10)
                   return "Phone Number's length must be lower than 10";
-                if (!(await checkPhoneNumberUnique(value) === true))
+                if (!((await checkPhoneNumberUnique(value)) === true))
                   return "Phone Number is already existed, please choose another one";
               }}
             >
@@ -173,6 +184,7 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
             </Form.Item>
 
             <Form.Item
+              required
               name="gender"
               label="Gender"
               style={{ width: "100%" }}
@@ -196,6 +208,7 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
             </Form.Item>
 
             <Form.Item
+              required
               name="dob"
               label="Date Of Birth"
               style={{ width: "100%" }}
@@ -219,6 +232,7 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
             </Form.Item>
 
             <Form.Item
+              required
               name="sinceYear"
               label="Joined year"
               style={{ width: "100%" }}
@@ -236,6 +250,7 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
             </Form.Item>
 
             <Form.Item
+              required
               name="fatherName"
               label="Father Name"
               style={{ width: "100%" }}
@@ -251,6 +266,7 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
             </Form.Item>
 
             <Form.Item
+              required
               name="motherName"
               label="Mother Name"
               style={{ width: "100%" }}
@@ -266,6 +282,7 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
             </Form.Item>
 
             <Form.Item
+              required
               name="fullAddress"
               label="Full Address"
               style={{ width: "100%" }}
@@ -281,6 +298,7 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
             </Form.Item>
 
             <Form.Item
+              required
               name="departmentID"
               label="Department"
               style={{ width: "100%" }}
@@ -310,7 +328,7 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
             </Form.Item>
 
             <SubmitButton style={{ width: "100%", marginBottom: "10px" }}>
-              {isSubmitting ? <Spin /> : "Submit"}
+              {mode === "edit" ? "Update" : "Create"}
             </SubmitButton>
             <ResetButton style={{ width: "100%" }}>Reset</ResetButton>
           </Form>
