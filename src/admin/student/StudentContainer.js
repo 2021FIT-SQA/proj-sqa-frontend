@@ -20,12 +20,11 @@ const StudentContainer = ({ postStudent }) => {
     size: 10,
     keyword: "",
   });
-
+  
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
   });
-  
   const [isStudentTableLoading, setStudentTableLoading] = useState(false);
 
   const [
@@ -38,24 +37,13 @@ const StudentContainer = ({ postStudent }) => {
   // the student form will be switched from creating to editing mode.
   const [selectedStudent, setSelectedStudent] = useState(null);
 
-  async function fetchStudentList(antCurrentPage, pageSize, keyword) {
+  async function fetchStudentList(paramsString) {
     setStudentTableLoading(true);
     try {
-      const paramsString = queryString.stringify({
-        page: antCurrentPage,
-        size: pageSize,
-        keyword: keyword,
-      });
       const data = await studentApi.getPaginatedStudents(paramsString);
       const { content, pageable, totalElements } = data;
 
       setStudents(content);
-
-      setPagination({
-        // current: antCurrentPage,
-        pageSize: pageable.pageSize,
-        total: totalElements,
-      });
 
       setPagination((pre) => {
         return {
