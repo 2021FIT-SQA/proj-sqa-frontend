@@ -13,15 +13,27 @@ import { Formik } from "formik";
 import moment from "moment";
 import departmentApi from "api/departmentApi";
 import userApi from "api/userApi";
+import { Spin } from "antd";
 
-const CreateStudentForm = ({ onSubmit }) => {
+const StudentForm = ({ onSubmit, initialValues, mode }) => {
   const now = moment();
 
   const [departments, setDepartments] = React.useState(null);
 
+  initialValues &&
+    (function convertInitialValuesToDTO() {
+      // TODO
+      // const dob = initialValues.dob;
+      // console.log(dob);
+      // const year = dob[0];
+      // const month = dob[1];
+      // const day = dob[2];
+      // initialValues.dob = moment(`${year}/${month}/${day}`, "YYYY/MM/DD");
+      // console.log(initialValues);
+    })();
+
   React.useEffect(() => {
     departmentApi.getAllDepartments().then((result) => {
-      console.log("Called getAllDepartments");
       setDepartments(result);
     });
   }, []);
@@ -44,19 +56,21 @@ const CreateStudentForm = ({ onSubmit }) => {
 
   return (
     <Formik
-      initialValues={{
-        gender: "Male",
-        dob: moment("01/01/2000", "DD/MM/YYYY"),
-        sinceYear: 1975,
-      }}
+      enableReinitialize
+      initialValues={
+        initialValues ?? {
+          gender: "Male",
+          dob: moment("01/01/2000", "DD/MM/YYYY"),
+          sinceYear: 1975,
+        }
+      }
       onSubmit={(data) => {
         data.dob = convertMomentToDateString(data.dob);
-        
         // TODO: Call backend to create new student
         onSubmit(data);
       }}
     >
-      {() => {
+      {({ values, handleSubmit, isSubmitting }) => {
         return (
           <Form layout="vertical">
             {/* every formik-antd component must have the 'name' prop set: */}
@@ -70,7 +84,7 @@ const CreateStudentForm = ({ onSubmit }) => {
                   return "Username's length must be greater than 4";
                 if (value.length > 25)
                   return "Username's length must be lower than 25";
-                if (await checkUsernameUnique(value))
+                if (!(await checkUsernameUnique(value) === true))
                   return "Username is already existed, please choose another one";
               }}
             >
@@ -78,6 +92,7 @@ const CreateStudentForm = ({ onSubmit }) => {
             </Form.Item>
 
             <Form.Item
+              hidden={mode === "edit"}
               name="password"
               label="Password"
               style={{ width: "100%" }}
@@ -133,7 +148,7 @@ const CreateStudentForm = ({ onSubmit }) => {
                   return "Email's length must be greater than 4";
                 if (value.length > 50)
                   return "Email's length must be lower than 50";
-                if (await checkEmailUnique(value))
+                if (!(await checkEmailUnique(value) === true))
                   return "Email is already existed, please choose another one";
               }}
             >
@@ -150,7 +165,7 @@ const CreateStudentForm = ({ onSubmit }) => {
                   return "Phone Number's length must be greater than 9";
                 if (value.length > 10)
                   return "Phone Number's length must be lower than 10";
-                if (await checkPhoneNumberUnique(value))
+                if (!(await checkPhoneNumberUnique(value) === true))
                   return "Phone Number is already existed, please choose another one";
               }}
             >
@@ -295,7 +310,7 @@ const CreateStudentForm = ({ onSubmit }) => {
             </Form.Item>
 
             <SubmitButton style={{ width: "100%", marginBottom: "10px" }}>
-              Submit
+              {isSubmitting ? <Spin /> : "Submit"}
             </SubmitButton>
             <ResetButton style={{ width: "100%" }}>Reset</ResetButton>
           </Form>
@@ -305,4 +320,4 @@ const CreateStudentForm = ({ onSubmit }) => {
   );
 };
 
-export default CreateStudentForm;
+export default StudentForm;

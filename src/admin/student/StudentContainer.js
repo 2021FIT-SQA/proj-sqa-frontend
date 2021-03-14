@@ -1,115 +1,172 @@
-import React, {useEffect, useState} from 'react'
-import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
-import queryString from 'query-string'
-import { v4 as uuidv4 } from 'uuid';
-import { Card } from 'antd'
+import React, { useEffect, useState } from "react";
+import queryString from "query-string";
+import { v4 as uuidv4 } from "uuid";
+import { Card, Row, Col, Button } from "antd";
 
-import { FilterComponent, StudentTableComponent } from './components'
+import { FilterComponent, StudentTableComponent } from "./components";
 
-import studentApi from 'api/studentApi'
-import CreateStudentForm from './components/student-form/CreateStudentForm';
+import studentApi from "api/studentApi";
+import CreateStudentForm from "./components/student-form/StudentForm";
+import Modal from "antd/lib/modal/Modal";
 
 const StudentContainer = () => {
-
   // STATE HANDLING
-  const [studentData, setStudentData] = useState([]);
+  const [students, setStudents] = useState([]);
+
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
   });
   const [keyword, setKeyword] = useState(null);
 
-  async function fetchStudentList(antCurrentPage, pageSize, keyword) {
-    try {
+  const [isStudentTableLoading, setStudentTableLoading] = useState(false);
 
-      //calling getStudents() function from student action 
+  const [
+    isCreateStudentFormDialogOpened,
+    setStudentFormDialogOpened,
+  ] = useState(false);
+
+  // When a student is selected to edit in the student table, this field will be set and
+  // then passed to the student form dialog as the initial values. This also means that
+  // the student form will be switched from creating to editing mode.
+  const [selectedStudent, setSelectedStudent] = useState(null);
+
+  async function fetchStudentList(antCurrentPage, pageSize, keyword) {
+    setStudentTableLoading(true);
+    try {
+      //calling getStudents() function from student action
       // => got undefine dispite of being connected mapDispatchToProps
       // => will refactor code using redux later
       const paramsString = queryString.stringify({
-        page: antCurrentPage - 1,
+        page: antCurrentPage,
         size: pageSize,
-        keyword: keyword
+        keyword: keyword,
       });
-      console.log(paramsString)
       const data = await studentApi.getPaginatedStudents(paramsString);
       const { content, pageable, totalElements } = data;
 
-      const studentsToDisplay = content.map((student) => {
-        const { username, lastName, firstName, gender, email, sinceYear, department, phoneNumber, fullAddress} = student;
-        return {
-          key: uuidv4(),
-          studentID: username,
-          fullName: `${lastName} ${firstName}`,
-          gender: gender.toLowerCase(),
-          email,
-          sinceYear,
-          department: department.code,
-          phoneNumber,
-          fullAddress
-        }
-      });
-      setStudentData(studentsToDisplay);
+      setStudents(content);
+      
       setPagination({
-        current: pageable.pageNumber + 1,
+        // current: antCurrentPage,
         pageSize: pageable.pageSize,
         total: totalElements,
-      })
+      });
     } catch (error) {
-        console.log(error)
+      console.log(error);
     }
+    setStudentTableLoading(false);
   }
 
   useEffect(() => {
-    fetchStudentList(pagination.current, pagination.pageSize, keyword)
-  },[]);
+    fetchStudentList(pagination.current, pagination.pageSize, keyword);
+  }, []);
 
   // @BUG: with each given keyword => only get the first page with 10 items
   const handleFinish = (values) => {
     // hanlde out search here
     const { keyword } = values;
-    setKeyword(previous => keyword)
+    setKeyword((previous) => keyword);
     // @BUG: cannot set pagination to initial state ????
     // setPagination({
     //   ...pagination,
     //   current: 1,
     //   pageSize: 10
     // })
-    
+
     // Garbage code -> not utility :<
-    fetchStudentList(1, 10, keyword)
+    fetchStudentList(1, 10, keyword);
   };
 
-  const handleReset =  () => {
+  const handleReset = () => {
     // clear the filter
     // @BUG: keyword is set to be null is only available for FilterComponent
     //       local state is kept
-    setKeyword(null)
+    setKeyword(null);
     // @BUG: cannot set pagination to initial state ????
     // setPagination({
     //   ...pagination,
     //   current: 1,
     //   pageSize: 10
     // })
-    fetchStudentList(1, 10, "")
-  }
+    fetchStudentList(1, 10, "");
+  };
 
   const handleTableChange = (pagination) => {
     const { current, pageSize } = pagination;
     fetchStudentList(current, pageSize, keyword);
-  }
+  };
   return (
     <div>
-        <Card title='Students' style={{'overflowX': 'auto'}}>
-            <FilterComponent keyword={keyword} onFinish={handleFinish} onReset={handleReset} />
-            <StudentTableComponent data={studentData} onChange={handleTableChange} pagination={pagination} />
-        </Card>    
-        <CreateStudentForm onSubmit={(createStudentDTO) => {
-          // TODO: Call backend
-          console.log(createStudentDTO);
-        }}/>                   
-    </div>
-  )
-}
+      <Card title="Students" style={{ overflowX: "auto" }}>
+        <Row>
+          <Col span={22}>
+            <FilterComponent
+              keyword={keyword}
+              onFinish={handleFinish}
+              onReset={handleReset}
+            />
+          </Col>
+          <Col span={2}>
+            <Button
+              onClick={() => {
+                setSelectedStudent(null);
+                setStudentFormDialogOpened(true);
+              }}
+            >
+              Add Student
+            </Button>
+          </Col>
+        </Row>
 
-export default StudentContainer
+        <StudentTableComponent
+          loading={isStudentTableLoading}
+          data={students.map((student, index) => {
+            return {
+              index,
+              key: uuidv4(),
+              studentID: student.username,
+              fullName: `${student.lastName} ${student.firstName}`,
+              gender: student.gender.toLowerCase(),
+              email: student.email,
+              sinceYear: student.sinceYear,
+              department: student.department.code,
+              phoneNumber: student.phoneNumber,
+              fullAddress: student.fullAddress,
+            };
+          })}
+          onChange={handleTableChange}
+          pagination={pagination}
+          onStudentEdit={(_, index) => { 
+            setSelectedStudent(students[index]); 
+            setStudentFormDialogOpened(true);
+          }}
+        />
+      </Card>
+
+      <Modal
+        title={selectedStudent ? `Edit Student ${selectedStudent.lastName} ${selectedStudent.firstName}` : "Create a new Student"}
+        visible={isCreateStudentFormDialogOpened}
+        onOk={() => {
+          setStudentFormDialogOpened(false);
+        }}
+        onCancel={() => {
+          setStudentFormDialogOpened(false);
+        }}
+        footer={null}
+      >
+        <CreateStudentForm
+          mode={selectedStudent ? "edit" : "create"}
+          onSubmit={async (createStudentDTO) => {
+            // TODO: Call backend
+            console.log(createStudentDTO);
+            return new Promise(r => setTimeout(r, 2000));
+          }}
+          initialValues={selectedStudent}
+        />
+      </Modal>
+    </div>
+  );
+};
+
+export default StudentContainer;
