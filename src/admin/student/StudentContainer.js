@@ -5,11 +5,16 @@ import { Card, Row, Col, Button } from "antd";
 
 import { FilterComponent, StudentTableComponent } from "./components";
 
-import studentApi from "api/studentApi";
+import studentApi from "api/studentApi"; 
 import CreateStudentForm from "./components/student-form/StudentForm";
 import Modal from "antd/lib/modal/Modal";
 
-const StudentContainer = () => {
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
+import { postStudent } from 'redux/actions/student.action'
+
+const StudentContainer = ({ postStudent }) => {
+
   // STATE HANDLING
   const [students, setStudents] = useState([]);
 
@@ -34,9 +39,6 @@ const StudentContainer = () => {
   async function fetchStudentList(antCurrentPage, pageSize, keyword) {
     setStudentTableLoading(true);
     try {
-      //calling getStudents() function from student action
-      // => got undefine dispite of being connected mapDispatchToProps
-      // => will refactor code using redux later
       const paramsString = queryString.stringify({
         page: antCurrentPage,
         size: pageSize,
@@ -53,7 +55,7 @@ const StudentContainer = () => {
         total: totalElements,
       });
     } catch (error) {
-      console.log(error);
+        throw error;
     }
     setStudentTableLoading(false);
   }
@@ -62,35 +64,16 @@ const StudentContainer = () => {
     fetchStudentList(pagination.current, pagination.pageSize, keyword);
   }, []);
 
-  // @BUG: with each given keyword => only get the first page with 10 items
   const handleFinish = (values) => {
-    // hanlde out search here
     const { keyword } = values;
-    setKeyword((previous) => keyword);
-    // @BUG: cannot set pagination to initial state ????
-    // setPagination({
-    //   ...pagination,
-    //   current: 1,
-    //   pageSize: 10
-    // })
-
-    // Garbage code -> not utility :<
-    fetchStudentList(1, 10, keyword);
+    setKeyword(previous => keyword)
+    fetchStudentList(1, 10, keyword)
   };
 
-  const handleReset = () => {
-    // clear the filter
-    // @BUG: keyword is set to be null is only available for FilterComponent
-    //       local state is kept
-    setKeyword(null);
-    // @BUG: cannot set pagination to initial state ????
-    // setPagination({
-    //   ...pagination,
-    //   current: 1,
-    //   pageSize: 10
-    // })
-    fetchStudentList(1, 10, "");
-  };
+  const handleReset =  () => {
+    setKeyword(null)
+    fetchStudentList(1, 10, "")
+  }
 
   const handleTableChange = (pagination) => {
     const { current, pageSize } = pagination;
@@ -169,4 +152,8 @@ const StudentContainer = () => {
   );
 };
 
-export default StudentContainer;
+StudentContainer.propTypes = {
+  postStudent: PropTypes.func.isRequired,
+}
+
+export default connect(null, { postStudent })(StudentContainer)
