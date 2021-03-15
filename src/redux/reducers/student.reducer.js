@@ -1,7 +1,4 @@
-import {
-    GET_ALL_STUDENTS,
-    GET_STUDENT_DETAIL
-} from '../constants/constants.action'
+import * as constants from '../constants/constants.action'
 
 const initialState = {
     student: null,
@@ -13,16 +10,30 @@ const initialState = {
 const studentReducer = (state = initialState, action) => {
     const { type, payload } = action;
     switch (type) {
-        case GET_ALL_STUDENTS:
+        case constants.GET_ALL_STUDENTS:
+            const { content } = payload;
             return {
                 ...state,
-                students: payload,
+                students: content,
                 loading: false
             }
-        case GET_STUDENT_DETAIL:
+        case constants.GET_STUDENT_DETAIL:
+        case constants.UPDATE_STUDENT:
             return {
                 ...state,
                 student: payload,
+                loading: false
+            }
+        case constants.POST_STUDENT:
+            return {
+                ...state,
+                students: [payload, ...state.students],
+                loading: false
+            }
+        case constants.STUDENT_ERROR:
+            return {
+                ...state,
+                error: payload,
                 loading: false
             }
         default:

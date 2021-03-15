@@ -1,5 +1,5 @@
 import React from 'react'
-import './LandingComponent.styles.scss'
+import './LandingComponent.styles.css'
 import { Link, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import PropTypes from "prop-types";
@@ -12,7 +12,7 @@ const LandingComponent = ({isAuthenticated}) => {
     
     return (
         <div className="landing-component">
-            <Link to='/login'><button class="bLogin">Login</button></Link>
+            <Link to='/login'><button className="bLogin">Login</button></Link>
         </div>
     )
 }

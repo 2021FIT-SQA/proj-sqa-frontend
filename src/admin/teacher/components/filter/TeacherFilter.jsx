@@ -1,12 +1,13 @@
 import React from 'react'
 import { Form, Row, Col, Input, Button} from 'antd';
 
+export const TeacherFilterComponent = (props) => {
+    const {keyword, onFinish, onReset } = props;
 
-export const FilterComponent = ({keyword, onFinish, onReset}) => {
     return (
         <Form className="search-form" onFinish={onFinish}>
             <Row style={{width: '100%'}}>
-                <Col span={ keyword === null || keyword === "" ? 21 : 18 }>
+                <Col span={18}>
                     <Form.Item name="keyword">
                         <Input
                             type="text"
@@ -30,6 +31,5 @@ export const FilterComponent = ({keyword, onFinish, onReset}) => {
                 }
             </Row>
         </Form>
-    );
-};
-
+    )
+}

@@ -1,235 +1,198 @@
-import React, {useState} from 'react'
-import { Card } from 'antd'
-import { FilterComponent, StudentTableComponent } from './components'
+import React, { useEffect, useState } from "react";
+import queryString from "query-string";
+import { Card, Button, Modal, Typography, Row, Col } from "antd";
 
-const data = [
-  {
-    key: '1',
-    studentID: '1801040111',
-    fullName: 'Nguyen Van Huyen',
-    gender: 'Male',
-    email: '1801040111@s.hanu.edu.vn',
-    class: '4C18',
-    department: 'FIT',
-    dob: '09/09/2000',
-    phoneNumber: '0967205036',
-    address: 'Thanh Xuan, Ha Noi'
-  },
-  {
-    key: '2',
-    studentID: '1801040222',
-    fullName: 'Pham Tien Thanh',
-    gender: 'Male',
-    email: '1801040222@s.hanu.edu.vn',
-    class: '4C18',
-    department: 'FIT',
-    dob: '02/09/2000',
-    phoneNumber: '121212121121',
-    address: 'Thanh Xuan, Ha Noi'
-  },
-  {
-    key: '3',
-    studentID: '1801040123',
-    fullName: 'Tang Ba Minh',
-    gender: 'Male',
-    email: '1801040123@s.hanu.edu.vn',
-    class: '4C18',
-    department: 'FIT',
-    dob: '03/09/2000',
-    phoneNumber: '01212121212',
-    address: 'Thanh Xuan, Ha Noi'
-  },
-  {
-    key: '4',
-    studentID: '1801040213',
-    fullName: 'Do Thi Ngan',
-    gender: 'Female',
-    email: '1801040213@s.hanu.edu.vn',
-    class: '4C18',
-    department: 'FIT',
-    dob: '05/09/2000',
-    phoneNumber: '01234567889',
-    address: 'Thanh Xuan, Ha Noi'
-  },
-  {
-    key: '5',
-    studentID: '1801040001',
-    fullName: 'Nguyen Thi Thuy Duong',
-    gender: 'Male',
-    email: '1801040001@s.hanu.edu.vn',
-    class: '4C18',
-    department: 'FIT',
-    dob: '08/08/2000',
-    phoneNumber: '09362732673',
-    address: 'Thanh Xuan, Ha Noi'
-  },
-//   {
-//     key: '6',
-//     studentID: '1801040111',
-//     fullName: 'Nguyen Van Huyen',
-//     gender: 'Male',
-//     email: '1801040111@s.hanu.edu.vn',
-//     class: '4C18',
-//     department: 'FIT',
-//     dob: '09/09/2000',
-//     phoneNumber: '0967205036',
-//     address: 'Thanh Xuan, Ha Noi'
-//   },
-//   {
-//     key: '7',
-//     studentID: '1801040111',
-//     fullName: 'Nguyen Van Huyen',
-//     gender: 'Male',
-//     email: '1801040111@s.hanu.edu.vn',
-//     class: '4C18',
-//     department: 'FIT',
-//     dob: '09/09/2000',
-//     phoneNumber: '0967205036',
-//     address: 'Thanh Xuan, Ha Noi'
-//   },
-//   {
-//     key: '8',
-//     studentID: '1801040111',
-//     fullName: 'Nguyen Van Huyen',
-//     gender: 'Male',
-//     email: '1801040111@s.hanu.edu.vn',
-//     class: '4C18',
-//     department: 'FIT',
-//     dob: '09/09/2000',
-//     phoneNumber: '0967205036',
-//     address: 'Thanh Xuan, Ha Noi'
-//   },
-//   {
-//     key: '9',
-//     studentID: '1801040111',
-//     fullName: 'Nguyen Van Huyen',
-//     gender: 'Male',
-//     email: '1801040111@s.hanu.edu.vn',
-//     class: '4C18',
-//     department: 'FIT',
-//     dob: '09/09/2000',
-//     phoneNumber: '0967205036',
-//     address: 'Thanh Xuan, Ha Noi'
-//   },
-//   {
-//     key: '10',
-//     studentID: '1801040111',
-//     fullName: 'Nguyen Van Huyen',
-//     gender: 'Male',
-//     email: '1801040111@s.hanu.edu.vn',
-//     class: '4C18',
-//     department: 'FIT',
-//     dob: '09/09/2000',
-//     phoneNumber: '0967205036',
-//     address: 'Thanh Xuan, Ha Noi'
-//   },
-//   {
-//     key: '11',
-//     studentID: '1801040111',
-//     fullName: 'Nguyen Van Huyen',
-//     gender: 'Male',
-//     email: '1801040111@s.hanu.edu.vn',
-//     class: '4C18',
-//     department: 'FIT',
-//     dob: '09/09/2000',
-//     phoneNumber: '0967205036',
-//     address: 'Thanh Xuan, Ha Noi'
-//   },
-//   {
-//     key: '12',
-//     studentID: '1801040111',
-//     fullName: 'Nguyen Van Huyen',
-//     gender: 'Male',
-//     email: '1801040111@s.hanu.edu.vn',
-//     class: '4C18',
-//     department: 'FIT',
-//     dob: '09/09/2000',
-//     phoneNumber: '0967205036',
-//     address: 'Thanh Xuan, Ha Noi'
-//   },
-//   {
-//     key: '13',
-//     studentID: '1801040111',
-//     fullName: 'Nguyen Van Huyen',
-//     gender: 'Male',
-//     email: '1801040111@s.hanu.edu.vn',
-//     class: '4C18',
-//     department: 'FIT',
-//     dob: '09/09/2000',
-//     phoneNumber: '0967205036',
-//     address: 'Thanh Xuan, Ha Noi'
-//   },
-//   {
-//     key: '14',
-//     studentID: '1801040111',
-//     fullName: 'Nguyen Van Huyen',
-//     gender: 'Male',
-//     email: '1801040111@s.hanu.edu.vn',
-//     class: '4C18',
-//     department: 'FIT',
-//     dob: '09/09/2000',
-//     phoneNumber: '0967205036',
-//     address: 'Thanh Xuan, Ha Noi'
-//   },
-//   {
-//     key: '15',
-//     studentID: '1801040111',
-//     fullName: 'Nguyen Van Huyen',
-//     gender: 'Male',
-//     email: '1801040111@s.hanu.edu.vn',
-//     class: '4C18',
-//     department: 'FIT',
-//     dob: '09/09/2000',
-//     phoneNumber: '0967205036',
-//     address: 'Thanh Xuan, Ha Noi'
-//   },
-//   {
-//     key: '16',
-//     studentID: '1801040111',
-//     fullName: 'Nguyen Van Huyen',
-//     gender: 'Male',
-//     email: '1801040111@s.hanu.edu.vn',
-//     class: '4C18',
-//     department: 'FIT',
-//     dob: '09/09/2000',
-//     phoneNumber: '0967205036',
-//     address: 'Thanh Xuan, Ha Noi'
-//   },
-//   {
-//     key: '1',
-//     studentID: '1801040111',
-//     fullName: 'Nguyen Van Huyen',
-//     gender: 'Male',
-//     email: '1801040111@s.hanu.edu.vn',
-//     class: '4C18',
-//     department: 'FIT',
-//     dob: '09/09/2000',
-//     phoneNumber: '0967205036',
-//     address: 'Thanh Xuan, Ha Noi'
-//   },
-];
+import { FilterComponent, StudentTableComponent } from "./components";
 
-const StudentContainer = () => {
+import studentApi from "api/studentApi";
+import CreateStudentForm from "./components/student-form/StudentForm";
 
-    const [tableData, setTableData] = useState(data);
-    
-    // Search function
-    const handleSearch = searchText => {
-        const filteredData = tableData.filter(({ fullName }) => {
-          fullName = fullName.toLowerCase();
-          return fullName.includes(searchText);
-        });
-        
-        setTableData([...filteredData])
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { postStudent, updateStudent } from "redux/actions/student.action";
+
+const StudentContainer = ({ postStudent, updateStudent }) => {
+  // STATE HANDLING
+  const [students, setStudents] = useState([]);
+
+  const [params, setParams] = useState({
+    page: 1,
+    size: 10,
+    keyword: "",
+  });
+
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+  });
+
+  const [isStudentTableLoading, setStudentTableLoading] = useState(false);
+  
+  const [
+    isCreateStudentFormDialogOpened,
+    setStudentFormDialogOpened,
+  ] = useState(false);
+
+  // When a student is selected to edit in the student table, this field will be set and
+  // then passed to the student form dialog as the initial values. This also means that
+  // the student form will be switched from creating to editing mode.
+  const [selectedStudent, setSelectedStudent] = useState(null);
+
+  async function fetchStudentList(paramsString) {
+    setStudentTableLoading(true);
+    try {
+      const data = await studentApi.getPaginatedStudents(paramsString);
+      const { content, pageable, totalElements } = data;
+
+      setStudents(content);
+
+      setPagination((pre) => {
+        return {
+          ...pre,
+          current: pageable.pageNumber + 1,
+          pageSize: pageable.pageSize,
+          total: totalElements,
+        };
+      });
+    } catch (error) {
+      throw error;
+    }
+    setStudentTableLoading(false);
+  }
+
+  useEffect(() => {
+    fetchStudentList(queryString.stringify(params));
+  }, [params]);
+
+  const handleFinish = (values) => {
+    setParams((previous) => {
+      return {
+        ...previous,
+        keyword: values.keyword,
       };
+    });
+  };
 
-    return (
-        <div>
-            <Card title='Students' style={{'overflowX': 'auto'}}>
-                <FilterComponent onSearch={handleSearch} />
-                <StudentTableComponent data={tableData} />
-            </Card>                       
-        </div>
-    )
-}
-export default StudentContainer
+  const handleReset = () => {
+    setParams((previous) => {
+      return {
+        ...previous,
+        keyword: "",
+      };
+    });
+  };
+
+  const handleTableChange = (pagination, filters) => {
+    console.log(filters);
+    fetchStudentList(
+      queryString.stringify({
+        page: pagination.current,
+        size: pagination.pageSize,
+        keyword: params.keyword,
+      })
+    );
+  };
+
+  return (
+    <div>
+      <Card title="Students" style={{ overflowX: "auto" }}>
+        <FilterComponent
+          keyword={params.keyword}
+          onFinish={handleFinish}
+          onReset={handleReset}
+        />
+        <Row>
+          <Col span={24} style={{ marginBottom: "15px" }}>
+            {pagination.total && (
+              <Typography.Text>
+                Found <b>{pagination.total}</b> records
+              </Typography.Text>
+            )}
+          </Col>
+
+          <Col span={24}>
+            <Button
+              type="primary"
+              onClick={() => {
+                setSelectedStudent(null);
+                setStudentFormDialogOpened(true);
+              }}
+            >
+              Add Student
+            </Button>
+          </Col>
+        </Row>
+
+        <StudentTableComponent
+          loading={isStudentTableLoading}
+          students={students}
+          onChange={handleTableChange}
+          pagination={pagination}
+          onStudentEdit={(_, index) => {
+            setSelectedStudent(students[index]);
+            setStudentFormDialogOpened(true);
+          }}
+        />
+      </Card>
+
+      <Modal
+        title={
+          selectedStudent
+            ? `Edit Student ${selectedStudent.lastName} ${selectedStudent.firstName}`
+            : "Create a new Student"
+        }
+        visible={isCreateStudentFormDialogOpened}
+        onOk={() => {
+          setStudentFormDialogOpened(false);
+        }}
+        onCancel={() => {
+          setStudentFormDialogOpened(false);
+        }}
+        footer={null}
+      >
+        <CreateStudentForm
+          mode={selectedStudent ? "edit" : "create"}
+          onSubmit={async (createStudentDTO) => {
+            // TODO: Call backend
+            try {
+              // Adding student
+              if (selectedStudent === null) {
+                const student = await postStudent(createStudentDTO);
+                // Close the form dialog
+                setStudentFormDialogOpened(false);
+                // Show success dialog
+                Modal.success({
+                  title: "Success",
+                  content: `Successfully saved student ${student.lastName} ${student.firstName} with ID ${student.id}`,
+                });
+              } else {
+                  const student = await updateStudent(createStudentDTO, createStudentDTO.id);
+                  // Close the form dialog
+                  setStudentFormDialogOpened(false);
+                  // Show success dialog
+                  Modal.success({
+                    title: "Success",
+                    content: `Successfully saved student ${student.lastName} ${student.firstName} with ID ${student.id}`,
+                  });
+              } 
+            } catch (e) {
+              Modal.error({
+                title: "Error",
+                content: e.toString(),
+              });
+            }
+            return;
+          }}
+          selectedStudent={selectedStudent}
+        />
+      </Modal>
+    </div>
+  );
+};
+
+StudentContainer.propTypes = {
+  postStudent: PropTypes.func.isRequired,
+  updateStudent: PropTypes.func.isRequired,
+};
+
+export default connect(null, { postStudent, updateStudent })(StudentContainer);
