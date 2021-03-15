@@ -1,13 +1,15 @@
 import axiosClient from './axiosClient'
 
+const baseUrl = '/students'
 const studentApi = {
     getPaginatedStudents: (paramsString) => {
-        const url = `/students?${paramsString}`;
-        return axiosClient.get(url)
+        return axiosClient.get(`${baseUrl}?${paramsString}`)
     },
     createStudent : (studentDTO, config) => {
-        const url = '/students';
-        return axiosClient.post(url, studentDTO, config)
+        return axiosClient.post(baseUrl, studentDTO, config)
+    },
+    updateStudent: (updateStudentDTO, studentID, config) => {
+        return axiosClient.put(`${baseUrl}/${studentID}`, updateStudentDTO, config)
     }
 }
 

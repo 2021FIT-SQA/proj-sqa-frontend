@@ -101,7 +101,8 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
               name="password"
               label="Password"
               style={{ width: "100%" }}
-              validate={async (value) => {
+              validate= {async (value) => {
+                if ( mode === 'edit') return;
                 if (value == null) return "Password is required";
                 if (value.length < 8)
                   return "Password's length must be greater than 8";

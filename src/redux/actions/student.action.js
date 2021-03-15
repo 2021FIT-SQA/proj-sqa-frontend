@@ -30,3 +30,24 @@ export const postStudent = (createStudentDTO) => async dispatch => {
         })
     }
 }
+
+export const updateStudent = (updateStudentDTO, studentID) => async dispatch => {
+    const config = {
+        headers: {
+            "Content-Type": "application/json",
+        },
+    };
+    try {
+        // TODO: call api here
+        const res = await studentApi.updateStudent(updateStudentDTO, studentID, config);
+        dispatch({
+            type: constants.UPDATE_STUDENT,
+            payload: res
+        })
+    } catch (error) {
+        dispatch({
+            type: constants.STUDENT_ERROR,
+            payload: { error: 'update student fail'}
+        })
+    }
+}

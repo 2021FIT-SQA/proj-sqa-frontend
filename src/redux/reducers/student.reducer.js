@@ -18,6 +18,7 @@ const studentReducer = (state = initialState, action) => {
                 loading: false
             }
         case constants.GET_STUDENT_DETAIL:
+        case constants.UPDATE_STUDENT:
             return {
                 ...state,
                 student: payload,

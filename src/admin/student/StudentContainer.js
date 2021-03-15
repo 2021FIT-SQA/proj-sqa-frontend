@@ -9,9 +9,9 @@ import CreateStudentForm from "./components/student-form/StudentForm";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { postStudent } from "redux/actions/student.action";
+import { postStudent, updateStudent } from "redux/actions/student.action";
 
-const StudentContainer = ({ postStudent, }) => {
+const StudentContainer = ({ postStudent, updateStudent }) => {
   // STATE HANDLING
   const [students, setStudents] = useState([]);
 
@@ -156,16 +156,25 @@ const StudentContainer = ({ postStudent, }) => {
             // TODO: Call backend
             try {
               // Adding student
-              const student = await postStudent(createStudentDTO);
-              // Close the form dialog
-              setStudentFormDialogOpened(false);
-              // Show success dialog
-              Modal.success({
-                title: "Success",
-                content: `Successfully saved student ${student.lastName} ${student.firstName} with ID ${student.id}`,
-              });
-
-              // TODO: edit student
+              if (selectedStudent === null) {
+                const student = await postStudent(createStudentDTO);
+                // Close the form dialog
+                setStudentFormDialogOpened(false);
+                // Show success dialog
+                Modal.success({
+                  title: "Success",
+                  content: `Successfully saved student ${student.lastName} ${student.firstName} with ID ${student.id}`,
+                });
+              } else {
+                  const student = await updateStudent(createStudentDTO, createStudentDTO.id);
+                  // Close the form dialog
+                  setStudentFormDialogOpened(false);
+                  // Show success dialog
+                  Modal.success({
+                    title: "Success",
+                    content: `Successfully saved student ${student.lastName} ${student.firstName} with ID ${student.id}`,
+                  });
+              } 
             } catch (e) {
               Modal.error({
                 title: "Error",
@@ -183,6 +192,7 @@ const StudentContainer = ({ postStudent, }) => {
 
 StudentContainer.propTypes = {
   postStudent: PropTypes.func.isRequired,
+  updateStudent: PropTypes.func.isRequired,
 };
 
-export default connect(null, { postStudent })(StudentContainer);
+export default connect(null, { postStudent, updateStudent })(StudentContainer);
