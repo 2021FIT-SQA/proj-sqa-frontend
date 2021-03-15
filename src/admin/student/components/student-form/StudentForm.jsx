@@ -15,6 +15,7 @@ import departmentApi from "api/departmentApi";
 import userApi from "api/userApi";
 
 // TODO: @BUG: check unique attribute request every keydown -> debounce may help (setTimeout for api request)
+// TODO: @URGENT @BUG: update form require password
 const StudentForm = ({ onSubmit, selectedStudent }) => {
   const now = moment();
   const [departments, setDepartments] = useState(null);
@@ -194,7 +195,6 @@ const StudentForm = ({ onSubmit, selectedStudent }) => {
     >
       {({ values, handleSubmit, isSubmitting, errors, touched }) => {
         console.log(errors);
-        console.log(touched)
         return (
           <Form layout="vertical">
             <Form.Item
