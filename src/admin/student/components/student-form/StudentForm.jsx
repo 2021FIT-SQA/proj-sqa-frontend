@@ -193,7 +193,8 @@ const StudentForm = ({ onSubmit, selectedStudent }) => {
       onSubmit={(values) => onFormikSubmit(values)}
     >
       {({ values, handleSubmit, isSubmitting, errors, touched }) => {
-        console.log(errors)
+        console.log(errors);
+        console.log(touched)
         return (
           <Form layout="vertical">
             <Form.Item
@@ -212,7 +213,7 @@ const StudentForm = ({ onSubmit, selectedStudent }) => {
 
             <Form.Item
               hidden={selectedStudent}
-              required
+              required={!selectedStudent}
               validateStatus={
                 touched["password"] && errors["password"] && "error"
               }
