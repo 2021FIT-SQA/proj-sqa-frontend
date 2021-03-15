@@ -25,7 +25,7 @@ export const StudentTableComponent = ({
       fullAddress: student.fullAddress,
       departmentID: student.department.id,
     };
-  });
+});
 
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 

@@ -11,7 +11,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { postStudent } from "redux/actions/student.action";
 
-const StudentContainer = ({ postStudent }) => {
+const StudentContainer = ({ postStudent, }) => {
   // STATE HANDLING
   const [students, setStudents] = useState([]);
 
@@ -25,8 +25,9 @@ const StudentContainer = ({ postStudent }) => {
     current: 1,
     pageSize: 10,
   });
-  const [isStudentTableLoading, setStudentTableLoading] = useState(false);
 
+  const [isStudentTableLoading, setStudentTableLoading] = useState(false);
+  
   const [
     isCreateStudentFormDialogOpened,
     setStudentFormDialogOpened,
@@ -154,22 +155,17 @@ const StudentContainer = ({ postStudent }) => {
           onSubmit={async (createStudentDTO) => {
             // TODO: Call backend
             try {
-              console.log("Sending... with Request DTO: ");
-              console.log(createStudentDTO);
-
+              // Adding student
               const student = await postStudent(createStudentDTO);
-
-              console.log("Success. Response Model: ");
-              console.log(student);
-
               // Close the form dialog
               setStudentFormDialogOpened(false);
-
               // Show success dialog
               Modal.success({
                 title: "Success",
                 content: `Successfully saved student ${student.lastName} ${student.firstName} with ID ${student.id}`,
               });
+
+              // TODO: edit student
             } catch (e) {
               Modal.error({
                 title: "Error",

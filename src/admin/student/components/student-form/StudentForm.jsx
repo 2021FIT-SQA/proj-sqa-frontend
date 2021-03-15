@@ -70,8 +70,6 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
         else if (typeof data.dob === "object")
           studentDTO.dob = convertMomentToDateString(studentDTO.dob);
 
-        console.log(data);
-
         await onSubmit(studentDTO);
       }}
     >

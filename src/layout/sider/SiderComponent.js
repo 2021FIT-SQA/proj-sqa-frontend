@@ -21,7 +21,7 @@ export const SiderComponent = () => {
         collapsed={collapsed}
         onCollapse={onCollapse}
         style={{
-          overflow: 'auto',
+          overflow: 'scrollY',
           height: '100vh',
         }}
       > 
