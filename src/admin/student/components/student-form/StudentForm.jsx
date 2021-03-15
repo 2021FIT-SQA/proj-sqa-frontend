@@ -31,8 +31,14 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
     });
   }, []);
 
+  function leftFillNum(num, targetLength) {
+    return num.toString().padStart(targetLength, 0);
+  }
+
   const convertMomentToDateString = (value) => {
-    return value.format("YYYY-MM-DD");
+    if (value.format) return value.format("YYYY-MM-DD");
+    // Array type
+    else return `${value[0]}-${leftFillNum(value[1], 2)}-${leftFillNum(value[2], 2)}`;
   };
 
   const checkUsernameUnique = async (username) => {
@@ -65,15 +71,19 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
 
         const studentDTO = { ...data };
 
-        if (typeof studentDTO.dob === "string") // 2000-01-03T17:00:00.000Z, for example
-          studentDTO.dob = studentDTO.dob.substring(10); // Get the 2000-01-03 part
+        if (typeof studentDTO.dob === "string")
+          // 2000-01-03T17:00:00.000Z, for example
+          studentDTO.dob = studentDTO.dob.substring(10);
+        // Get the 2000-01-03 part
         else if (typeof data.dob === "object")
           studentDTO.dob = convertMomentToDateString(studentDTO.dob);
+
+        console.log(studentDTO);
 
         await onSubmit(studentDTO);
       }}
     >
-      {({ values, handleSubmit, isSubmitting }) => {
+      {({ values, handleSubmit, isSubmitting, errors }) => {
         return (
           <Form layout="vertical">
             {/* every formik-antd component must have the 'name' prop set: */}
@@ -83,6 +93,7 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
               label="Username"
               style={{ width: "100%" }}
               validate={async (value) => {
+                if (mode === "edit") return;
                 if (value == null) return "Username is required";
                 if (value.length < 4)
                   return "Username's length must be greater than 4";
@@ -92,17 +103,21 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
                   return "Username is already existed, please choose another one";
               }}
             >
-              <Input name="username" placeholder="Username" />
+              <Input
+                disabled={mode === "edit"}
+                name="username"
+                placeholder="Username"
+              />
             </Form.Item>
 
             <Form.Item
               hidden={mode === "edit"}
-              required
+              required={mode !== "edit"}
               name="password"
               label="Password"
               style={{ width: "100%" }}
-              validate= {async (value) => {
-                if ( mode === 'edit') return;
+              validate={async (value) => {
+                if (mode === "edit") return;
                 if (value == null) return "Password is required";
                 if (value.length < 8)
                   return "Password's length must be greater than 8";
@@ -152,6 +167,8 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
               required
               style={{ width: "100%" }}
               validate={async (value) => {
+                if (value === initialValues.email) return;
+                if (mode === "edit") return;
                 if (value == null) return "Email is required";
                 if (value.length < 4)
                   return "Email's length must be greater than 4";
@@ -170,6 +187,8 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
               label="Phone Number"
               style={{ width: "100%" }}
               validate={async (value) => {
+                if (value === initialValues.phoneNumber) return;
+                if (mode === "edit") return;
                 if (value == null) return "Phone Number is required";
                 if (value.length < 9)
                   return "Phone Number's length must be greater than 9";

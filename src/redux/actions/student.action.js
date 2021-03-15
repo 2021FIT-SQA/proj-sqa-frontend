@@ -44,6 +44,7 @@ export const updateStudent = (updateStudentDTO, studentID) => async dispatch => 
             type: constants.UPDATE_STUDENT,
             payload: res
         })
+        return res;
     } catch (error) {
         dispatch({
             type: constants.STUDENT_ERROR,
