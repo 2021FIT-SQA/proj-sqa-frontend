@@ -27,6 +27,7 @@ const studentReducer = (state = initialState, action) => {
         case constants.POST_STUDENT:
             return {
                 ...state,
+                student: payload,
                 students: [payload, ...state.students],
                 loading: false
             }
