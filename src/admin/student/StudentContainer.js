@@ -183,7 +183,7 @@ const StudentContainer = ({ postStudent, updateStudent }) => {
             }
             return;
           }}
-          initialValues={selectedStudent}
+          selectedStudent={selectedStudent}
         />
       </Modal>
     </div>

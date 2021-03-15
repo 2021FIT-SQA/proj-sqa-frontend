@@ -14,15 +14,15 @@ import moment from "moment";
 import departmentApi from "api/departmentApi";
 import userApi from "api/userApi";
 
-const StudentForm = ({ onSubmit, initialValues, mode }) => {
+const StudentForm = ({ onSubmit, selectedStudent }) => {
   const now = moment();
 
   const [departments, setDepartments] = React.useState(null);
 
-  initialValues &&
+  selectedStudent &&
     (function convertInitialValuesToDTO() {
       // Transform
-      initialValues.departmentID = initialValues.department.id;
+      selectedStudent.departmentID = selectedStudent.department.id;
     })();
 
   React.useEffect(() => {
@@ -31,8 +31,18 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
     });
   }, []);
 
+  function leftFillNum(num, targetLength) {
+    return num.toString().padStart(targetLength, 0);
+  }
+
   const convertMomentToDateString = (value) => {
-    return value.format("YYYY-MM-DD");
+    if (value.format) return value.format("YYYY-MM-DD");
+    // Array type
+    else
+      return `${value[0]}-${leftFillNum(value[1], 2)}-${leftFillNum(
+        value[2],
+        2
+      )}`;
   };
 
   const checkUsernameUnique = async (username) => {
@@ -51,7 +61,7 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
     <Formik
       enableReinitialize
       initialValues={
-        initialValues ?? {
+        selectedStudent ?? {
           gender: "Male",
           dob: moment("01/01/2000", "DD/MM/YYYY"),
           sinceYear: 1975,
@@ -65,15 +75,17 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
 
         const studentDTO = { ...data };
 
-        if (typeof studentDTO.dob === "string") // 2000-01-03T17:00:00.000Z, for example
-          studentDTO.dob = studentDTO.dob.substring(10); // Get the 2000-01-03 part
+        if (typeof studentDTO.dob === "string")
+          // 2000-01-03T17:00:00.000Z, for example
+          studentDTO.dob = studentDTO.dob.substring(10);
+        // Get the 2000-01-03 part
         else if (typeof data.dob === "object")
           studentDTO.dob = convertMomentToDateString(studentDTO.dob);
 
         await onSubmit(studentDTO);
       }}
     >
-      {({ values, handleSubmit, isSubmitting }) => {
+      {({ values, handleSubmit, isSubmitting, errors, touched }) => {
         return (
           <Form layout="vertical">
             {/* every formik-antd component must have the 'name' prop set: */}
@@ -88,21 +100,34 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
                   return "Username's length must be greater than 4";
                 if (value.length > 25)
                   return "Username's length must be lower than 25";
-                if (!((await checkUsernameUnique(value)) === true))
+
+                // If we are in creating mode
+                // and this value is already existed in the database
+                // Then warns the user about the duplication
+                if (
+                  !selectedStudent &&
+                  !(await checkUsernameUnique(value) === true)
+                )
                   return "Username is already existed, please choose another one";
               }}
             >
-              <Input name="username" placeholder="Username" />
+              <Input
+                disabled={selectedStudent}
+                name="username"
+                placeholder="Username"
+              />
             </Form.Item>
 
             <Form.Item
-              hidden={mode === "edit"}
+              hidden={selectedStudent}
               required
+              validateStatus={
+                touched["password"] && errors["password"] && "error"
+              }
               name="password"
               label="Password"
               style={{ width: "100%" }}
-              validate= {async (value) => {
-                if ( mode === 'edit') return;
+              validate={async (value) => {
                 if (value == null) return "Password is required";
                 if (value.length < 8)
                   return "Password's length must be greater than 8";
@@ -157,7 +182,19 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
                   return "Email's length must be greater than 4";
                 if (value.length > 50)
                   return "Email's length must be lower than 50";
-                if (!((await checkEmailUnique(value)) === true))
+
+                // If we are in editing mode
+                // and this value is not the initial one
+                // and this value is already existed in the database
+
+                // Or if we are in creating mode
+                // and this value is already existed in the database
+
+                // Then warns the user about the duplication
+                if (
+                  (!selectedStudent || value !== selectedStudent.email) &&
+                  !(await checkEmailUnique(value) === true)
+                )
                   return "Email is already existed, please choose another one";
               }}
             >
@@ -175,7 +212,19 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
                   return "Phone Number's length must be greater than 9";
                 if (value.length > 10)
                   return "Phone Number's length must be lower than 10";
-                if (!((await checkPhoneNumberUnique(value)) === true))
+
+                // If we are in editing mode
+                // and this value is not the initial one
+                // and this value is already existed in the database
+
+                // Or if we are in creating mode
+                // and this value is already existed in the database
+
+                // Then warns the user about the duplication
+                if (
+                  (!selectedStudent || value !== selectedStudent.phoneNumber) &&
+                  !(await checkPhoneNumberUnique(value) === true)
+                )
                   return "Phone Number is already existed, please choose another one";
               }}
             >
@@ -327,7 +376,7 @@ const StudentForm = ({ onSubmit, initialValues, mode }) => {
             </Form.Item>
 
             <SubmitButton style={{ width: "100%", marginBottom: "10px" }}>
-              {mode === "edit" ? "Update" : "Create"}
+              {selectedStudent ? "Update" : "Create"}
             </SubmitButton>
             <ResetButton style={{ width: "100%" }}>Reset</ResetButton>
           </Form>
