@@ -19,6 +19,7 @@ const StudentContainer = ({ postStudent, updateStudent, deleteStudent }) => {
     page: 1,
     size: 10,
     keyword: "",
+    sort: [],
   });
   const [pagination, setPagination] = useState({
     current: 1,
@@ -64,6 +65,7 @@ const StudentContainer = ({ postStudent, updateStudent, deleteStudent }) => {
       return {
         ...previous,
         keyword: values.keyword,
+        sort: values.sort,
       };
     });
   };
@@ -72,6 +74,7 @@ const StudentContainer = ({ postStudent, updateStudent, deleteStudent }) => {
       return {
         ...previous,
         keyword: "",
+        sort: [],
       };
     });
   };
@@ -81,6 +84,7 @@ const StudentContainer = ({ postStudent, updateStudent, deleteStudent }) => {
         page: pagination.current,
         size: pagination.pageSize,
         keyword: params.keyword,
+        sort: params.sort,
       })
     );
   };
