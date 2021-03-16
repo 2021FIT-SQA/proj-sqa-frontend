@@ -31,6 +31,10 @@ const studentReducer = (state = initialState, action) => {
                 students: [payload, ...state.students],
                 loading: false
             }
+        case constants.DELETE_STUDENT:
+            return {
+                ...state,
+            }
         case constants.STUDENT_ERROR:
             return {
                 ...state,

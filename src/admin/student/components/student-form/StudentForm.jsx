@@ -74,6 +74,7 @@ const StudentForm = ({ onSubmit, selectedStudent }) => {
   }
   
   const validatePassword = async (value) => {
+    if (selectedStudent) return; // Since password can not be updated directly in here
     if (value == null) return "Password is required";
     if (value.length < 8)
       return "Password's length must be greater than 8";
@@ -194,7 +195,6 @@ const StudentForm = ({ onSubmit, selectedStudent }) => {
       onSubmit={(values) => onFormikSubmit(values)}
     >
       {({ values, handleSubmit, isSubmitting, errors, touched }) => {
-        console.log(errors);
         return (
           <Form layout="vertical">
             <Form.Item
@@ -213,10 +213,6 @@ const StudentForm = ({ onSubmit, selectedStudent }) => {
 
             <Form.Item
               hidden={selectedStudent}
-              required={!selectedStudent}
-              validateStatus={
-                touched["password"] && errors["password"] && "error"
-              }
               name="password"
               label="Password"
               style={{ width: "100%" }}

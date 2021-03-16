@@ -10,6 +10,9 @@ const studentApi = {
     },
     updateStudent: (updateStudentDTO, studentID, config) => {
         return axiosClient.put(`${baseUrl}/${studentID}`, updateStudentDTO, config)
+    },
+    deleteStudent: (studentID) => {
+        return axiosClient.delete(`${baseUrl}/${studentID}`);
     }
 }
 
