@@ -53,7 +53,7 @@ const MainAdmin = ({children, logout, auth:{isAuthenticated, user,}}) => {
                         </Dropdown>
                     }
                     </Header>
-                    <Content style={{padding: 10}}>
+                    <Content style={{minHeight: '90vh', padding: 10, backgroundColor: '#fff', margin: 10}}>
                        {children}
                     </Content>
                     <Footer 
