@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Form,
   Input,
@@ -14,24 +14,24 @@ import moment from "moment";
 import departmentApi from "api/departmentApi";
 import userApi from "api/userApi";
 
+// TODO: @BUG: check unique attribute request every keydown -> debounce may help (setTimeout for api request)
+// TODO: @URGENT @BUG: update form require password
 const StudentForm = ({ onSubmit, selectedStudent }) => {
   const now = moment();
-
-  const [departments, setDepartments] = React.useState(null);
+  const [departments, setDepartments] = useState(null);
 
   selectedStudent &&
     (function convertInitialValuesToDTO() {
-      // Transform
       selectedStudent.departmentID = selectedStudent.department.id;
     })();
 
-  React.useEffect(() => {
+  useEffect(() => {
     departmentApi.getAllDepartments().then((result) => {
       setDepartments(result);
     });
   }, []);
 
-  function leftFillNum(num, targetLength) {
+  const leftFillNum = (num, targetLength) => {
     return num.toString().padStart(targetLength, 0);
   }
 
@@ -57,6 +57,131 @@ const StudentForm = ({ onSubmit, selectedStudent }) => {
     return await userApi.checkPhoneNumberUnique(phoneNumber);
   };
 
+  // validate methods
+  const validateUsername = async (value) => {
+    if (value == null) return "Username is required";
+    if (value.length < 4)
+      return "Username's length must be greater than 4";
+    if (value.length > 25)
+      return "Username's length must be lower than 25";
+    // TODO: avoid calling api for every keyboard choking
+    // Solution: Debounce -> setTimeout for api calling
+    if (
+      !selectedStudent &&
+      !(await checkUsernameUnique(value) === true)
+    )
+      return "Username is already existed, please choose another one";
+  }
+  
+  const validatePassword = async (value) => {
+    if (selectedStudent) return; // Since password can not be updated directly in here
+    if (value == null) return "Password is required";
+    if (value.length < 8)
+      return "Password's length must be greater than 8";
+    if (value.length > 100)
+      return "Password's length must be lower than 100";
+  }
+
+  const validateFirstName = (value) => {
+    if (value == null) return "First Name is required";
+    if (value.length < 1)
+      return "First Name's length must be greater than 1";
+    if (value.length > 50)
+      return "First Name's length must be lower than 50";
+  }
+
+  const validateLastName = (value) => {
+    if (value == null) return "Last Name is required";
+    if (value.length < 1)
+      return "Last Name's length must be greater than 1";
+    if (value.length > 50)
+      return "Last Name's length must be lower than 50";
+  }
+
+  const validateEmail = async (value) => {
+    if (value == null) return "Email is required";
+    if (value.length < 4)
+      return "Email's length must be greater than 4";
+    if (value.length > 50)
+      return "Email's length must be lower than 50";
+    if (
+      (!selectedStudent || value !== selectedStudent.email) &&
+      !(await checkEmailUnique(value) === true)
+    )
+      return "Email is already existed, please choose another one";
+  }
+
+  const validatePhone = async (value) => {
+    if (value == null) return "Phone Number is required";
+    if (value.length < 9) return "Phone Number's length must be greater than 9";
+    if (value.length > 10) return "Phone Number's length must be lower than 10";
+    if (
+      (!selectedStudent || value !== selectedStudent.phoneNumber) &&
+      !(await checkPhoneNumberUnique(value) === true)
+    )
+      return "Phone Number is already existed, please choose another one";
+  }
+
+  const validateGender = (value) => {
+    if (value == null) return "Gender is required";
+  }
+
+  const validateDOB = (value) => {
+    // value is String type in UTC format
+    if (value == null) return "Date Of Birth is required";
+    const transformed = moment(value);
+    if (!transformed.isSameOrBefore(now))
+      // Moment.isSameOrBefore()
+      return "Date or Birth must be in the past or at the present";
+  }
+
+  const validateJoinYear = (value) => {
+    if (value == null) return "Joined year required";
+    if (value < 2000)
+      return "Joined year must be greater than 2000";
+  }
+
+  const validateFatherName = (value) => {
+    if (value == null) return "Father Name is required";
+    if (value.length < 2)
+      return "Father Name's length must be greater than 2";
+    if (value.length > 50)
+      return "Father Name's length must be lower than 50";
+  }
+
+  const validateMotherName = (value) => {
+    if (value == null) return "Mother Name is required";
+    if (value.length < 2)
+      return "Mother Name's length must be greater than 2";
+    if (value.length > 50)
+      return "Mother Name's length must be lower than 50";
+  }
+  const validateAddress = (value) => {
+    if (value == null) return "Full Address is required";
+    if (value.length < 2)
+      return "Full Address's length must be greater than 2";
+    if (value.length > 255)
+      return "Full Address's length must be lower than 255";
+  }
+
+  const validateDepartment = (value) => {
+    if (value == null) return "Department is required";
+    return;
+  }
+
+  const onFormikSubmit = async (data) => {
+    const studentDTO = { ...data };
+
+    if (typeof studentDTO.dob === "string") {
+      // 2000-01-03T17:00:00.000Z, for example
+      studentDTO.dob = studentDTO.dob.substring(10);
+    }
+    // Get the 2000-01-03 part
+    else if (typeof data.dob === "object") {
+      studentDTO.dob = convertMomentToDateString(studentDTO.dob);
+    }
+    await onSubmit(studentDTO);
+  }
   return (
     <Formik
       enableReinitialize
@@ -64,52 +189,20 @@ const StudentForm = ({ onSubmit, selectedStudent }) => {
         selectedStudent ?? {
           gender: "Male",
           dob: moment("01/01/2000", "DD/MM/YYYY"),
-          sinceYear: 1975,
+          sinceYear: 2016,
         }
       }
-      onSubmit={async (data) => {
-        // @BUG: Cannot determine the correct type of data.dob at runtime
-        // it is either "string" or "Moment" (as "object" when checking with typeof)
-
-        // The current solution is to check its type first, then convert it to DTO
-
-        const studentDTO = { ...data };
-
-        if (typeof studentDTO.dob === "string")
-          // 2000-01-03T17:00:00.000Z, for example
-          studentDTO.dob = studentDTO.dob.substring(10);
-        // Get the 2000-01-03 part
-        else if (typeof data.dob === "object")
-          studentDTO.dob = convertMomentToDateString(studentDTO.dob);
-
-        await onSubmit(studentDTO);
-      }}
+      onSubmit={(values) => onFormikSubmit(values)}
     >
       {({ values, handleSubmit, isSubmitting, errors, touched }) => {
         return (
           <Form layout="vertical">
-            {/* every formik-antd component must have the 'name' prop set: */}
             <Form.Item
               name="username"
               required
               label="Username"
               style={{ width: "100%" }}
-              validate={async (value) => {
-                if (value == null) return "Username is required";
-                if (value.length < 4)
-                  return "Username's length must be greater than 4";
-                if (value.length > 25)
-                  return "Username's length must be lower than 25";
-
-                // If we are in creating mode
-                // and this value is already existed in the database
-                // Then warns the user about the duplication
-                if (
-                  !selectedStudent &&
-                  !(await checkUsernameUnique(value) === true)
-                )
-                  return "Username is already existed, please choose another one";
-              }}
+              validate={(value) => validateUsername(value)}
             >
               <Input
                 disabled={selectedStudent}
@@ -120,18 +213,10 @@ const StudentForm = ({ onSubmit, selectedStudent }) => {
 
             <Form.Item
               hidden={selectedStudent}
-              required
               name="password"
               label="Password"
               style={{ width: "100%" }}
-              validate={async (value) => {
-                if (selectedStudent) return;
-                if (value == null) return "Password is required";
-                if (value.length < 8)
-                  return "Password's length must be greater than 8";
-                if (value.length > 100)
-                  return "Password's length must be lower than 100";
-              }}
+              validate={(value) => validatePassword(value)}
             >
               <Input name="password" placeholder="Password" />
             </Form.Item>
@@ -141,13 +226,7 @@ const StudentForm = ({ onSubmit, selectedStudent }) => {
               name="firstName"
               label="First Name"
               style={{ width: "100%" }}
-              validate={(value) => {
-                if (value == null) return "First Name is required";
-                if (value.length < 1)
-                  return "First Name's length must be greater than 1";
-                if (value.length > 50)
-                  return "First Name's length must be lower than 50";
-              }}
+              validate={(value) => validateFirstName(value)}
             >
               <Input name="firstName" placeholder="First Name" />
             </Form.Item>
@@ -157,13 +236,7 @@ const StudentForm = ({ onSubmit, selectedStudent }) => {
               name="lastName"
               label="Last Name"
               style={{ width: "100%" }}
-              validate={(value) => {
-                if (value == null) return "Last Name is required";
-                if (value.length < 1)
-                  return "Last Name's length must be greater than 1";
-                if (value.length > 50)
-                  return "Last Name's length must be lower than 50";
-              }}
+              validate={value => validateLastName(value)}
             >
               <Input name="lastName" placeholder="Last Name" />
             </Form.Item>
@@ -174,27 +247,7 @@ const StudentForm = ({ onSubmit, selectedStudent }) => {
               label="Email"
               required
               style={{ width: "100%" }}
-              validate={async (value) => {
-                if (value == null) return "Email is required";
-                if (value.length < 4)
-                  return "Email's length must be greater than 4";
-                if (value.length > 50)
-                  return "Email's length must be lower than 50";
-
-                // If we are in editing mode
-                // and this value is not the initial one
-                // and this value is already existed in the database
-
-                // Or if we are in creating mode
-                // and this value is already existed in the database
-
-                // Then warns the user about the duplication
-                if (
-                  (!selectedStudent || value !== selectedStudent.email) &&
-                  !(await checkEmailUnique(value) === true)
-                )
-                  return "Email is already existed, please choose another one";
-              }}
+              validate={value => validateEmail(value)}
             >
               <Input name="email" type="email" placeholder="Email" />
             </Form.Item>
@@ -204,27 +257,7 @@ const StudentForm = ({ onSubmit, selectedStudent }) => {
               name="phoneNumber"
               label="Phone Number"
               style={{ width: "100%" }}
-              validate={async (value) => {
-                if (value == null) return "Phone Number is required";
-                if (value.length < 9)
-                  return "Phone Number's length must be greater than 9";
-                if (value.length > 10)
-                  return "Phone Number's length must be lower than 10";
-
-                // If we are in editing mode
-                // and this value is not the initial one
-                // and this value is already existed in the database
-
-                // Or if we are in creating mode
-                // and this value is already existed in the database
-
-                // Then warns the user about the duplication
-                if (
-                  (!selectedStudent || value !== selectedStudent.phoneNumber) &&
-                  !(await checkPhoneNumberUnique(value) === true)
-                )
-                  return "Phone Number is already existed, please choose another one";
-              }}
+              validate={value => validatePhone(value)}
             >
               <Input name="phoneNumber" placeholder="Phone Number" />
             </Form.Item>
@@ -234,9 +267,7 @@ const StudentForm = ({ onSubmit, selectedStudent }) => {
               name="gender"
               label="Gender"
               style={{ width: "100%" }}
-              validate={(value) => {
-                if (value == null) return "Gender is required";
-              }}
+              validate={value => validateGender(value)}
             >
               <Radio.Group
                 name="gender"
@@ -258,16 +289,7 @@ const StudentForm = ({ onSubmit, selectedStudent }) => {
               name="dob"
               label="Date Of Birth"
               style={{ width: "100%" }}
-              validate={(value) => {
-                // value is String type in UTC format
-                if (value == null) return "Date Of Birth is required";
-
-                const transformed = moment(value);
-
-                if (!transformed.isSameOrBefore(now))
-                  // Moment.isSameOrBefore()
-                  return "Date or Birth must be in the past or at the present";
-              }}
+              validate={value => validateDOB(value)}
             >
               <DatePicker
                 name="dob"
@@ -282,11 +304,7 @@ const StudentForm = ({ onSubmit, selectedStudent }) => {
               name="sinceYear"
               label="Joined year"
               style={{ width: "100%" }}
-              validate={(value) => {
-                if (value == null) return "Joined year required";
-                if (value < 1975)
-                  return "Joined year must be greater than 1975";
-              }}
+              validate={value => validateJoinYear(value)}
             >
               <InputNumber
                 name="sinceYear"
@@ -300,13 +318,7 @@ const StudentForm = ({ onSubmit, selectedStudent }) => {
               name="fatherName"
               label="Father Name"
               style={{ width: "100%" }}
-              validate={(value) => {
-                if (value == null) return "Father Name is required";
-                if (value.length < 2)
-                  return "Father Name's length must be greater than 2";
-                if (value.length > 50)
-                  return "Father Name's length must be lower than 50";
-              }}
+              validate={value => validateFatherName(value)}
             >
               <Input name="fatherName" placeholder="Father Name" />
             </Form.Item>
@@ -316,13 +328,7 @@ const StudentForm = ({ onSubmit, selectedStudent }) => {
               name="motherName"
               label="Mother Name"
               style={{ width: "100%" }}
-              validate={(value) => {
-                if (value == null) return "Mother Name is required";
-                if (value.length < 2)
-                  return "Mother Name's length must be greater than 2";
-                if (value.length > 50)
-                  return "Mother Name's length must be lower than 50";
-              }}
+              validate={value => validateMotherName(value)}
             >
               <Input name="motherName" placeholder="Mother Name" />
             </Form.Item>
@@ -332,13 +338,7 @@ const StudentForm = ({ onSubmit, selectedStudent }) => {
               name="fullAddress"
               label="Full Address"
               style={{ width: "100%" }}
-              validate={(value) => {
-                if (value == null) return "Full Address is required";
-                if (value.length < 2)
-                  return "Full Address's length must be greater than 2";
-                if (value.length > 255)
-                  return "Full Address's length must be lower than 255";
-              }}
+              validate={value => validateAddress(value)}
             >
               <Input name="fullAddress" placeholder="Full Address" />
             </Form.Item>
@@ -348,10 +348,7 @@ const StudentForm = ({ onSubmit, selectedStudent }) => {
               name="departmentID"
               label="Department"
               style={{ width: "100%" }}
-              validate={(value) => {
-                if (value == null) return "Department is required";
-                return;
-              }}
+              validate={value => validateDepartment(value)}
             >
               <Select
                 loading={departments === null}
