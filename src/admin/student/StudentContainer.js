@@ -9,9 +9,9 @@ import CreateStudentForm from "./components/student-form/StudentForm";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { postStudent, updateStudent } from "redux/actions/student.action";
+import { postStudent, updateStudent, deleteStudent } from "redux/actions/student.action";
 
-const StudentContainer = ({ postStudent, updateStudent }) => {
+const StudentContainer = ({ postStudent, updateStudent, deleteStudent }) => {
 
   // COMPONENT STATE
   const [students, setStudents] = useState([]);
@@ -118,6 +118,37 @@ const StudentContainer = ({ postStudent, updateStudent }) => {
     setStudentTableLoading(false);
     return;
   }
+
+  const onStudentDelete = (studentID) => {
+    Modal.warning({
+      title: "Confirm Deletion",
+      content: `Are you sure want to delete student ${studentID}`,
+      closable: true,
+      maskClosable: true,
+      onOk: async () => {
+        setStudentTableLoading(true);
+        try {
+          const result = await deleteStudent(studentID);
+          if (result) {
+            Modal.success({
+              title: "Delete successfully",
+              content: `Successfully deleted student with ID: ${studentID}`,
+            });
+  
+            // Update students arr with deleted student
+            setStudents(students.filter(std => std.id !== studentID));
+          }
+        } catch (e) {
+          Modal.error({
+            title: "Delete failed",
+            content: e.toString(),
+          })
+        }
+        setStudentTableLoading(false);
+      },
+    })
+  };
+
   return (
     <div>
       <Card title="Students" style={{ overflowX: "auto" }}>
@@ -157,6 +188,9 @@ const StudentContainer = ({ postStudent, updateStudent }) => {
             setSelectedStudent(students[index]);
             setStudentFormDialogOpened(true);
           }}
+          onStudentDelete={(_, index) => {
+            onStudentDelete(students[index].id);
+          }}
         />
       </Card>
 
@@ -190,4 +224,4 @@ StudentContainer.propTypes = {
   updateStudent: PropTypes.func.isRequired,
 };
 
-export default connect(null, { postStudent, updateStudent })(StudentContainer);
+export default connect(null, { postStudent, updateStudent, deleteStudent })(StudentContainer);

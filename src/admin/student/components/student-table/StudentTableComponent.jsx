@@ -8,6 +8,7 @@ export const StudentTableComponent = ({
   pagination,
   onChange,
   onStudentEdit,
+  onStudentDelete,
   loading,
 }) => {
   // Transform
@@ -25,7 +26,7 @@ export const StudentTableComponent = ({
       fullAddress: student.fullAddress,
       departmentID: student.department.id,
     };
-});
+  });
 
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
@@ -77,14 +78,27 @@ export const StudentTableComponent = ({
             title: "Action",
             key: "action",
             render: (text, record) => (
-              <Button
-                type="primary"
-                onClick={() => {
-                  onStudentEdit(record, record.index);
-                }}
-              >
-                Edit
-              </Button>
+              <div>
+                <Button
+                  style={{ marginBottom: "3px", width: "100%" }}
+                  type="primary"
+                  onClick={() => {
+                    onStudentEdit(record, record.index);
+                  }}
+                >
+                  Edit
+                </Button>
+                <Button
+                  style={{ width: "100%" }}
+                  danger
+                  type="primary"
+                  onClick={() => {
+                    onStudentDelete(record, record.index);
+                  }}
+                >
+                  Delete
+                </Button>
+              </div>
             ),
           },
         ]}
