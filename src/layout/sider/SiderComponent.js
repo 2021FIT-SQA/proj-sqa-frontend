@@ -21,8 +21,10 @@ export const SiderComponent = () => {
         collapsed={collapsed}
         onCollapse={onCollapse}
         style={{
-          overflow: 'scrollY',
-          height: '100vh',
+          overflow: 'auto',
+          minHeight: '100vh',
+          position: 'fixed',
+          left: 0,
         }}
       > 
         <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
