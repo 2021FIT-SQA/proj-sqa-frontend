@@ -27,13 +27,12 @@ const MainAdmin = ({children, logout, auth:{isAuthenticated, user,}}) => {
         <div>
             <Layout>
                 <SiderComponent />
-                <Layout>
+                <Layout style={{marginLeft: 200}}>
                     <Header 
                         style={{
+                            marginLeft: 10,
                             display: 'flex',
                             justifyContent: 'flex-end',
-                            padding: 0,
-                            paddingLeft: 16,
                             textAlign: 'center',
                             background: "#fff",
                         }}
@@ -51,18 +50,10 @@ const MainAdmin = ({children, logout, auth:{isAuthenticated, user,}}) => {
                                 />
                                 <span style={{marginRight: 16, marginLeft: 4}} >{`Hi, ${user.firstName}`}</span>
                             </a>
-                            {/* <span>{user.firstName}</span> */}
                         </Dropdown>
                     }
                     </Header>
-                    <Content
-                        style={{
-                            margin: "24px 16px",
-                            padding: 24,
-                            background: "#fff",
-                            minHeight: 280
-                        }}
-                    >
+                    <Content style={{padding: 10}}>
                        {children}
                     </Content>
                     <Footer 
