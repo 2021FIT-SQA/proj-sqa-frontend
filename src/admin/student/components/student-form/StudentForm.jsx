@@ -121,13 +121,11 @@ const StudentForm = ({ onSubmit, selectedStudent }) => {
             <Form.Item
               hidden={selectedStudent}
               required
-              validateStatus={
-                touched["password"] && errors["password"] && "error"
-              }
               name="password"
               label="Password"
               style={{ width: "100%" }}
               validate={async (value) => {
+                if (selectedStudent) return;
                 if (value == null) return "Password is required";
                 if (value.length < 8)
                   return "Password's length must be greater than 8";
