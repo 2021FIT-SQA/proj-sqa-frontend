@@ -27,8 +27,14 @@ const studentReducer = (state = initialState, action) => {
         case constants.POST_STUDENT:
             return {
                 ...state,
+                student: payload,
                 students: [payload, ...state.students],
                 loading: false
+            }
+        case constants.DELETE_STUDENT:
+            return {
+                ...state,
+                students: state.students.filter(student => student.id !== payload.config.url.subString(10))
             }
         case constants.STUDENT_ERROR:
             return {

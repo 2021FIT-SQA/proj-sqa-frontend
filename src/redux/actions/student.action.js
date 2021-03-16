@@ -52,3 +52,19 @@ export const updateStudent = (updateStudentDTO, studentID) => async dispatch => 
         })
     }
 }
+
+export const deleteStudent = (studentID) => async dispatch => {
+    try {
+        const res = await studentApi.deleteStudent(studentID);
+        dispatch({
+            type: constants.DELETE_STUDENT,
+            payload: res
+        })
+        return res;
+    } catch (error) {
+        dispatch({
+            type: constants.STUDENT_ERROR,
+            payload: { error: 'delete student fail'}
+        })
+    }
+}

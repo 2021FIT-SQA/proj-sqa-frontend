@@ -9,33 +9,26 @@ import CreateStudentForm from "./components/student-form/StudentForm";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { postStudent, updateStudent } from "redux/actions/student.action";
+import { postStudent, updateStudent, deleteStudent } from "redux/actions/student.action";
 
-const StudentContainer = ({ postStudent, updateStudent }) => {
-  // STATE HANDLING
+const StudentContainer = ({ postStudent, updateStudent, deleteStudent }) => {
+
+  // COMPONENT STATE
   const [students, setStudents] = useState([]);
-
   const [params, setParams] = useState({
     page: 1,
     size: 10,
     keyword: "",
   });
-
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
   });
-
   const [isStudentTableLoading, setStudentTableLoading] = useState(false);
-  
   const [
     isCreateStudentFormDialogOpened,
     setStudentFormDialogOpened,
   ] = useState(false);
-
-  // When a student is selected to edit in the student table, this field will be set and
-  // then passed to the student form dialog as the initial values. This also means that
-  // the student form will be switched from creating to editing mode.
   const [selectedStudent, setSelectedStudent] = useState(null);
 
   async function fetchStudentList(paramsString) {
@@ -60,10 +53,12 @@ const StudentContainer = ({ postStudent, updateStudent }) => {
     setStudentTableLoading(false);
   }
 
+  // COMPONENT DID MOUNT 
   useEffect(() => {
     fetchStudentList(queryString.stringify(params));
   }, [params]);
 
+  // HANDLE TABLE ACTIONS & PAGINATION CHANGING
   const handleFinish = (values) => {
     setParams((previous) => {
       return {
@@ -72,7 +67,6 @@ const StudentContainer = ({ postStudent, updateStudent }) => {
       };
     });
   };
-
   const handleReset = () => {
     setParams((previous) => {
       return {
@@ -81,9 +75,7 @@ const StudentContainer = ({ postStudent, updateStudent }) => {
       };
     });
   };
-
   const handleTableChange = (pagination, filters) => {
-    console.log(filters);
     fetchStudentList(
       queryString.stringify({
         page: pagination.current,
@@ -91,6 +83,70 @@ const StudentContainer = ({ postStudent, updateStudent }) => {
         keyword: params.keyword,
       })
     );
+  };
+
+  const onStudentFormSubmit = async (createStudentDTO) => {
+    setStudentTableLoading(true);
+    try {
+      // Add new student
+      if (selectedStudent === null) {
+        const student = await postStudent(createStudentDTO);
+        setStudentFormDialogOpened(false);
+        Modal.success({
+          title: "Success",
+          content: `Successfully created student ${student.lastName} ${student.firstName} with ID ${student.id}`,
+        });
+      } 
+      else { 
+        // update student by id
+        const student = await updateStudent(createStudentDTO, createStudentDTO.id);
+        setStudentFormDialogOpened(false);
+        Modal.success({
+          title: "Success",
+          content: `Successfully updated student ${student.lastName} ${student.firstName} with ID ${student.id}`,
+        });
+        
+        // Update students arr with the edited student
+        setStudents(students.map(std => std.id === student.id ? student : std));
+      } 
+    } catch (e) {
+        Modal.error({
+          title: "Error",
+          content: 'Some unexpected errors come. Try later!',
+        });
+    }
+    setStudentTableLoading(false);
+    return;
+  }
+
+  const onStudentDelete = (studentID) => {
+    Modal.warning({
+      title: "Confirm Deletion",
+      content: `Are you sure want to delete student ${studentID}`,
+      closable: true,
+      maskClosable: true,
+      onOk: async () => {
+        setStudentTableLoading(true);
+        try {
+          const result = await deleteStudent(studentID);
+          if (result) {
+            Modal.success({
+              title: "Delete successfully",
+              content: `Successfully deleted student with ID: ${studentID}`,
+            });
+  
+            // Update students arr with deleted student
+            setStudents(students.filter(std => std.id !== studentID));
+          }
+        } catch (e) {
+          Modal.error({
+            title: "Delete failed",
+            content: e.toString(),
+          })
+        }
+        setStudentTableLoading(false);
+      },
+    })
   };
 
   return (
@@ -132,6 +188,9 @@ const StudentContainer = ({ postStudent, updateStudent }) => {
             setSelectedStudent(students[index]);
             setStudentFormDialogOpened(true);
           }}
+          onStudentDelete={(_, index) => {
+            onStudentDelete(students[index].id);
+          }}
         />
       </Card>
 
@@ -152,37 +211,7 @@ const StudentContainer = ({ postStudent, updateStudent }) => {
       >
         <CreateStudentForm
           mode={selectedStudent ? "edit" : "create"}
-          onSubmit={async (createStudentDTO) => {
-            // TODO: Call backend
-            try {
-              // Adding student
-              if (selectedStudent === null) {
-                const student = await postStudent(createStudentDTO);
-                // Close the form dialog
-                setStudentFormDialogOpened(false);
-                // Show success dialog
-                Modal.success({
-                  title: "Success",
-                  content: `Successfully saved student ${student.lastName} ${student.firstName} with ID ${student.id}`,
-                });
-              } else {
-                  const student = await updateStudent(createStudentDTO, createStudentDTO.id);
-                  // Close the form dialog
-                  setStudentFormDialogOpened(false);
-                  // Show success dialog
-                  Modal.success({
-                    title: "Success",
-                    content: `Successfully saved student ${student.lastName} ${student.firstName} with ID ${student.id}`,
-                  });
-              } 
-            } catch (e) {
-              Modal.error({
-                title: "Error",
-                content: e.toString(),
-              });
-            }
-            return;
-          }}
+          onSubmit={onStudentFormSubmit}
           selectedStudent={selectedStudent}
         />
       </Modal>
@@ -195,4 +224,4 @@ StudentContainer.propTypes = {
   updateStudent: PropTypes.func.isRequired,
 };
 
-export default connect(null, { postStudent, updateStudent })(StudentContainer);
+export default connect(null, { postStudent, updateStudent, deleteStudent })(StudentContainer);
