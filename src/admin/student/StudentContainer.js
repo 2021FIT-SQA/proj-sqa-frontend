@@ -222,6 +222,7 @@ const StudentContainer = ({ postStudent, updateStudent, deleteStudent }) => {
 StudentContainer.propTypes = {
   postStudent: PropTypes.func.isRequired,
   updateStudent: PropTypes.func.isRequired,
+  deleteStudent: PropTypes.func.isRequired,
 };
 
 export default connect(null, { postStudent, updateStudent, deleteStudent })(StudentContainer);
