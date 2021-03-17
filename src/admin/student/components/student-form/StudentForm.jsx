@@ -194,7 +194,7 @@ const StudentForm = ({ onSubmit, selectedStudent }) => {
       }
       onSubmit={(values) => onFormikSubmit(values)}
     >
-      {({ values, handleSubmit, isSubmitting, errors, touched }) => {
+      {({ dirty, isValid }) => {
         return (
           <Form layout="vertical">
             <Form.Item
@@ -370,7 +370,7 @@ const StudentForm = ({ onSubmit, selectedStudent }) => {
               </Select>
             </Form.Item>
 
-            <SubmitButton style={{ width: "100%", marginBottom: "10px" }}>
+            <SubmitButton disabled={!(isValid && dirty)} style={{ width: "100%", marginBottom: "10px" }}>
               {selectedStudent ? "Update" : "Create"}
             </SubmitButton>
             <ResetButton style={{ width: "100%" }}>Reset</ResetButton>
