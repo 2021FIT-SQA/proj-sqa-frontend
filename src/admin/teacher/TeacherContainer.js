@@ -179,9 +179,9 @@ const TeacherContainer = ({postTeacher, updateTeacher, deleteTeacher}) => {
             </Card>
             <Modal
                 title={
-                selectedTeacher
-                    ? `Edit Student ${selectedTeacher.lastName} ${selectedTeacher.firstName}`
-                    : "Create a new Student"
+                    selectedTeacher
+                        ? `Edit Student ${selectedTeacher.lastName} ${selectedTeacher.firstName}`
+                        : "Create a new Student"
                 }
                 visible={isDialogOpened}
                 onOk={() => {

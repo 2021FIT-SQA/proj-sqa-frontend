@@ -48,6 +48,10 @@ const TeacherForm = ({ onSubmit, selectedTeacher }) => {
     return await userApi.checkEmailUnique(email);
   };
 
+  const checkUsernameUnique = async (username) => {
+    return await userApi.checkUsernameUnique(username);
+  };
+
   const checkPhoneNumberUnique = async (phoneNumber) => {
     return await userApi.checkPhoneNumberUnique(phoneNumber);
   };
@@ -55,6 +59,30 @@ const TeacherForm = ({ onSubmit, selectedTeacher }) => {
   // validate methods
   const validatePerformanceRating = (value) => {
     console.log(value);
+  }
+
+  const validateUsername = async (value) => {
+    if (value == null) return "Username is required";
+    if (value.length < 4)
+      return "Username's length must be greater than 4";
+    if (value.length > 25)
+      return "Username's length must be lower than 25";
+    // TODO: avoid calling api for every keyboard choking
+    // Solution: Debounce -> setTimeout for api calling
+    if (
+      !selectedTeacher &&
+      !(await checkUsernameUnique(value) === true)
+    )
+      return "Username is already existed, please choose another one";
+  }
+  
+  const validatePassword = async (value) => {
+    if (selectedTeacher) return; // Since password can not be updated directly in here
+    if (value == null) return "Password is required";
+    if (value.length < 8)
+      return "Password's length must be greater than 8";
+    if (value.length > 100)
+      return "Password's length must be lower than 100";
   }
 
   const validateFirstName = (value) => {
@@ -143,6 +171,26 @@ const TeacherForm = ({ onSubmit, selectedTeacher }) => {
       {({ values, handleSubmit, isSubmitting, errors, touched }) => {
         return (
           <Form layout="vertical">
+            <Form.Item
+              required
+              name="username"
+              label="Username"
+              style={{ width: "100%" }}
+              validate={(value) => validateUsername(value)}
+            >
+              <Input name="username" placeholder="Username" />
+            </Form.Item>
+
+            <Form.Item
+              required
+              name="password"
+              label="Password"
+              style={{ width: "100%" }}
+              validate={(value) => validatePassword(value)}
+            >
+              <Input name="password" placeholder="Password" />
+            </Form.Item>
+
             <Form.Item
               required
               name="firstName"
