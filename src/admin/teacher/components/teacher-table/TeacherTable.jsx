@@ -1,14 +1,30 @@
 import React, { useState } from 'react'
 import { Table, Button } from 'antd'
+import { v4 as uuidv4 } from "uuid";
 
 export const TeacherTableComponent = ({
-  data,
+  teachers,
   pagination,
   onChange,
-  onTeacherEdit,
+  onTeacherEdited,
   onTeacherDelete,
   loading
 }) => {
+
+    teachers = teachers.map((teacher, index) => {
+      return {
+        index,
+        key: uuidv4(),
+        username: teacher.username,
+        fullName: `${teacher.lastName} ${teacher.firstName}`,
+        gender: teacher.gender,
+        email: teacher.email,
+        phoneNumber: teacher.phoneNumber,
+        dob: teacher.dob.reverse().join('/'),
+        department: `${teacher.department.name} (${teacher.department.code})`
+    } 
+    })
+
 
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
@@ -67,7 +83,7 @@ export const TeacherTableComponent = ({
                           style={{ marginBottom: "3px", width: "100%" }}
                           type="primary"
                           onClick={() => {
-                            onTeacherEdit(record, record.index);
+                            onTeacherEdited(record, record.index);
                           }}
                         >
                           Edit
@@ -86,7 +102,7 @@ export const TeacherTableComponent = ({
                     ),
                   },
                 ]}
-                dataSource={data}
+                dataSource={teachers}
                 style={{'marginTop': '1rem'}}
                 pagination={pagination}
                 onChange={onChange}

@@ -58,7 +58,11 @@ const TeacherForm = ({ onSubmit, selectedTeacher }) => {
 
   // validate methods
   const validatePerformanceRating = (value) => {
-    console.log(value);
+    if (value == null) return "Performance rating is required";
+    if (value < 5)
+      return "Performance rating must be greater than 5";
+    if (value > 10)
+      return "Performance rating must be lower than 10";
   }
 
   const validateUsername = async (value) => {
@@ -143,18 +147,19 @@ const TeacherForm = ({ onSubmit, selectedTeacher }) => {
     return;
   }
 
-  const onFormikSubmit = async (data) => {
-    const studentDTO = { ...data };
+  const onFormikSubmit = async (data, helpers) => {
+    console.log(helpers)
+    const teacherDTO = { ...data };
 
-    if (typeof studentDTO.dob === "string") {
+    if (typeof teacherDTO.dob === "string") {
       // 2000-01-03T17:00:00.000Z, for example
-      studentDTO.dob = studentDTO.dob.substring(10);
+      teacherDTO.dob = teacherDTO.dob.substring(10);
     }
     // Get the 2000-01-03 part
     else if (typeof data.dob === "object") {
-      studentDTO.dob = convertMomentToDateString(studentDTO.dob);
+      teacherDTO.dob = convertMomentToDateString(teacherDTO.dob);
     }
-    await onSubmit(studentDTO);
+    await onSubmit(teacherDTO);
   }
   return (
     <Formik
@@ -162,11 +167,10 @@ const TeacherForm = ({ onSubmit, selectedTeacher }) => {
       initialValues={
         selectedTeacher ?? {
           gender: "Male",
-          dob: moment("01/01/2000", "DD/MM/YYYY"),
-          sinceYear: 2016,
+          dob: moment("01/01/1960", "DD/MM/YYYY"),
         }
       }
-      onSubmit={(values) => onFormikSubmit(values)}
+      onSubmit={(values, actions) => onFormikSubmit(values, actions)}
     >
       {({ values, handleSubmit, isSubmitting, errors, touched }) => {
         return (
@@ -178,11 +182,16 @@ const TeacherForm = ({ onSubmit, selectedTeacher }) => {
               style={{ width: "100%" }}
               validate={(value) => validateUsername(value)}
             >
-              <Input name="username" placeholder="Username" />
+              <Input 
+                name="username" 
+                placeholder="Username" 
+                disabled={selectedTeacher}  
+              />
             </Form.Item>
 
             <Form.Item
-              required
+              hidden={selectedTeacher}
+              required={selectedTeacher ? false : true}
               name="password"
               label="Password"
               style={{ width: "100%" }}
@@ -310,7 +319,7 @@ const TeacherForm = ({ onSubmit, selectedTeacher }) => {
               </Select>
             </Form.Item>
 
-            <SubmitButton style={{ width: "100%", marginBottom: "10px" }}>
+            <SubmitButton disabled={touched ? false : true} style={{ width: "100%", marginBottom: "10px" }}>
               {selectedTeacher ? "Update" : "Create"}
             </SubmitButton>
             <ResetButton style={{ width: "100%" }}>Reset</ResetButton>

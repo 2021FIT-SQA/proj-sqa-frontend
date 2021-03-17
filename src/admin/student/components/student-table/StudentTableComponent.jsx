@@ -18,7 +18,7 @@ export const StudentTableComponent = ({
       key: uuidv4(),
       studentID: student.username,
       fullName: `${student.lastName} ${student.firstName}`,
-      gender: student.gender.toLowerCase(),
+      gender: student.gender,
       email: student.email,
       sinceYear: student.sinceYear,
       department: student.department.code,

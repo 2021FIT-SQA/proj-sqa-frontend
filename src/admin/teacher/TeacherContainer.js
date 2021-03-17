@@ -35,23 +35,9 @@ const TeacherContainer = ({postTeacher, updateTeacher, deleteTeacher}) => {
     const fetchTeacherList = (paramsString) => {
         try {
             setLoading(previous => true);
-
             teacherApi.getTeachers(paramsString).then(data => {
                 const { content, pageable, totalElements } = data;
-                const teacherToDisplay = content.map(ele => {
-                    const { username, firstName,lastName, gender, email, phoneNumber, dob, department } = ele;
-                    return {
-                        key: uuidv4(),
-                        username,
-                        fullName: `${lastName} ${firstName.split('').splice(0,firstName.indexOf('(')).join('')}`,
-                        gender,
-                        email,
-                        phoneNumber,
-                        dob: dob.reverse().join('/'),
-                        department: `${department.name} (${department.code})`
-                    } 
-                })
-                setTeacherList(teacherToDisplay);
+                setTeacherList(content);
                 setPagination( previous => {
                     return {
                         ...previous,
@@ -161,13 +147,13 @@ const TeacherContainer = ({postTeacher, updateTeacher, deleteTeacher}) => {
                             setDialogOpen(true);
                         }}
                         >
-                            Add Student
+                            Add Teacher
                         </Button>
                     </Col>
                 </Row>
 
                 <TeacherTableComponent 
-                    data={teacherList}
+                    teachers={teacherList}
                     onChange={handlePagination}
                     loading={loading}
                     pagination={pagination}
@@ -180,7 +166,7 @@ const TeacherContainer = ({postTeacher, updateTeacher, deleteTeacher}) => {
             <Modal
                 title={
                     selectedTeacher
-                        ? `Edit Student ${selectedTeacher.lastName} ${selectedTeacher.firstName}`
+                        ? `Edit Teacher ${selectedTeacher.lastName} ${selectedTeacher.firstName}`
                         : "Create a new Student"
                 }
                 visible={isDialogOpened}
