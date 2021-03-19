@@ -86,28 +86,22 @@ export const FilterComponent = ({ keyword, onFinish, onReset }) => {
 
   const onSortValueOrderChange = (value, isAscending) => {
     if (isAscending) {
-      console.log("Switch to asc");
-      console.log(sortValues);
-      setSortValues([]);
       setSortValues(
         sortValues.map((sortValue) =>
           sortValue.includes(value) ? sortValue.replace(",desc", "") : sortValue
         )
       );
     } else {
-      console.log("Switch to desc");
-      console.log(sortValues);
       setSortValues(
         sortValues.map((sortValue) =>
           sortValue === value ? sortValue.concat(",desc") : sortValue
         )
       );
     }
-    console.log(sortValues);
   };
 
   return (
-    <Form className="search-form" onFinish={onFinish} onChange={console.log}>
+    <Form className="search-form" onFinish={onFinish}>
       <Row style={{ width: "100%" }}>
         <Col span={21}>
           <Form.Item name="keyword">
@@ -137,11 +131,6 @@ export const FilterComponent = ({ keyword, onFinish, onReset }) => {
               {STUDENT_SORTING_CRITERIAS.map((criteria) => (
                 <Select.Option key={criteria.value} value={criteria.value}>
                   {criteria.title}
-                </Select.Option>
-              ))}
-              {STUDENT_SORTING_CRITERIAS.map((criteria) => (
-                <Select.Option disabled key={criteria.value + ",desc"} value={criteria.value + ",desc"}>
-                  {criteria.title + " - Descending"}
                 </Select.Option>
               ))}
             </Select>

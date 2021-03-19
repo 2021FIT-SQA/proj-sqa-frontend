@@ -18,7 +18,7 @@ const StudentContainer = ({ postStudent, updateStudent, deleteStudent }) => {
   const [params, setParams] = useState({
     page: 1,
     size: 10,
-    keyword: "",
+    keyword: undefined,
     sort: [],
   });
   const [pagination, setPagination] = useState({
@@ -73,7 +73,7 @@ const StudentContainer = ({ postStudent, updateStudent, deleteStudent }) => {
     setParams((previous) => {
       return {
         ...previous,
-        keyword: "",
+        keyword: undefined,
         sort: [],
       };
     });
@@ -100,6 +100,7 @@ const StudentContainer = ({ postStudent, updateStudent, deleteStudent }) => {
           title: "Success",
           content: `Successfully created student ${student.lastName} ${student.firstName} with ID ${student.id}`,
         });
+        setStudents([...students, student])
       } 
       else { 
         // update student by id
@@ -226,6 +227,7 @@ const StudentContainer = ({ postStudent, updateStudent, deleteStudent }) => {
 StudentContainer.propTypes = {
   postStudent: PropTypes.func.isRequired,
   updateStudent: PropTypes.func.isRequired,
+  deleteStudent: PropTypes.func.isRequired,
 };
 
 export default connect(null, { postStudent, updateStudent, deleteStudent })(StudentContainer);
