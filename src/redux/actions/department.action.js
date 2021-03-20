@@ -1,9 +1,9 @@
 import departmentApi from 'api/departmentApi';
 import * as constants from 'redux/constants/constants.action'
 
-export const getDepartments = () => async dispatch => {
+export const getDepartments = (params) => async dispatch => {
     try {
-        const res = await departmentApi.getAllDepartments();
+        const res = await departmentApi.getDepartments(params);
         dispatch({
             type: constants.GET_ALL_DEPARTMENTS,
             payload: res
@@ -23,12 +23,13 @@ export const postDepartment = (departmentDTO) => async dispatch => {
         },
     }
     try {
-        const res = departmentApi.createDepartment(departmentDTO, config);
+        const res = await departmentApi.createDepartment(departmentDTO, config);
         dispatch({
             type: constants.POST_DEPARTMENT,
             payload: res
         })
     } catch (error) {
+        console.log(error)
         dispatch({
             type: constants.DEPARTMENT_ERROR,
             payload: {error: 'POST department fail'}

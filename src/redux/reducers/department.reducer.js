@@ -3,6 +3,11 @@ import * as types from 'redux/constants/constants.action'
 const initialState = {
     department: null,
     departments: [],
+    pagination: {
+        current: 1,
+        pageSize: 1,
+        total: 0
+    },
     isLoading: true,
     error: {}
 }
@@ -13,7 +18,13 @@ const departmentReducer = (state=initialState, action) => {
         case types.GET_ALL_DEPARTMENTS:
             return {
                 ...state,
-                departments: payload,
+                departments: payload.content,
+                pagination: {
+                    ...state.pagination,
+                    current: payload.pageable.pageNumber + 1,
+                    pageSize: payload.pageable.pageSize,
+                    total: payload.totalElements
+                },
                 isLoading: false
             }
         case types.POST_DEPARTMENT:
@@ -21,7 +32,7 @@ const departmentReducer = (state=initialState, action) => {
                 ...state,
                 department: payload,
                 departments: [
-                    ...state,
+                    ...state.departments,
                     payload
                 ],
                 isLoading: false,
