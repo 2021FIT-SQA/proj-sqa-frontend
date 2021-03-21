@@ -1,10 +1,19 @@
 import axiosClient from './axiosClient'
 
+const baseUrl = '/departments'
 const departmentApi = {
-    getAllDepartments: () => {
-        const url = `/departments/all`;
-        return axiosClient.get(url)
+    getDepartments: (params) => {
+        return axiosClient.get(`${baseUrl}?${params}`)
     },
+    createDepartment: (departmentDTO, config) => {
+        return axiosClient.post(`${baseUrl}`, departmentDTO, config)
+    },
+    deleteDepartment: (departmentID) => {
+        return axiosClient.delete(`${baseUrl}/${departmentID}`)
+    },
+    updateDepartment: (departmentDTO,departmentID, config) => {
+        return axiosClient.put(`${baseUrl}/${departmentID}`, departmentDTO, config)
+    }
 }
 
 export default departmentApi
