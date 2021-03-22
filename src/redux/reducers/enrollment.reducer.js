@@ -8,7 +8,7 @@ const initialState = {
         pageSize: 1,
         total: 0
     },
-    isLoading: true,
+    loading: true,
     error: {}
 }
 
@@ -25,7 +25,7 @@ const enrollmentReducer = (state=initialState, action) => {
                     pageSize: payload.pageable.pageSize,
                     total: payload.totalElements
                 },
-                isLoading: false
+                loading: false
             }
         case types.POST_ENROLLMENT:
             return {
@@ -35,25 +35,25 @@ const enrollmentReducer = (state=initialState, action) => {
                     ...state.enrollment,
                     payload
                 ],
-                isLoading: false,
+                loading: false,
             }
         case types.DELETE_ENROLLMENT:
             return {
                 ...state,
                 enrollments: state.enrollments.filter(ele => ele.id !== payload.id),
-                isLoading: false
+                loading: false
             }
         case types.UPDATE_ENROLLMENT:
             return {
                 ...state,
                 enrollment: payload,
-                isLoading: false
+                loading: false
             }
         case types.ENROLLMENT_ERROR:
             return {
                 ...state,
                 error: payload,
-                isLoading: false
+                loading: false
             }
         default:
             return state

@@ -8,15 +8,13 @@ import { getDepartments, postDepartment, updateDepartment, deleteDepartment } fr
 import { DepartmentTableComponent } from 'admin/department/components/department-table/DepartmentTableComponent'
 import { CreateDepartmentForm } from 'admin/department/components/department-form/CreateDepartmentForm'
 import { EditDepartmentForm } from 'admin/department/components/department-form/EditDepartmentForm'
-import { DepartmentFilterComponent } from 'admin/department/components/department-filter/DepartmentFilterComponent'
-import ErrorList from 'antd/lib/form/ErrorList'
 
 
 const DepartmentContainer = (props) => {
     const { getDepartments, postDepartment, updateDepartment, deleteDepartment, department, departments, pagination, loading } = props;
 
     // LOCAL INITIAL STATE
-    const [params, setParams ] = useState({
+    const [params, _ ] = useState({
         page: 1,
         size: 10,
         keyword: undefined,
@@ -106,31 +104,10 @@ const DepartmentContainer = (props) => {
           },
         })
     };
-
-    // const handleSearch = (values) => {
-    //     setParams( previous => ({
-    //         ...previous,
-    //         keyword: values.keyword,
-    //         sort: values.sort
-    //     }))
-    // }
-
-    // const handleResetFilter = () => {
-    //     setParams(pre => ({
-    //         ...pre,
-    //         keyword: undefined,
-    //         sort: []
-    //     }))
-    // }
     
     return (
         <div>
             <Card title="Department" style={{overflowX: 'auto'}}>
-                {/* <DepartmentFilterComponent 
-                    keyword={params.keyword}
-                    onFinish={handleSearch}
-                    onReset={handleResetFilter}
-                /> */}
                 <Row>
                     <Col span={24} style={{ marginBottom: "15px" }}>
                         {pagination.total && (

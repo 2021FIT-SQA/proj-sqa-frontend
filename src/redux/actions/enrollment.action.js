@@ -3,12 +3,13 @@ import * as constants from 'redux/constants/constants.action'
 
 export const getEnrollments = (params) => async dispatch => {
     try {
-        const res = await enrollmentApi.getDepartments(params);
+        const res = await enrollmentApi.getEnrollments(params);
         dispatch({
             type: constants.GET_ALL_ENROLLMENTS,
             payload: res
         })
     } catch (error) {
+        console.log(error)
         dispatch({
             type: constants.ENROLLMENT_ERROR,
             payload: {error: 'GET department fail'}
