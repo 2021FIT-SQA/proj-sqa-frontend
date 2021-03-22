@@ -47,7 +47,7 @@ export const deleteDepartment = (departmentID) => async dispatch => {
     } catch (error) {
         dispatch({
             type: constants.DEPARTMENT_ERROR,
-            paylaod: { error: 'DELETE department fail'}
+            payload: { error: 'DELETE department fail'}
         })
     }
 }
@@ -67,7 +67,7 @@ export const updateDepartment = (departmentDTO, departmentID) => async dispatch 
     } catch (error) {
         dispatch({
             type: constants.DEPARTMENT_ERROR,
-            paylaod: { error: 'UPDATE department fail'}
+            payload: { error: 'UPDATE department fail'}
         })
     }
 }
