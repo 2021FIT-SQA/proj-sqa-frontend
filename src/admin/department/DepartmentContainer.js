@@ -8,14 +8,19 @@ import { getDepartments, postDepartment, updateDepartment, deleteDepartment } fr
 import { DepartmentTableComponent } from 'admin/department/components/department-table/DepartmentTableComponent'
 import { CreateDepartmentForm } from 'admin/department/components/department-form/CreateDepartmentForm'
 import { EditDepartmentForm } from 'admin/department/components/department-form/EditDepartmentForm'
+import { DepartmentFilterComponent } from 'admin/department/components/department-filter/DepartmentFilterComponent'
+import ErrorList from 'antd/lib/form/ErrorList'
+
 
 const DepartmentContainer = (props) => {
     const { getDepartments, postDepartment, updateDepartment, deleteDepartment, department, departments, pagination, loading } = props;
 
     // LOCAL INITIAL STATE
-    const [params, _ ] = useState({
+    const [params, setParams ] = useState({
         page: 1,
         size: 10,
+        keyword: undefined,
+        sort: []
     });
     const [isCreateModalOpened, setCreateModalOpen] = useState(false);
     const [isEditModalOpened, setEditModalOpen] = useState(false);
@@ -37,18 +42,22 @@ const DepartmentContainer = (props) => {
     const onCreateFormSubmit = async (departmentDTO) => {
         try {
             await postDepartment(departmentDTO);
+            await getDepartments(queryString.stringify({
+                page: pagination.current,
+                size: pagination.pageSize
+            }));
             setCreateModalOpen(false);
             Modal.success({
                 title: 'Success',
                 content: `Successfully created department ${department.name} with code ${department.code}`
             });
         } catch (error) {
+            console.log(error);
             setCreateModalOpen(false);
             Modal.error({
                 title: "Error",
                 content: "Some unexpected errors come. Try later!"
             });
-            throw error;
         }
     }
 
@@ -61,12 +70,12 @@ const DepartmentContainer = (props) => {
                 content: `Successfully updated department ${department.name} with code ${department.code}`
             })
         } catch (error) {
+            console.log(error);
             setEditModalOpen(false);
             Modal.error({
                 title: "Error",
                 content: "Some unexpected errors come. Try later!"
             });
-            throw error;
         }
     }
 
@@ -88,20 +97,40 @@ const DepartmentContainer = (props) => {
                     content: `Successfully deleted department ${record.name}`
                 });
             } catch (error) {
+                console.log(error);
                 Modal.error({
                     title: "Delete failed",
                     content: 'Errors',
                 });
-                throw error;
             }
           },
         })
-      };
+    };
 
+    // const handleSearch = (values) => {
+    //     setParams( previous => ({
+    //         ...previous,
+    //         keyword: values.keyword,
+    //         sort: values.sort
+    //     }))
+    // }
+
+    // const handleResetFilter = () => {
+    //     setParams(pre => ({
+    //         ...pre,
+    //         keyword: undefined,
+    //         sort: []
+    //     }))
+    // }
+    
     return (
         <div>
             <Card title="Department" style={{overflowX: 'auto'}}>
-                {/* TODO: Filter component here */}
+                {/* <DepartmentFilterComponent 
+                    keyword={params.keyword}
+                    onFinish={handleSearch}
+                    onReset={handleResetFilter}
+                /> */}
                 <Row>
                     <Col span={24} style={{ marginBottom: "15px" }}>
                         {pagination.total && (
@@ -118,7 +147,7 @@ const DepartmentContainer = (props) => {
                             setCreateModalOpen(true)
                         }}
                         >
-                            Add Student
+                            Add Department
                         </Button>
                     </Col>
                 </Row>
