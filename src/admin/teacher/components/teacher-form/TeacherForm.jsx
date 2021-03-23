@@ -14,15 +14,14 @@ import moment from "moment";
 import departmentApi from "api/departmentApi";
 import userApi from "api/userApi";
 
-// TODO: @BUG: check unique attribute request every keydown -> debounce may help (setTimeout for api request)
-// TODO: @URGENT @BUG: update form require password
-const StudentForm = ({ onSubmit, selectedStudent }) => {
+
+const TeacherForm = ({ onSubmit, selectedTeacher }) => {
   const now = moment();
   const [departments, setDepartments] = useState(null);
 
-  selectedStudent &&
+  selectedTeacher &&
     (function convertInitialValuesToDTO() {
-      selectedStudent.departmentID = selectedStudent.department.id;
+      selectedTeacher.departmentID = selectedTeacher.department.id;
     })();
 
   useEffect(() => {
@@ -45,12 +44,12 @@ const StudentForm = ({ onSubmit, selectedStudent }) => {
       )}`;
   };
 
-  const checkUsernameUnique = async (username) => {
-    return await userApi.checkUsernameUnique(username);
-  };
-
   const checkEmailUnique = async (email) => {
     return await userApi.checkEmailUnique(email);
+  };
+
+  const checkUsernameUnique = async (username) => {
+    return await userApi.checkUsernameUnique(username);
   };
 
   const checkPhoneNumberUnique = async (phoneNumber) => {
@@ -58,6 +57,14 @@ const StudentForm = ({ onSubmit, selectedStudent }) => {
   };
 
   // validate methods
+  const validatePerformanceRating = (value) => {
+    if (value == null) return "Performance rating is required";
+    if (value < 5)
+      return "Performance rating must be greater than 5";
+    if (value > 10)
+      return "Performance rating must be lower than 10";
+  }
+
   const validateUsername = async (value) => {
     if (value == null) return "Username is required";
     if (value.length < 4)
@@ -67,14 +74,14 @@ const StudentForm = ({ onSubmit, selectedStudent }) => {
     // TODO: avoid calling api for every keyboard choking
     // Solution: Debounce -> setTimeout for api calling
     if (
-      !selectedStudent &&
+      !selectedTeacher &&
       !(await checkUsernameUnique(value) === true)
     )
       return "Username is already existed, please choose another one";
   }
   
   const validatePassword = async (value) => {
-    if (selectedStudent) return; // Since password can not be updated directly in here
+    if (selectedTeacher) return; // Since password can not be updated directly in here
     if (value == null) return "Password is required";
     if (value.length < 8)
       return "Password's length must be greater than 8";
@@ -105,7 +112,7 @@ const StudentForm = ({ onSubmit, selectedStudent }) => {
     if (value.length > 50)
       return "Email's length must be lower than 50";
     if (
-      (!selectedStudent || value !== selectedStudent.email) &&
+      (!selectedTeacher || value !== selectedTeacher.email) &&
       !(await checkEmailUnique(value) === true)
     )
       return "Email is already existed, please choose another one";
@@ -116,7 +123,7 @@ const StudentForm = ({ onSubmit, selectedStudent }) => {
     if (value.length < 9) return "Phone Number's length must be greater than 9";
     if (value.length > 10) return "Phone Number's length must be lower than 10";
     if (
-      (!selectedStudent || value !== selectedStudent.phoneNumber) &&
+      (!selectedTeacher || value !== selectedTeacher.phoneNumber) &&
       !(await checkPhoneNumberUnique(value) === true)
     )
       return "Phone Number is already existed, please choose another one";
@@ -135,84 +142,56 @@ const StudentForm = ({ onSubmit, selectedStudent }) => {
       return "Date or Birth must be in the past or at the present";
   }
 
-  const validateJoinYear = (value) => {
-    if (value == null) return "Joined year required";
-    if (value < 2000)
-      return "Joined year must be greater than 2000";
-  }
-
-  const validateFatherName = (value) => {
-    if (value == null) return "Father Name is required";
-    if (value.length < 2)
-      return "Father Name's length must be greater than 2";
-    if (value.length > 50)
-      return "Father Name's length must be lower than 50";
-  }
-
-  const validateMotherName = (value) => {
-    if (value == null) return "Mother Name is required";
-    if (value.length < 2)
-      return "Mother Name's length must be greater than 2";
-    if (value.length > 50)
-      return "Mother Name's length must be lower than 50";
-  }
-  const validateAddress = (value) => {
-    if (value == null) return "Full Address is required";
-    if (value.length < 2)
-      return "Full Address's length must be greater than 2";
-    if (value.length > 255)
-      return "Full Address's length must be lower than 255";
-  }
-
   const validateDepartment = (value) => {
     if (value == null) return "Department is required";
     return;
   }
 
-  const onFormikSubmit = async (data) => {
-    const studentDTO = { ...data };
+  const onFormikSubmit = async (data, helpers) => {
+    console.log(helpers)
+    const teacherDTO = { ...data };
 
-    if (typeof studentDTO.dob === "string") {
+    if (typeof teacherDTO.dob === "string") {
       // 2000-01-03T17:00:00.000Z, for example
-      studentDTO.dob = studentDTO.dob.substring(10);
+      teacherDTO.dob = teacherDTO.dob.substring(10);
     }
     // Get the 2000-01-03 part
     else if (typeof data.dob === "object") {
-      studentDTO.dob = convertMomentToDateString(studentDTO.dob);
+      teacherDTO.dob = convertMomentToDateString(teacherDTO.dob);
     }
-    await onSubmit(studentDTO);
+    await onSubmit(teacherDTO);
   }
   return (
     <Formik
       enableReinitialize
       initialValues={
-        selectedStudent ?? {
+        selectedTeacher ?? {
           gender: "Male",
-          dob: moment("01/01/2000", "DD/MM/YYYY"),
-          sinceYear: 2016,
+          dob: moment("01/01/1960", "DD/MM/YYYY"),
         }
       }
-      onSubmit={(values) => onFormikSubmit(values)}
+      onSubmit={(values, actions) => onFormikSubmit(values, actions)}
     >
-      {({ dirty, isValid }) => {
+      {({ values, handleSubmit, isSubmitting, errors, touched }) => {
         return (
           <Form layout="vertical">
             <Form.Item
-              name="username"
               required
+              name="username"
               label="Username"
               style={{ width: "100%" }}
               validate={(value) => validateUsername(value)}
             >
-              <Input
-                disabled={selectedStudent}
-                name="username"
-                placeholder="Username"
+              <Input 
+                name="username" 
+                placeholder="Username" 
+                disabled={selectedTeacher}  
               />
             </Form.Item>
 
             <Form.Item
-              hidden={selectedStudent}
+              hidden={selectedTeacher}
+              required={selectedTeacher ? false : true}
               name="password"
               label="Password"
               style={{ width: "100%" }}
@@ -301,46 +280,16 @@ const StudentForm = ({ onSubmit, selectedStudent }) => {
 
             <Form.Item
               required
-              name="sinceYear"
-              label="Joined year"
+              name="performanceRating"
+              label="Performance Rating"
               style={{ width: "100%" }}
-              validate={value => validateJoinYear(value)}
+              validate={value => validatePerformanceRating(value)}
             >
               <InputNumber
-                name="sinceYear"
-                placeholder="Enter the year when the student joined this school"
+                name="performanceRating"
+                placeholder="Enter the performance rating"
                 style={{ width: "100%" }}
               />
-            </Form.Item>
-
-            <Form.Item
-              required
-              name="fatherName"
-              label="Father Name"
-              style={{ width: "100%" }}
-              validate={value => validateFatherName(value)}
-            >
-              <Input name="fatherName" placeholder="Father Name" />
-            </Form.Item>
-
-            <Form.Item
-              required
-              name="motherName"
-              label="Mother Name"
-              style={{ width: "100%" }}
-              validate={value => validateMotherName(value)}
-            >
-              <Input name="motherName" placeholder="Mother Name" />
-            </Form.Item>
-
-            <Form.Item
-              required
-              name="fullAddress"
-              label="Full Address"
-              style={{ width: "100%" }}
-              validate={value => validateAddress(value)}
-            >
-              <Input name="fullAddress" placeholder="Full Address" />
             </Form.Item>
 
             <Form.Item
@@ -370,8 +319,8 @@ const StudentForm = ({ onSubmit, selectedStudent }) => {
               </Select>
             </Form.Item>
 
-            <SubmitButton disabled={!(isValid && dirty)} style={{ width: "100%", marginBottom: "10px" }}>
-              {selectedStudent ? "Update" : "Create"}
+            <SubmitButton disabled={touched ? false : true} style={{ width: "100%", marginBottom: "10px" }}>
+              {selectedTeacher ? "Update" : "Create"}
             </SubmitButton>
             <ResetButton style={{ width: "100%" }}>Reset</ResetButton>
           </Form>
@@ -381,4 +330,4 @@ const StudentForm = ({ onSubmit, selectedStudent }) => {
   );
 };
 
-export default StudentForm;
+export default TeacherForm;

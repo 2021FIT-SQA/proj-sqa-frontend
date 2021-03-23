@@ -52,6 +52,10 @@ export const SiderComponent = () => {
               <span>Enrollment</span>
               <Link to='/admin/enrollments' />
             </Menu.Item>
+            <Menu.Item key="7" icon={<CameraTwoTone />}>
+              <span>Course Release</span>
+              <Link to='/admin/courseRelease' />
+            </Menu.Item>
           </Menu>
       </Sider>
     </aside>

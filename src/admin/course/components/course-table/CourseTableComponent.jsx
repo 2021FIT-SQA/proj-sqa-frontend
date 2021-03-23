@@ -1,30 +1,30 @@
 import React, { useState } from "react";
 import { Table, Button } from "antd";
-
 import { v4 as uuidv4 } from "uuid";
+import convertDateTimeArrToString from "utils/dateConverter";
 
-export const StudentTableComponent = ({
-  students,
+export const CourseTableComponent = ({
+  courses,
   pagination,
   onChange,
-  onStudentEdit,
-  onStudentDelete,
+  onCourseEdit,
+  onCourseDelete,
   loading,
 }) => {
   // Transform
-  students = students.map((student, index) => {
+  courses = courses.map((course, index) => {
     return {
       index,
       key: uuidv4(),
-      studentID: student.username,
-      fullName: `${student.lastName} ${student.firstName}`,
-      gender: student.gender,
-      email: student.email,
-      sinceYear: student.sinceYear,
-      department: student.department.code,
-      phoneNumber: student.phoneNumber,
-      fullAddress: student.fullAddress,
-      departmentID: student.department.id,
+      courseID: course.id,
+      name: course.name,
+      registrationCode: course.registrationCode,
+      code: course.code,
+      requiredSchoolYear: course.requiredSchoolYear,
+      department: course.department.code,
+      activeReleasesCount: course.activeReleasesCount,
+      createdAt: convertDateTimeArrToString(course.createdAt, "DATE"),
+      updatedAt: convertDateTimeArrToString(course.updatedAt, "DATE"),
     };
   });
 
@@ -43,36 +43,36 @@ export const StudentTableComponent = ({
       <Table
         columns={[
           {
-            title: "Student ID",
-            dataIndex: "studentID",
+            title: "Course ID",
+            dataIndex: "courseID",
+          },
+          {
+            title: "Registration Code",
+            dataIndex: "registrationCode",
           },
           {
             title: "Name",
-            dataIndex: "fullName",
-          },
-          {
-            title: "Gender",
-            dataIndex: "gender",
-          },
-          {
-            title: "Email",
-            dataIndex: "email",
+            dataIndex: "name",
           },
           {
             title: "Year",
-            dataIndex: "sinceYear",
+            dataIndex: "requiredSchoolYear",
           },
           {
             title: "Department",
             dataIndex: "department",
           },
           {
-            title: "Phone",
-            dataIndex: "phoneNumber",
+            title: "Active Releases Count",
+            dataIndex: "activeReleasesCount",
           },
           {
-            title: "Address",
-            dataIndex: "fullAddress",
+            title: "Created At",
+            dataIndex: "createdAt",
+          },
+          {
+            title: "Updated At",
+            dataIndex: "updatedAt",
           },
           {
             title: "Action",
@@ -83,7 +83,7 @@ export const StudentTableComponent = ({
                   style={{ marginBottom: "3px", width: "100%" }}
                   type="primary"
                   onClick={() => {
-                    onStudentEdit(record, record.index);
+                    onCourseEdit(record, record.index);
                   }}
                 >
                   Edit
@@ -93,7 +93,7 @@ export const StudentTableComponent = ({
                   danger
                   type="primary"
                   onClick={() => {
-                    onStudentDelete(record, record.index);
+                    onCourseDelete(record, record.index);
                   }}
                 >
                   Delete
@@ -104,7 +104,7 @@ export const StudentTableComponent = ({
         ]}
         rowKey={(record) => record.key}
         rowSelection={rowSelection}
-        dataSource={students}
+        dataSource={courses}
         style={{ marginTop: "1rem" }}
         pagination={pagination}
         onChange={onChange}

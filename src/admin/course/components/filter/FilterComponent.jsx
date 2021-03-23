@@ -11,26 +11,22 @@ import {
   Switch,
 } from "antd";
 
-const STUDENT_SORTING_CRITERIAS = [
+const COURSE_SORTING_CRITERIAS = [
   {
     title: "ID",
     value: "id",
   },
   {
-    title: "Username",
-    value: "username",
+    title: "Registration Code",
+    value: "registrationCode",
   },
   {
-    title: "First Name",
-    value: "firstName",
+    title: "Name",
+    value: "name",
   },
   {
-    title: "Last Name",
-    value: "lastName",
-  },
-  {
-    title: "Date Of Birth",
-    value: "dob",
+    title: "Required School Year",
+    value: "requiredSchoolYear",
   },
   {
     title: "Created At",
@@ -39,14 +35,6 @@ const STUDENT_SORTING_CRITERIAS = [
   {
     title: "Updated At",
     value: "updatedAt",
-  },
-  {
-    title: "Joined Year",
-    value: "sinceYear",
-  },
-  {
-    title: "Full Address",
-    value: "fullAddress",
   },
 ];
 
@@ -107,7 +95,7 @@ export const FilterComponent = ({ keyword, onFinish, onReset }) => {
           <Form.Item name="keyword">
             <Input
               type="text"
-              placeholder="Filter by student id, name, email, phone number..."
+              placeholder="Filter by course name, registration code..."
               allowClear
             />
           </Form.Item>
@@ -123,12 +111,12 @@ export const FilterComponent = ({ keyword, onFinish, onReset }) => {
               tagRender={(props) => (
                 <TagRender {...props} onOrderChange={onSortValueOrderChange} />
               )}
-              placeholder="Sort students by criterias..."
+              placeholder="Sort courses by criterias..."
               style={{ width: "100%", textAlign: "left" }}
               onChange={setSortValues}
               value={sortValues}
             >
-              {STUDENT_SORTING_CRITERIAS.map((criteria) => (
+              {COURSE_SORTING_CRITERIAS.map((criteria) => (
                 <Select.Option key={criteria.value} value={criteria.value}>
                   {criteria.title}
                 </Select.Option>
