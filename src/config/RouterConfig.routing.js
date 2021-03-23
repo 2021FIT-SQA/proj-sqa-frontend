@@ -20,6 +20,7 @@ import {
   AdminEnrollmentPage,
   AdminStudentPage,
   AdminTeacherPage,
+  AdminCourseReleasePage
 } from "admin";
 
 const RouterConfig = ({ loading }) => {
@@ -68,6 +69,10 @@ const RouterConfig = ({ loading }) => {
               <PrivateRoute
                 path="/admin/enrollments"
                 component={AdminEnrollmentPage}
+              />
+              <PrivateRoute
+                path="/admin/courseRelease"
+                component={AdminCourseReleasePage}
               />
             </Switch>
           </MainAdmin>
