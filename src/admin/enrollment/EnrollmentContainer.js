@@ -66,7 +66,6 @@ const EnrollmentContainer = ({
     }
 
     const onEditFormSubmit = async (enrollmentDTO) => {
-            console.log(enrollmentDTO)
             await updateEnrollment({
                 ...enrollmentDTO,
                 id: editedEnrollment.id,
