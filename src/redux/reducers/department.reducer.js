@@ -8,7 +8,7 @@ const initialState = {
         pageSize: 1,
         total: 0
     },
-    isLoading: true,
+    loading: true,
     error: {}
 }
 
@@ -25,7 +25,7 @@ const departmentReducer = (state=initialState, action) => {
                     pageSize: payload.pageable.pageSize,
                     total: payload.totalElements
                 },
-                isLoading: false
+                loading: false
             }
         case types.POST_DEPARTMENT:
             return {
@@ -35,25 +35,25 @@ const departmentReducer = (state=initialState, action) => {
                     ...state.departments,
                     payload
                 ],
-                isLoading: false,
+                loading: false,
             }
         case types.DELETE_DEPARTMENT:
             return {
                 ...state,
                 departments: state.departments.filter(ele => ele.id !== payload.id),
-                isLoading: false
+                loading: false
             }
         case types.UPDATE_DEPARTMENT:
             return {
                 ...state,
                 department: payload,
-                isLoading: false
+                loading: false
             }
         case types.DEPARTMENT_ERROR:
             return {
                 ...state,
                 error: payload,
-                isLoading: false
+                loading: false
             }
         default:
             return state

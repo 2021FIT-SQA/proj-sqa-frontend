@@ -20,6 +20,7 @@ import {
   AdminEnrollmentPage,
   AdminStudentPage,
   AdminTeacherPage,
+  AdminCourseReleasePage
 } from "admin";
 
 const RouterConfig = ({ loading }) => {
@@ -46,30 +47,41 @@ const RouterConfig = ({ loading }) => {
         <Route path="/" exact component={LandingPage} />
         <Route path="/admin/:path?" exact>
           <MainAdmin>
-            <Switch>
-              <PrivateRoute
-                path="/admin"
-                exact
-                component={AdminDashboardPage}
-              />
-              <PrivateRoute
-                path="/admin/students"
-                component={AdminStudentPage}
-              />
-              <PrivateRoute
-                path="/admin/teachers"
-                component={AdminTeacherPage}
-              />
-              <PrivateRoute path="/admin/courses" component={AdminCoursePage} />
-              <PrivateRoute
-                path="/admin/departments"
-                component={AdminDepartmentPage}
-              />
-              <PrivateRoute
-                path="/admin/enrollments"
-                component={AdminEnrollmentPage}
-              />
-            </Switch>
+            <PrivateRoute
+                  path="/admin"
+                  exact
+                  component={AdminDashboardPage}
+            />
+              <Switch>
+                <PrivateRoute
+                  path="/admin/dashboard"
+                  component={AdminDashboardPage}
+                />
+                <PrivateRoute
+                  path="/admin/students"
+                  component={AdminStudentPage}
+                />
+                <PrivateRoute
+                  path="/admin/teachers"
+                  component={AdminTeacherPage}
+                />
+                <PrivateRoute
+                  path="/admin/courses"
+                  component={AdminCoursePage} 
+                />
+                <PrivateRoute
+                  path="/admin/departments"
+                  component={AdminDepartmentPage}
+                />
+                <PrivateRoute
+                  path="/admin/enrollments"
+                  component={AdminEnrollmentPage}
+                />
+                <PrivateRoute
+                  path="/admin/courseRelease"
+                  component={AdminCourseReleasePage}
+                />
+              </Switch>
           </MainAdmin>
         </Route>
 
