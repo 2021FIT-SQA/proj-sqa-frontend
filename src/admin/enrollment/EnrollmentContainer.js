@@ -66,7 +66,12 @@ const EnrollmentContainer = ({
     }
 
     const onEditFormSubmit = async (enrollmentDTO) => {
-            await updateEnrollment(enrollmentDTO, editedEnrollment.id);
+            console.log(enrollmentDTO)
+            await updateEnrollment({
+                ...enrollmentDTO,
+                id: editedEnrollment.id,
+                courseReleaseID: editedEnrollment.id
+            }, editedEnrollment.id);
 
             error 
             ? Modal.error({

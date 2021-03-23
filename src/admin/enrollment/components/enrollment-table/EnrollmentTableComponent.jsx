@@ -11,7 +11,7 @@ export const EnrollmentTableComponent = ({
     loading
 }) => {
     // transform data
-    enrollments = enrollments.map((ele, index) => {
+    enrollments = enrollments.map((ele, _) => {
         return {
             key: uuidv4(),
             id: ele.id,
@@ -19,8 +19,11 @@ export const EnrollmentTableComponent = ({
             studentName: `${ele.student.lastName} ${ele.student.firstName}`,
             department: ele.student.department.name,
             course: `${ele.courseRelease.course.name} (${ele.courseRelease.course.department.code})`,
-            courseRelease:  `${ele.courseRelease.course.season} ${ele.courseRelease.course.releaseYear}`,
-            mark: (ele.attendanceMark*0.1 + ele.midtermMark*0.3 + ele.finalMark*0.6).toFixed(2),
+            courseRelease:  `${ele.courseRelease.season} ${ele.courseRelease.releaseYear}`,
+            attendanceMark: ele.attendanceMark,
+            midtermMark: ele.midtermMark,
+            finalMark: ele.finalMark,
+            averageScore: (ele.attendanceMark*0.1 + ele.midtermMark*0.3 + ele.finalMark*0.6).toFixed(2),
             teacher:` ${ele.courseRelease.teacher.lastName} ${ele.courseRelease.teacher.firstName}`
         }
     })
@@ -49,8 +52,24 @@ export const EnrollmentTableComponent = ({
                 dataIndex: "course",
             },
             {
-                title: "Mark",
-                dataIndex: "mark",
+              title: "Release",
+              dataIndex: "courseRelease"
+            },
+            {
+              title: "Attendance Mark",
+              dataIndex: "attendanceMark",
+            },
+            {
+              title: "Midterm Mark",
+              dataIndex: "midtermMark",
+            },
+            {
+            title: "Final Mark",
+            dataIndex: "finalMark",
+            },
+            {
+                title: "Average",
+                dataIndex: "averageScore",
             },
             {
                 title: "Lecturer",
