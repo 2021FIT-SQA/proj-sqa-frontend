@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Table, Button } from "antd";
-
+import { useLocation, Link } from 'react-router-dom';
 import { v4 as uuidv4 } from "uuid";
 
 export const StudentTableComponent = ({
@@ -28,6 +28,8 @@ export const StudentTableComponent = ({
     };
   });
 
+  let location = useLocation();
+
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
   const onSelectChange = (selectedRowKeys) => {
@@ -49,6 +51,9 @@ export const StudentTableComponent = ({
           {
             title: "Name",
             dataIndex: "fullName",
+            render: (fullName, record) => (
+              <Link to={`${location.pathname}/${record.studentID}`}>{fullName}</Link>
+            )
           },
           {
             title: "Gender",

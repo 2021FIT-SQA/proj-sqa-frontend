@@ -20,8 +20,12 @@ import {
   AdminEnrollmentPage,
   AdminStudentPage,
   AdminTeacherPage,
-  AdminCourseReleasePage
+  AdminCourseReleasePage,
 } from "admin";
+
+import {StudentDetailContainer} from 'pages/student-detail/StudentDetailContainer'
+import { CourseReleaseDetailContainer} from 'pages/ course-release-detail/CourseReleaseDetailContainer'
+
 
 const RouterConfig = ({ loading }) => {
   if (loading)
@@ -62,6 +66,10 @@ const RouterConfig = ({ loading }) => {
                   component={AdminStudentPage}
                 />
                 <PrivateRoute
+                  path="/admin/students/:studentID"
+                  component={StudentDetailContainer}
+                />
+                <PrivateRoute
                   path="/admin/teachers"
                   component={AdminTeacherPage}
                 />
@@ -92,6 +100,7 @@ const RouterConfig = ({ loading }) => {
             </Switch>
           </Main>
         </Route>
+
       </Switch>
     </Router>
   );
