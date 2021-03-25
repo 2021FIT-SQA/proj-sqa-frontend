@@ -1,17 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-
-
 import { Layout, Avatar, Dropdown, Menu} from 'antd'
 import { UserOutlined, LogoutOutlined } from '@ant-design/icons'
-import { SiderComponent } from '../sider/SiderComponent'
+import SiderComponent  from '../sider/SiderComponent'
 import { logout } from 'redux/actions/auth.action'
 
 const { Header, Content, Footer } = Layout;
 
-
-const MainAdmin = ({children, logout, auth:{isAuthenticated, user,}}) => {
+//TODO: build header component
+const MainAdmin = (props) => {
+    const { logout, auth: { isAuthenticated, user } } = props;
     const menu = (
         <Menu>
             <Menu.Item key="0">
@@ -54,7 +53,7 @@ const MainAdmin = ({children, logout, auth:{isAuthenticated, user,}}) => {
                     }
                     </Header>
                     <Content style={{minHeight: '90vh', padding: 10, backgroundColor: '#fff', margin: 10}}>
-                       {children}
+                        {React.Children.map(props.children, child => child)}
                     </Content>
                     <Footer 
                         style={{ textAlign: "center" }}
@@ -75,4 +74,5 @@ MainAdmin.propTypes = {
 const mapStateToProps = state => ({
     auth: state.auth,
 })
+
 export default connect(mapStateToProps, {logout})(MainAdmin)

@@ -1,63 +1,75 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Layout, Menu } from 'antd';
-import { Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import './SiderComponent.styles.css';
-import { CameraTwoTone } from '@ant-design/icons'
 
+import { ADMIN_SIDER_MENU_LIST } from '../../constants'
 const { Sider } = Layout;
 
-export const SiderComponent = () => {
-
+const SiderComponent = ({ location }) => {
+  const [selectedKeys, setSelectedKeys] = useState('')
+  const [openKeys, setOpenKeys] = useState([])
   const [collapsed, setCollapsed] = useState(false);
 
-  const onCollapse = (e) => {
-      setCollapsed(previous => !previous)
+  const handleOpenChange = (openKeys) => {
+    setOpenKeys(openKeys)
+  }
+  const hanldeToggelCollapsed = () => {
+      setCollapsed(!collapsed);
   }
 
+  useEffect(() => {
+    const pathname = location.pathname
+    const fragment = pathname.split('/').slice(0, 3)
+    const prefixPath = fragment.join('/')
+    if (fragment.length === 3) {
+      for (let i = 0; i < ADMIN_SIDER_MENU_LIST.length; i++) {
+        const menu = ADMIN_SIDER_MENU_LIST[i]
+        if (Array.isArray(menu.children)) {
+          const findIdx = menu.children.findIndex(menu => pathname === menu.path)
+          if (findIdx !== -1) {
+            setSelectedKeys(menu.children[findIdx].path)
+            setOpenKeys([menu.name])
+            break
+          }
+        }
+        if (menu.path.indexOf(prefixPath) !== -1) {
+          setSelectedKeys(menu.path)
+          break
+        }
+      }
+    }
+  }, [location.pathname])
+  
   return (
     <aside className="SiderComponent">
       <Sider 
-        collapsible 
+        trigger={null}
+        collapsible
         collapsed={collapsed}
-        onCollapse={onCollapse}
-        style={{
-          overflow: 'auto',
-          minHeight: '100vh',
-          position: 'fixed',
-          left: 0,
-        }}
+        width={190}
+        className="sidebar"
       > 
-        <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
-            <Menu.Item key="1" icon={<CameraTwoTone />}>
-              <span>Dashboard</span>
-              <Link to='/admin' />
-            </Menu.Item>
-            <Menu.Item key="2" icon={<CameraTwoTone />}>
-              <span>Student</span>
-              <Link to='/admin/students' />
-            </Menu.Item>
-            <Menu.Item key="3" icon={<CameraTwoTone />}>
-              <span>Teacher</span>
-              <Link to='/admin/teachers' />
-            </Menu.Item>
-            <Menu.Item key="4" icon={<CameraTwoTone />}>
-              <span>Course</span>
-              <Link to='/admin/courses' />
-            </Menu.Item>
-            <Menu.Item key="5" icon={<CameraTwoTone />}>
-              <span>Department</span>
-              <Link to='/admin/departments' />
-            </Menu.Item>
-            <Menu.Item key="6" icon={<CameraTwoTone />}>
-              <span>Enrollment</span>
-              <Link to='/admin/enrollments' />
-            </Menu.Item>
-            <Menu.Item key="7" icon={<CameraTwoTone />}>
-              <span>Course Release</span>
-              <Link to='/admin/courseRelease' />
-            </Menu.Item>
-          </Menu>
+        <Menu
+          selectedKeys={[selectedKeys]}
+          openKeys={openKeys}
+          onOpenChange={handleOpenChange}
+          mode="inline"
+          theme="dark"
+        >
+          {ADMIN_SIDER_MENU_LIST.map(menu => {
+            return (
+              <Menu.Item key={menu.path}>
+                <Link to={menu.path.toString()}>
+                  {menu.icon}
+                  <span>{menu.name}</span>
+                </Link>
+              </Menu.Item>
+            )
+          })}
+        </Menu>
       </Sider>
     </aside>
   )
 }
+export default withRouter(SiderComponent)

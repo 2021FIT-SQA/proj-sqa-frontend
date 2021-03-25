@@ -6,7 +6,6 @@ import { login } from 'redux/actions/auth.action';
 import './LoginComponent.styles.css';
 
 const Login = ({ login, isAuthenticated }) => {
-
   const [formData, setFormData] = useState({
     username: "",
     password: "",
