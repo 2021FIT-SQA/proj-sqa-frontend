@@ -1,22 +1,19 @@
 import React, {useState, useEffect} from 'react';
 import { Layout, Menu } from 'antd';
 import { withRouter, Link } from 'react-router-dom';
-import './SiderComponent.styles.css';
+import './style.scss';
 
 import { ADMIN_SIDER_MENU_LIST } from '../../constants'
 const { Sider } = Layout;
 
-const SiderComponent = ({ location }) => {
+const SiderComponent = ({ location, collapsed }) => {
   const [selectedKeys, setSelectedKeys] = useState('')
   const [openKeys, setOpenKeys] = useState([])
-  const [collapsed, setCollapsed] = useState(false);
 
   const handleOpenChange = (openKeys) => {
     setOpenKeys(openKeys)
   }
-  const hanldeToggelCollapsed = () => {
-      setCollapsed(!collapsed);
-  }
+
 
   useEffect(() => {
     const pathname = location.pathname
@@ -42,34 +39,37 @@ const SiderComponent = ({ location }) => {
   }, [location.pathname])
   
   return (
-    <aside className="SiderComponent">
-      <Sider 
-        trigger={null}
-        collapsible
-        collapsed={collapsed}
-        width={190}
-        className="sidebar"
-      > 
-        <Menu
-          selectedKeys={[selectedKeys]}
-          openKeys={openKeys}
-          onOpenChange={handleOpenChange}
-          mode="inline"
-          theme="dark"
-        >
-          {ADMIN_SIDER_MENU_LIST.map(menu => {
-            return (
-              <Menu.Item key={menu.path}>
-                <Link to={menu.path.toString()}>
-                  {menu.icon}
-                  <span>{menu.name}</span>
-                </Link>
-              </Menu.Item>
-            )
-          })}
-        </Menu>
-      </Sider>
-    </aside>
+    <Sider 
+      trigger={null}
+      collapsible
+      collapsed={collapsed}
+      width={190}
+      className="sidebar"
+    > 
+      <div className="sider-menu-logo">
+        {collapsed ? (
+          'HANU'
+        ) : 'Hanu EMS'}
+      </div>
+      <Menu
+        selectedKeys={[selectedKeys]}
+        openKeys={openKeys}
+        onOpenChange={handleOpenChange}
+        mode="inline"
+        theme="dark"
+      >
+        {ADMIN_SIDER_MENU_LIST.map(menu => {
+          return (
+            <Menu.Item key={menu.path}>
+              <Link to={menu.path.toString()}>
+                {menu.icon}
+                <span>{menu.name}</span>
+              </Link>
+            </Menu.Item>
+          )
+        })}
+      </Menu>
+    </Sider>
   )
 }
 export default withRouter(SiderComponent)

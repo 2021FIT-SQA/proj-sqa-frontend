@@ -1,8 +1,9 @@
 import React from 'react'
+import './style.scss'
 import { Menu, Dropdown , Avatar} from 'antd';
-import { UserOutlined, LogoutOutlined } from '@ant-design/icons'
+import { UserOutlined, LogoutOutlined, MenuFoldOutlined, MenuUnfoldOutlined} from '@ant-design/icons'
 
-const Header = ({ isAuthenticated, logout, user, style }) => {
+const Header = ({ collapsed, setCollapsed, isAuthenticated, logout, user }) => {
     const menu = (
         <Menu>
             <Menu.Item key="0">
@@ -14,12 +15,25 @@ const Header = ({ isAuthenticated, logout, user, style }) => {
         </Menu>
     );
     return (
-        <div className="header" style={style}>
+        <div className="header">
+            <div className="header__left">
+                {collapsed ? (
+                    <MenuUnfoldOutlined
+                        onClick={setCollapsed}
+                        style={{ cursor: 'pointer', fontSize: '20px' }}
+                    />
+                    ) : (
+                    <MenuFoldOutlined
+                        onClick={setCollapsed}
+                        style={{ cursor: 'pointer', fontSize: '20px' }}
+                    />
+                )}
+            </div>
             {
                 isAuthenticated 
                 && 
                 <Dropdown overlay={menu} trigger={['click']}>
-                    <a href="#!" className="ant-dropdown-link" onClick={e => e.preventDefault()} style={{paddingTop: '.5rem'}}>
+                    <a href="#!" className="header__right" onClick={e => e.preventDefault()} style={{paddingTop: '.5rem'}}>
                         <Avatar
                             style={{
                                 backgroundColor: '#87d068',
@@ -27,7 +41,7 @@ const Header = ({ isAuthenticated, logout, user, style }) => {
                             }}
                             icon={<UserOutlined />}
                         />
-                        <span style={{marginRight: 16, marginLeft: 4}} >{`Hi, ${user.firstName}`}</span>
+                        <span style={{marginRight: 16, marginLeft: 4, marginTop: '.3rem'}} >{`Hi, ${user.firstName}`}</span>
                     </a>
                 </Dropdown>
             }

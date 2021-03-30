@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './style.scss';
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
@@ -9,27 +9,26 @@ import { logout } from '../../../redux/actions/auth.action';
 
 const { Content, Footer } = Layout;
 
+
 const AdminEntry = (props) => {
     console.log('props',props)
     const { logout, auth: { isAuthenticated, user } } = props;
+    const [collapsed, setCollapsed] = useState(true)
 
+    function handleToggleCollapsed() {
+      setCollapsed(!collapsed)
+    }
     return (
         <div className="home-main">
             <Layout>
-                <SiderComponent />
+                <SiderComponent {...{ collapsed }}/>
                 <Layout className="home-layout">
                     <Header 
+                        collapsed={collapsed}
+                        setCollapsed={handleToggleCollapsed}
                         isAuthenticated={isAuthenticated}
                         logout={logout}
                         user={user}
-                        style={{
-                            marginLeft: 10,
-                            display: 'flex',
-                            justifyContent: 'flex-end',
-                            textAlign: 'center',
-                            background: "#fff",
-                            minHeight: '5vh'
-                        }}
                     />
 
                     <Content id="container">
