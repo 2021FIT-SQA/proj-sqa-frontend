@@ -52,7 +52,7 @@ export const StudentTableComponent = ({
             title: "Name",
             dataIndex: "fullName",
             render: (fullName, record) => (
-              <Link to={`${location.pathname}/${record.studentID}`}>{fullName}</Link>
+              <Link to={`${location.pathname}/detail/${record.studentID}`}>{fullName}</Link>
             )
           },
           {

@@ -28,7 +28,7 @@ const PrivateRoute = withRouter(({
     const url = redirectUrl || ADMIN.DASHBOARD.path
     return <Redirect to={url.toString()} />
   }
-
+  
   return (
     <Route render={props => {
       return (

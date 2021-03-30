@@ -5,6 +5,7 @@ import { login, loggedUser } from 'redux/actions/auth.action';
 import qs from 'query-string'
 import { ADMIN } from '../../router/route-constants'
 import './LoginComponent.styles.css';
+import { Redirect } from "react-router-dom";
 
 const Login = ({ login, loggedUser, isAuthenticated, history, location}) => {
   const [formData, setFormData] = useState({
@@ -29,8 +30,8 @@ const Login = ({ login, loggedUser, isAuthenticated, history, location}) => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      loggedUser();
-      history.replace(redirectUrl)
+      history.replace(redirectUrl);
+      <Redirect to={redirectUrl} />
     }
   }, [history, isAuthenticated, loggedUser, redirectUrl])
 
