@@ -5,9 +5,9 @@ import queryString from 'query-string'
 import { v4 as uuidv4 } from 'uuid';
 
 import { Card, Button, Modal, Typography, Row, Col } from "antd";
-import { TeacherTableComponent } from '../teacher/components/teacher-table/TeacherTable'
-import { TeacherFilterComponent } from './components/filter/TeacherFilter';
-import TeacherForm from './components/teacher-form/TeacherForm';
+import { TeacherTableComponent } from '../components/teacher-table/TeacherTable'
+import { TeacherFilterComponent } from '../components/filter/TeacherFilter';
+import TeacherForm from '../components/teacher-form/TeacherForm';
 
 import { postTeacher, deleteTeacher, updateTeacher } from 'redux/actions/teacher.action'
 import teacherApi from 'api/teacherApi';

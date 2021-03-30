@@ -1,7 +1,0 @@
-export {default as AdminDashboardPage} from './dashboard/DashboardContainer'
-export {default as AdminCoursePage} from './course/CourseContainer'
-export {default as AdminDepartmentPage} from './department/DepartmentContainer'
-export {default as AdminEnrollmentPage} from './enrollment/EnrollmentContainer'
-export {default as AdminStudentPage} from './student/StudentContainer'
-export {default as AdminTeacherPage} from './teacher/TeacherContainer'
-export {default as AdminCourseReleasePage} from './course-release/CourseReleaseContainer'

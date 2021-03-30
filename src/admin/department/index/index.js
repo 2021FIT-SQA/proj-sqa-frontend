@@ -9,7 +9,6 @@ import { DepartmentTableComponent } from 'admin/department/components/department
 import { CreateDepartmentForm } from 'admin/department/components/department-form/CreateDepartmentForm'
 import { EditDepartmentForm } from 'admin/department/components/department-form/EditDepartmentForm'
 
-
 const DepartmentContainer = (props) => {
     const { getDepartments, postDepartment, updateDepartment, deleteDepartment, department, departments, pagination, loading } = props;
 
@@ -50,7 +49,6 @@ const DepartmentContainer = (props) => {
                 content: `Successfully created department ${department.name} with code ${department.code}`
             });
         } catch (error) {
-            console.log(error);
             setCreateModalOpen(false);
             Modal.error({
                 title: "Error",
@@ -68,7 +66,6 @@ const DepartmentContainer = (props) => {
                 content: `Successfully updated department ${department.name} with code ${department.code}`
             })
         } catch (error) {
-            console.log(error);
             setEditModalOpen(false);
             Modal.error({
                 title: "Error",

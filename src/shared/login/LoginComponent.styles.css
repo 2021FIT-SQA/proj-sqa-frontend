@@ -1,7 +1,7 @@
 
 body {
 	background: #f6f5f7;
-    background-image: url("bg.jpg");
+    background-image: url("/src/assets/image/bg.jpg");
     background-repeat: no-repeat;
     background-size: cover;
 	justify-content: center;
@@ -104,7 +104,7 @@ input {
 
 .overlay {
 	background: #ffffff;
-    background-image: url("right.jpg");
+    background-image: url("/src/assets/image/right.jpg");
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: 0 0;
