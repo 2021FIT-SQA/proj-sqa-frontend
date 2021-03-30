@@ -1,15 +1,20 @@
-import React, { Fragment, useState } from "react";
-import { Redirect } from "react-router-dom";
+import React, { Fragment, useState, useEffect } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { login } from 'redux/actions/auth.action';
+import { login, loggedUser } from 'redux/actions/auth.action';
+import qs from 'query-string'
+import { ADMIN } from '../../router/route-constants'
 import './LoginComponent.styles.css';
 
-const Login = ({ login, isAuthenticated }) => {
+const Login = ({ login, loggedUser, isAuthenticated, history, location}) => {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
+  const [redirectUrl] = useState(() => {
+    const url = qs.parse(location.search).redirectUrl;
+    return url || ADMIN.DASHBOARD.path
+  })
 
   const { username, password } = formData;
 
@@ -19,11 +24,15 @@ const Login = ({ login, isAuthenticated }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     login({ username, password });
+    history.replace(redirectUrl);
   };
 
-  if(isAuthenticated) {
-    return <Redirect to='/admin/index' />
-  }
+  useEffect(() => {
+    if (isAuthenticated) {
+      loggedUser();
+      history.replace(redirectUrl)
+    }
+  }, [history, isAuthenticated, loggedUser, redirectUrl])
 
   return (
     <Fragment>
@@ -64,11 +73,12 @@ const Login = ({ login, isAuthenticated }) => {
 
 Login.propTypes = {
   login: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool
+  isAuthenticated: PropTypes.bool,
+  loggedUser: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated
 })
 
-export default connect(mapStateToProps, { login })(Login);
+export default connect(mapStateToProps, { login, loggedUser})(Login);
