@@ -1,12 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import { Provider } from 'react-redux'
+import { ConfigProvider } from 'antd'
+import 'antd/dist/antd.css'
 import reportWebVitals from './reportWebVitals';
+import moment from 'moment'
+import 'moment/locale/zh-cn'
+import zh_CN from 'antd/lib/locale-provider/zh_CN'
+import store from './redux/store';
+import Routes from './router'
 
+moment.locale('zh-cn')
 ReactDOM.render(
   <React.StrictMode>
-      <App />
+    <Provider store={store}>
+      <ConfigProvider locale={zh_CN}>
+        <Routes />
+      </ConfigProvider>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import queryString from "query-string";
 import { Card, Button, Modal, Typography, Row, Col } from "antd";
 
-import { FilterComponent, CourseTableComponent } from "./components";
+import { FilterComponent, CourseTableComponent } from "../components";
 
 import courseApi from "api/courseApi";
-import CreateCourseForm from "./components/course-form/CourseForm";
+import CreateCourseForm from "../components/course-form/CourseForm";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
