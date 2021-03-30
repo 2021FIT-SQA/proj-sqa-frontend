@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { Layout, Menu } from 'antd';
 import { withRouter, Link } from 'react-router-dom';
 import './style.scss';
+import HanuLogo from '../../assets/image/hanu-logo.png'
 
 import { ADMIN_SIDER_MENU_LIST } from '../../constants'
 const { Sider } = Layout;
@@ -48,7 +49,7 @@ const SiderComponent = ({ location, collapsed }) => {
     > 
       <div className="sider-menu-logo">
         {collapsed ? (
-          'HANU'
+          <img src={HanuLogo} alt="logo"/>
         ) : 'Hanu EMS'}
       </div>
       <Menu
