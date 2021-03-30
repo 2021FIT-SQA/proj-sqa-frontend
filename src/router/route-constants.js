@@ -4,8 +4,8 @@ export const COMMON = {
 }
 
 export const ADMIN = {
-    HOME: { name: '', path: ['/admin/index', ] },
-    DASHBOARD: { name: 'Dashboard', path: ['/admin/dashboard'] },
+    HOME: { name: '', path: '/admin' },
+    DASHBOARD: { name: 'Dashboard', path: '/admin/dashboard' },
     STUDENT: { name: 'Student', path: '/admin/students'},
     STUDENT_DETAIL: { name: '*', path: '/admin/students/detail/:id'},
     TEACHER: { name: 'Teacher', path: '/admin/teachers'},
