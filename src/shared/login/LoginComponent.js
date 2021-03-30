@@ -22,7 +22,7 @@ const Login = ({ login, isAuthenticated }) => {
   };
 
   if(isAuthenticated) {
-    return <Redirect to='/admin' />
+    return <Redirect to='/admin/index' />
   }
 
   return (

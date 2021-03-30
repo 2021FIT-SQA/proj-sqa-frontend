@@ -1,9 +1,9 @@
 import { COMMON, ADMIN, END_USER } from './route-constants';
 
-import MainAdmin from '../layout/main-admin/MainAdmin';
 import LoginPage from '../shared/login/LoginComponent';
 import AdminDashboardPage from '../admin/dashboard';
-import AdminStudentPage  from '../admin/student'
+import AdminStudentPage  from '../admin/student';
+import AdminEntry from '../layout/components/admin-entry/index'
 
 const routesMap = [
   {
@@ -18,7 +18,7 @@ const routesMap = [
   },
   {
     path: ADMIN.HOME.path,
-    component: MainAdmin,
+    component: AdminEntry,
     meta: {
         requiresAuth: true
     },

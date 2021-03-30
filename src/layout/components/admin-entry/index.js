@@ -1,15 +1,15 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { Layout, Avatar, Dropdown, Menu} from 'antd'
 import { UserOutlined, LogoutOutlined } from '@ant-design/icons'
-import SiderComponent  from '../sider/SiderComponent'
-import { logout } from 'redux/actions/auth.action'
+import SiderComponent  from '../../sider/SiderComponent'
+import { logout } from '../../../redux/actions/auth.action'
 
 const { Header, Content, Footer } = Layout;
 
-//TODO: build header component
-const MainAdmin = (props) => {
+const AdminEntry = (props) => {
+    console.log('props',props)
     const { logout, auth: { isAuthenticated, user } } = props;
     const menu = (
         <Menu>
@@ -40,7 +40,7 @@ const MainAdmin = (props) => {
                         isAuthenticated 
                         && 
                         <Dropdown overlay={menu} trigger={['click']}>
-                            <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                            <a href="#!" className="ant-dropdown-link" onClick={e => e.preventDefault()}>
                                 <Avatar
                                     style={{
                                         backgroundColor: '#87d068',
@@ -66,7 +66,7 @@ const MainAdmin = (props) => {
     )
 }
 
-MainAdmin.propTypes = {
+AdminEntry.propTypes = {
     auth: PropTypes.object.isRequired,
     logout: PropTypes.func.isRequired,
 }
@@ -75,4 +75,4 @@ const mapStateToProps = state => ({
     auth: state.auth,
 })
 
-export default connect(mapStateToProps, {logout})(MainAdmin)
+export default connect(mapStateToProps, {logout})(AdminEntry)
