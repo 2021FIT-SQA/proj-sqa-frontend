@@ -10,8 +10,10 @@ export const ADMIN = {
     STUDENT_DETAIL: { name: '*', path: '/admin/students/detail/:id'},
     TEACHER: { name: 'Teacher', path: '/admin/teachers'},
     COURSE: { name: 'Course', path: '/admin/courses'},
+    COURSE_DETAIL: { name: '*', path: '/admin/courses/detail/:id'},
     DEPARTMENT: { name: 'Deparment', path: '/admin/departments'},
-    COURSE_RELEASE: { name: 'Course Release', path: '/admin/courseRelease'},
+    COURSE_RELEASE: { name: 'Course Release', path: '/admin/courseReleases'},
+    COURSE_RELEASE_DETAIL: { name: '*', path: '/admin/courseReleases/detail/:id'},
     NO_MATCH: { name: '404 Not Found', path: '*' },
 }
 

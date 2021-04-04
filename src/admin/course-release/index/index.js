@@ -8,7 +8,7 @@ import { getCourseReleases } from 'redux/actions/courseRelease.action'
 import { CourseReleaseTableComponent } from 'admin/course-release/components/courseReleaseTableComponent'
 
 const CourseReleaseContainer = props => {
-    const { getCourseReleases, courseRelease: {courseReleases, pagination, loading} } = props;
+    const { getCourseReleases, courseRelease: {courseReleases, pagination, loading}, options } = props;
     // LOCAL INITIAL STATE
     const [params, _ ] = useState({
         page: 1,
@@ -18,21 +18,22 @@ const CourseReleaseContainer = props => {
     });
 
     useEffect(() => {
-        getCourseReleases(queryString.stringify(params));
-    },[getCourseReleases, params])
+        getCourseReleases(queryString.stringify(params), options);
+    },[getCourseReleases, params, options])
 
     const handlePaginationChange = async (paginate, filters) => {
         await getCourseReleases(
             queryString.stringify({
                 page: paginate.current,
                 size: paginate.pageSize
-            })
+            }),
+            options,
         )
     }
 
     return (
         <div>
-            <Card title="Department" style={{overflowX: 'auto'}}>
+            <Card title="Course Releases" style={{overflowX: 'auto'}}>
                 <Row>
                     <Col span={24} style={{ marginBottom: "15px" }}>
                         {pagination.total && (

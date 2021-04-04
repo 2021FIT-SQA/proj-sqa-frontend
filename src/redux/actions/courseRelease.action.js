@@ -1,9 +1,14 @@
 import courseReleaseApi from 'api/courseReleaseApi';
 import * as constants from 'redux/constants/constants.action';
 
-export const getCourseReleases = (params) => async dispatch => {
+export const getCourseReleases = (params, options) => async dispatch => {
     try {
-        const res = await courseReleaseApi.getCourseReleases(params);
+        let res;
+        if (options?.forCourse) {
+            res = await courseReleaseApi.getForCourse(options.forCourse, params);
+        } else {
+            res = await courseReleaseApi.getCourseReleases(params);
+        }
         dispatch({
             type: constants.GET_ALL_COURSE_RELEASES,
             payload: res
@@ -14,4 +19,4 @@ export const getCourseReleases = (params) => async dispatch => {
             payload: {error: 'GET course release failed'}
         })
     }
-} 
+}

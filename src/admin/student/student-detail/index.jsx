@@ -1,6 +1,6 @@
 import React from 'react'
 
-const StudentDetail = () => {
+const StudentDetailContainer = () => {
     return (
         <div>
             StudentDetail works....
@@ -8,4 +8,4 @@ const StudentDetail = () => {
     )
 }
 
-export default StudentDetail
+export default StudentDetailContainer

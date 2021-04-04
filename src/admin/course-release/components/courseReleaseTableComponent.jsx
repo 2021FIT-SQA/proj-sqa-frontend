@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { Table, Tag } from 'antd'
 import { v4 as uuidv4 } from "uuid";
+import { useLocation, Link } from 'react-router-dom';
+
 
 export const CourseReleaseTableComponent = ({
     courseReleases,
@@ -36,6 +38,9 @@ export const CourseReleaseTableComponent = ({
             {
                 title: "Release",
                 dataIndex: "release",
+                render: (release, record) => (
+                    <Link to={`/admin/courseReleases/detail/${record.id}`}>{release}</Link>
+                ),
             },
             {
                 title: "Department",

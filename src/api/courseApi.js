@@ -16,7 +16,10 @@ const courseApi = {
     },
     checkRegistrationCodeUnique: (registrationCode) => {
         return axiosClient.get(`/Course/checkUniqueness/registrationCode/${registrationCode}`);
-    }
+    },
+    getByID: (courseID) => {
+        return axiosClient.get(`${baseUrl}/${courseID}`);
+    },
 }
 
 export default courseApi

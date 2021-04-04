@@ -20,7 +20,9 @@ const EnrollmentContainer = ({
         pagination,
         loading,
         error
-    }}) => {
+    }},
+    options,
+    ) => {
     // LOCAL INITIAL STATE
     const [params, _ ] = useState({
         page: 1,
@@ -118,7 +120,7 @@ const EnrollmentContainer = ({
     
     return (
         <div>
-            <Card title="Enrollment" style={{overflowX: 'auto'}}>
+            <Card title="Enrollments" style={{overflowX: 'auto'}}>
                 <Row>
                     <Col span={24} style={{ marginBottom: "15px" }}>
                         {pagination.total && (
@@ -135,7 +137,7 @@ const EnrollmentContainer = ({
                             setCreateModalOpen(true)
                         }}
                         >
-                            Add Department
+                            Add Enrollment
                         </Button>
                     </Col>
                 </Row>
@@ -165,7 +167,7 @@ const EnrollmentContainer = ({
             </Modal>
 
             <Modal
-                title='Edit department'
+                title='Edit enrollment'
                 visible={isEditModalOpened}
                 onOk={() => setEditModalOpen(false)}
                 onCancel={() => setEditModalOpen(false)}

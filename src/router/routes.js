@@ -8,7 +8,9 @@ import AdminTeacherPage from '../admin/teacher/index'
 import AdminCoursePage from '../admin/course/index'
 import AdminDepartmentPage from '../admin/department/index'
 import AdminCourseReleasePage from '../admin/course-release/index'
-import StudentDetail from '../admin/student/student-detail'
+import StudentDetailContainer from '../admin/student/student-detail'
+import CourseReleaseDetailContainer from 'admin/course-release/course-release-detail';
+import CourseDetailContainer from 'admin/course/course-detail';
 
 const routesMap = [
   {
@@ -48,7 +50,7 @@ const routesMap = [
       },
       {
         path: ADMIN.STUDENT_DETAIL.path,
-        component: StudentDetail,
+        component: StudentDetailContainer,
         exact: true,
         meta: {
           title: ADMIN.STUDENT_DETAIL.name,
@@ -74,6 +76,15 @@ const routesMap = [
         }
       },
       {
+        path: ADMIN.COURSE_DETAIL.path,
+        component: CourseDetailContainer,
+        exact: true,
+        meta: {
+          title: ADMIN.COURSE_DETAIL.name,
+          requiresAuth: true,
+        }
+      },
+      {
         path: ADMIN.DEPARTMENT.path,
         component: AdminDepartmentPage,
         exact: true,
@@ -88,6 +99,15 @@ const routesMap = [
         exact: true,
         meta: {
           title: ADMIN.COURSE_RELEASE.name,
+          requiresAuth: true,
+        }
+      },
+      {
+        path: ADMIN.COURSE_RELEASE_DETAIL.path,
+        component: CourseReleaseDetailContainer,
+        exact: true,
+        meta: {
+          title: ADMIN.COURSE_RELEASE_DETAIL.name,
           requiresAuth: true,
         }
       },

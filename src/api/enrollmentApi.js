@@ -13,6 +13,9 @@ const enrollmentApi = {
     },
     updateEnrollment: (enrollmentDTO,enrollmentID, config) => {
         return axiosClient.put(`${baseUrl}/${enrollmentID}`, enrollmentDTO, config)
+    },
+    getEnrollmentsForCourseRelease: (courseReleaseID, params) => {
+        return axiosClient.get(`/coursesReleases/${courseReleaseID}/enrollments?${params}`)
     }
 }
 

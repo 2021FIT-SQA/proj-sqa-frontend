@@ -1,9 +1,15 @@
 import enrollmentApi from 'api/enrollmentApi';
 import * as constants from 'redux/constants/constants.action'
 
-export const getEnrollments = (params) => async dispatch => {
+export const getEnrollments = (params, options) => async dispatch => {
     try {
-        const res = await enrollmentApi.getEnrollments(params);
+        let res;
+        if (options?.forCourseRelease) {
+            res = await enrollmentApi.getEnrollmentsForCourseRelease(options.forCourseRelease);
+        } else {
+            res = await enrollmentApi.getEnrollments(params);
+        }
+
         dispatch({
             type: constants.GET_ALL_ENROLLMENTS,
             payload: res

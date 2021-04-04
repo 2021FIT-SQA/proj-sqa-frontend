@@ -18,7 +18,7 @@ const TeacherContainer = ({postTeacher, updateTeacher, deleteTeacher}) => {
     const [params, setParams] = useState({
         page: 1,
         size: 10,
-        keyword: '',
+        keyword: undefined,
     });
     const [pagination, setPagination] = useState({
         current: 1,
@@ -82,7 +82,7 @@ const TeacherContainer = ({postTeacher, updateTeacher, deleteTeacher}) => {
         setParams(previous => {
             return {
                 ...previous,
-                keyword: ''
+                keyword: undefined,
             }
         })
     }
@@ -123,7 +123,7 @@ const TeacherContainer = ({postTeacher, updateTeacher, deleteTeacher}) => {
 
     return (
         <div>
-            <Card>
+            <Card title="Teachers" style={{ overflowX: "auto" }}>
                 <TeacherFilterComponent 
                     keyword={params.keyword}
                     onFinish={handleFinish}

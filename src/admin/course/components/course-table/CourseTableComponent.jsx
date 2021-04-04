@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Table, Button } from "antd";
 import { v4 as uuidv4 } from "uuid";
 import convertDateTimeArrToString from "utils/dateConverter";
+import { useLocation, Link } from 'react-router-dom';
 
 export const CourseTableComponent = ({
   courses,
@@ -11,6 +12,8 @@ export const CourseTableComponent = ({
   onCourseDelete,
   loading,
 }) => {
+  let location = useLocation();
+
   // Transform
   courses = courses.map((course, index) => {
     return {
@@ -53,6 +56,9 @@ export const CourseTableComponent = ({
           {
             title: "Name",
             dataIndex: "name",
+            render: (name, record) => (
+              <Link to={`${location.pathname}/detail/${record.courseID}`}>{name}</Link>
+            )
           },
           {
             title: "Year",
