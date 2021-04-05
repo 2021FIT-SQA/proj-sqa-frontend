@@ -3,7 +3,7 @@ import axiosClient from './axiosClient'
 const baseUrl = '/departments'
 const departmentApi = {
     getAllDepartments: () => {
-        return axiosClient.get(`${baseUrl}/all`);
+        return axiosClient.get(`${baseUrl}/all`)
     },
     getDepartments: (params) => {
         return axiosClient.get(`${baseUrl}?${params}`)
