@@ -5,7 +5,10 @@ import teacher from './teacher.reducer'
 import department from './department.reducer'
 import enrollment from './enrollment.reducer'
 import courseRelease from './courseRelease.reducer'
+import app from './app.reducer'
+
 export default combineReducers({
+    app,
     auth,
     student,
     teacher,
