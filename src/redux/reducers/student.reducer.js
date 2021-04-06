@@ -19,6 +19,7 @@ const studentReducer = (state = initialState, action) => {
             }
         case constants.GET_STUDENT_DETAIL:
         case constants.UPDATE_STUDENT:
+            console.log(payload)
             return {
                 ...state,
                 student: payload,
