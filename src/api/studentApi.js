@@ -2,6 +2,9 @@ import axiosClient from './axiosClient'
 
 const baseUrl = '/students'
 const studentApi = {
+    getStudentDetail: (id) => {
+        return axiosClient.get(`${baseUrl}/${id}`);
+    },
     getPaginatedStudents: (paramsString) => {
         return axiosClient.get(`${baseUrl}?${paramsString}`)
     },

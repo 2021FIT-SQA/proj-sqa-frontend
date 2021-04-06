@@ -5,6 +5,7 @@ export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAIL = "LOGIN_FAIL";
 export const LOGOUT = "LOGOUT";
 
+// STUDENT 
 export const GET_ALL_STUDENTS = 'GET_ALL_STUDENTS'
 export const GET_STUDENT_DETAIL = 'GET_STUDENT_DETAIL'
 export const POST_STUDENT = 'POST_STUDENT'
