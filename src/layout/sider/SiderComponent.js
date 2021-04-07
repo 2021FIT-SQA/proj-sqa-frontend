@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef } from 'react';
 import { Layout, Menu } from 'antd';
 import { withRouter, Link } from 'react-router-dom';
 import './style.scss';
@@ -39,6 +39,8 @@ const SiderComponent = ({ location, collapsed }) => {
     }
   }, [location.pathname])
   
+  const ref = useRef();
+
   return (
     <Sider 
       trigger={null}
@@ -61,7 +63,7 @@ const SiderComponent = ({ location, collapsed }) => {
       >
         {ADMIN_SIDER_MENU_LIST.map(menu => {
           return (
-            <Menu.Item key={menu.path}>
+            <Menu.Item ref={ref} key={menu.path}>
               <Link to={menu.path.toString()}>
                 {menu.icon}
                 <span>{menu.name}</span>

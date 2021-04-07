@@ -5,13 +5,11 @@ import * as constants from '../constants/constants.action'
 export const getStudent = (id) => async dispatch => {
     try {
         const res = await studentApi.getStudentDetail(id);
-        console.log(res)
         dispatch({
             type: constants.GET_STUDENT_DETAIL,
             payload: res
         });
     } catch (error) {
-        console.log(error);
         dispatch({
             type: constants.STUDENT_ERROR,
             payload: { error }
