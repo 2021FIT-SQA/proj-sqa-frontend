@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import { Layout } from 'antd'
 import SiderComponent  from '../../sider/SiderComponent'
 import Header from '../header';
+import FooterComponent from '../footer';
 import { logout } from '../../../redux/actions/auth.action';
 
 const { Content, Footer } = Layout;
@@ -36,7 +37,7 @@ const AdminEntry = (props) => {
                     <Footer 
                         style={{ textAlign: "center" }}
                     >
-                        FOOTER
+                        <FooterComponent />
                     </Footer>
                 </Layout>
             </Layout>

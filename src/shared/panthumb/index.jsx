@@ -22,7 +22,7 @@ const PanThumb = (props) => {
 };
 
 PanThumb.propTypes = {
-  image: PropTypes.string.isRequired,
+  image: PropTypes.string,
   zIndex: PropTypes.number,
   width: PropTypes.string,
   height: PropTypes.string,

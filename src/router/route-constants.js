@@ -7,13 +7,13 @@ export const ADMIN = {
     HOME: { name: '', path: '/admin' },
     DASHBOARD: { name: 'Dashboard', path: '/admin/dashboard' },
     STUDENT: { name: 'Student', path: '/admin/students'},
-    STUDENT_DETAIL: { name: '*', path: '/admin/students/detail/:id'},
+    STUDENT_DETAIL: { name: 'Student detail', path: '/admin/students/detail/:id'},
     TEACHER: { name: 'Teacher', path: '/admin/teachers'},
     COURSE: { name: 'Course', path: '/admin/courses'},
-    COURSE_DETAIL: { name: '*', path: '/admin/courses/detail/:id'},
+    COURSE_DETAIL: { name: 'Course detail', path: '/admin/courses/detail/:id'},
     DEPARTMENT: { name: 'Deparment', path: '/admin/departments'},
     COURSE_RELEASE: { name: 'Course Release', path: '/admin/courseReleases'},
-    COURSE_RELEASE_DETAIL: { name: '*', path: '/admin/courseReleases/detail/:id'},
+    COURSE_RELEASE_DETAIL: { name: 'Release detail', path: '/admin/courseReleases/detail/:id'},
     NO_MATCH: { name: '404 Not Found', path: '*' },
 }
 

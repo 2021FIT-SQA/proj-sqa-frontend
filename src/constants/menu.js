@@ -1,35 +1,35 @@
 import { ADMIN } from '../router/route-constants'
-import { CameraTwoTone } from '@ant-design/icons'
+import { HomeOutlined, UserOutlined, BookOutlined, ReadOutlined , BankOutlined, TeamOutlined } from '@ant-design/icons'
 
 export const ADMIN_SIDER_MENU_LIST = [
     {
         path: ADMIN.DASHBOARD.path,
-        icon: <CameraTwoTone />,
+        icon: <HomeOutlined />,
         name: ADMIN.DASHBOARD.name
     },
     {
         path: ADMIN.STUDENT.path,
-        icon: <CameraTwoTone />,
+        icon: <UserOutlined />,
         name: ADMIN.STUDENT.name
     },
     {
         path: ADMIN.TEACHER.path,
-        icon: <CameraTwoTone />,
+        icon: <TeamOutlined />,
         name: ADMIN.TEACHER.name
     },
     {
         path: ADMIN.COURSE.path,
-        icon: <CameraTwoTone />,
+        icon: <BookOutlined />,
         name: ADMIN.COURSE.name
     },
     {
         path: ADMIN.DEPARTMENT.path,
-        icon: <CameraTwoTone />,
+        icon: <BankOutlined />,
         name: ADMIN.DEPARTMENT.name
     },
     {
         path: ADMIN.COURSE_RELEASE.path,
-        icon: <CameraTwoTone />,
+        icon: <ReadOutlined />,
         name: ADMIN.COURSE_RELEASE.name
     },
 ]

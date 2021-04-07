@@ -52,7 +52,12 @@ const SiderComponent = ({ location, collapsed }) => {
       <div className="sider-menu-logo">
         {collapsed ? (
           <img src={HanuLogo} alt="logo"/>
-        ) : 'Hanu EMS'}
+        ) : (
+          <div>
+            <img src={HanuLogo} alt="logo"/>
+            <span style={{marginLeft: '5px'}}>Hanu EMS</span>
+          </div>
+        )}
       </div>
       <Menu
         selectedKeys={[selectedKeys]}
