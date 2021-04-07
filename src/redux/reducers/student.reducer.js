@@ -37,6 +37,7 @@ const studentReducer = (state = initialState, action) => {
                 students: state.students.filter(student => student.id !== payload.config.url.subString(10))
             }
         case constants.STUDENT_ERROR:
+            console.log(payload)
             return {
                 ...state,
                 error: payload,

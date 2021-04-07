@@ -14,7 +14,7 @@ export const StudentTableComponent = ({
   // Transform
   students = students.map((student, index) => {
     return {
-      index,
+      index: student.id,
       key: uuidv4(),
       studentID: student.username,
       fullName: `${student.lastName} ${student.firstName}`,
@@ -52,7 +52,7 @@ export const StudentTableComponent = ({
             title: "Name",
             dataIndex: "fullName",
             render: (fullName, record) => (
-              <Link to={`${location.pathname}/detail/${record.studentID}`}>{fullName}</Link>
+              <Link to={`${location.pathname}/detail/${record.index}`}>{fullName}</Link>
             )
           },
           {

@@ -1,6 +1,21 @@
 import studentApi from '../../api/studentApi'
 import * as constants from '../constants/constants.action'
 
+
+export const getStudent = (id) => async dispatch => {
+    try {
+        const res = await studentApi.getStudentDetail(id);
+        dispatch({
+            type: constants.GET_STUDENT_DETAIL,
+            payload: res
+        });
+    } catch (error) {
+        dispatch({
+            type: constants.STUDENT_ERROR,
+            payload: { error }
+        })
+    }
+}
 // GET ALL PAGINATED STUDENTS
 export const getStudents = (paramsString) => async dispatch => {
     const res = await studentApi.getPaginatedStudents(paramsString);

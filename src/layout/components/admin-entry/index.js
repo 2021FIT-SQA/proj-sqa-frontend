@@ -11,7 +11,6 @@ const { Content, Footer } = Layout;
 
 
 const AdminEntry = (props) => {
-    console.log('props',props)
     const { logout, auth: { isAuthenticated, user } } = props;
     const [collapsed, setCollapsed] = useState(true)
 
